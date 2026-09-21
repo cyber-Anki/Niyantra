@@ -9,6 +9,18 @@ export default {
         serif: ["'Noto Serif'", "Georgia", "Cambria", "'Times New Roman'", "Times", "serif"],
         heading: ["'Noto Serif'", "Georgia", "Cambria", "'Times New Roman'", "Times", "serif"],
       },
+      fontSize: {
+        '2xs': ['0.75rem', { lineHeight: '1.1rem' }],
+        'xs': ['0.85rem', { lineHeight: '1.25rem' }],
+        'sm': ['0.95rem', { lineHeight: '1.45rem' }],
+        'base': ['1.0625rem', { lineHeight: '1.65rem' }],
+        'lg': ['1.2rem', { lineHeight: '1.75rem' }],
+        'xl': ['1.35rem', { lineHeight: '1.85rem' }],
+        '2xl': ['1.65rem', { lineHeight: '2.1rem' }],
+        '3xl': ['2rem', { lineHeight: '2.4rem' }],
+        '4xl': ['2.5rem', { lineHeight: '2.8rem' }],
+        '5xl': ['3.25rem', { lineHeight: '1.15' }],
+      },
       colors: {
         brand: {
           primary: "#4F46E5", // Indigo 600

@@ -5,9 +5,14 @@
 @tailwind utilities;
 
 @layer base {
-  html,
+  html {
+    font-size: 17px;
+  }
+
   body {
     font-family: 'Noto Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
     @apply antialiased;
   }
 
@@ -18,6 +23,7 @@
   h5,
   h6 {
     font-family: 'Noto Serif', Georgia, Cambria, 'Times New Roman', Times, serif;
+    letter-spacing: -0.015em;
   }
 }
 

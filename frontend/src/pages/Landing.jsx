@@ -12,7 +12,7 @@ import { ShieldAlert, SplitSquareHorizontal, LineChart, ChevronRight, X, Bell, A
 
 export default function Landing({ onNavigateLogin }) {
   const { t, lang, toggleLanguage } = useTranslation()
-  const [textSize, setTextSize] = useState('16px')
+  const [textSize, setTextSize] = useState('17px')
   const [selectedDiv, setSelectedDiv] = useState(null)
 
   const divisionDetails = {
@@ -72,9 +72,9 @@ export default function Landing({ onNavigateLogin }) {
         <div className="flex items-center gap-4 mt-2 sm:mt-0">
           <a href="#main-content" className="hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">{t('landing.skip')}</a>
           <div className="flex items-center gap-1 border-l border-r border-slate-300 px-3">
-            <button onClick={() => setTextSize('14px')} className="px-1 hover:text-slate-900" aria-label="Decrease Text Size" title="Decrease Text Size">A-</button>
-            <button onClick={() => setTextSize('16px')} className="px-1 hover:text-slate-900" aria-label="Normal Text Size" title="Normal Text Size">A</button>
-            <button onClick={() => setTextSize('18px')} className="px-1 hover:text-slate-900" aria-label="Increase Text Size" title="Increase Text Size">A+</button>
+            <button onClick={() => setTextSize('15px')} className="px-1 hover:text-slate-900" aria-label="Decrease Text Size" title="Decrease Text Size">A-</button>
+            <button onClick={() => setTextSize('17px')} className="px-1 hover:text-slate-900" aria-label="Normal Text Size" title="Normal Text Size">A</button>
+            <button onClick={() => setTextSize('19px')} className="px-1 hover:text-slate-900" aria-label="Increase Text Size" title="Increase Text Size">A+</button>
           </div>
           <button onClick={toggleLanguage} aria-label="Toggle Language" className="font-bold text-slate-900 hover:underline">
             {lang === 'en' ? 'हिन्दी' : 'English'}
