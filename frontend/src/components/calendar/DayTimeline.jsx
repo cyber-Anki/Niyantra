@@ -41,8 +41,10 @@ function useSyntheticTraffic(dayKey, section) {
   }, [dayKey, section])
 }
 
-export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, section, onDecide }) {
+export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, section, onDecide, userContext, submitBlockFlag }) {
   const [openBlockId, setOpenBlockId] = useState(null)
+  const [flagReason, setFlagReason] = useState('')
+  const [isFlagging, setIsFlagging] = useState(false)
   const dayKey = date.toDateString()
   const traffic = useSyntheticTraffic(dayKey, section)
 
@@ -142,7 +144,11 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                     style={{ left: `${pct(b.start_minute)}%`, width: `${Math.max(pct(b.end_minute) - pct(b.start_minute), 6)}%` }}
                   >
                     <button
-                      onClick={() => setOpenBlockId(openBlockId === b.block_id ? null : b.block_id)}
+                      onClick={() => {
+                        setOpenBlockId(openBlockId === b.block_id ? null : b.block_id)
+                        setIsFlagging(false)
+                        setFlagReason('')
+                      }}
                       className={`focus-ring block w-full rounded-xl px-3 py-2 text-left text-xs font-bold text-white shadow-md transition-transform hover:scale-[1.01] ${b.status === 'approved' ? 'ring-2 ring-emerald-400 ring-offset-1' : ''}`}
                       style={{
                         backgroundColor: isRejected ? '#94A3B8' : color,
@@ -153,7 +159,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                     >
                       <p className="truncate">{b.is_merged ? `${b.departments.join('+')} Block` : `${b.departments[0]} Block`}</p>
                       <p className="text-[10px] font-medium opacity-90 mt-0.5">
-                        {b.status === 'approved' ? '✓ Approved' : b.status === 'rejected' ? '✕ Rejected' : 'Pending'}
+                        {b.status === 'approved' ? '✓ Approved' : b.status === 'rejected' ? '✕ Rejected' : b.status === 'flagged' ? '⚑ Flagged' : 'Pending'}
                       </p>
                     </button>
 
@@ -176,7 +182,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                             <div className="mb-6">
                               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Status</span>
                               <div className="mt-1">
-                                <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${b.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : b.status === 'rejected' ? 'bg-slate-200 text-slate-600' : 'bg-amber-100 text-amber-700'}`}>
+                                <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${b.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : b.status === 'rejected' ? 'bg-slate-200 text-slate-600' : b.status === 'flagged' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
                                   {b.status}
                                 </span>
                               </div>
@@ -203,7 +209,9 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                             <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
                               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">AI Reasoning</span>
                               <p className="mt-2 text-sm text-slate-600 font-medium leading-relaxed">
-                                Dedicated power block required for urgent rectifications in this section. Ensures safe execution of tasks while minimizing traffic disruption.
+                                {b.is_merged 
+                                  ? `Merged ${b.task_ids.length} tasks across ${b.departments.join(' and ')} to optimize track possession and minimize overall traffic downtime by 40 minutes.`
+                                  : `Dedicated power block required for urgent rectifications by ${b.departments[0]}. Ensures safe execution of tasks while minimizing traffic disruption.`}
                               </p>
                             </div>
 
@@ -220,19 +228,61 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                             </div>
 
                             {b.status === 'pending' && (
-                              <div className="mt-8 flex gap-3">
-                                <button
-                                  onClick={() => { onDecide(b.block_id, 'approve'); setOpenBlockId(null) }}
-                                  className="flex-1 rounded-xl bg-[#0A261A] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#133c2a]"
-                                >
-                                  Approve
-                                </button>
-                                <button
-                                  onClick={() => { onDecide(b.block_id, 'reject'); setOpenBlockId(null) }}
-                                  className="flex-1 rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50"
-                                >
-                                  Reject
-                                </button>
+                              <div className="mt-8 flex flex-col gap-3">
+                                {!isFlagging ? (
+                                  <>
+                                    <div className="flex gap-3">
+                                      <button
+                                        onClick={() => { onDecide(b.block_id, 'approve'); setOpenBlockId(null) }}
+                                        className="flex-1 rounded-xl bg-[#0A261A] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#133c2a]"
+                                      >
+                                        Approve
+                                      </button>
+                                      <button
+                                        onClick={() => { onDecide(b.block_id, 'reject'); setOpenBlockId(null) }}
+                                        className="flex-1 rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                                      >
+                                        Reject
+                                      </button>
+                                    </div>
+                                    <button
+                                      onClick={() => setIsFlagging(true)}
+                                      className="w-full rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-bold text-red-700 shadow-sm transition hover:bg-red-100"
+                                    >
+                                      Flag Issue
+                                    </button>
+                                  </>
+                                ) : (
+                                  <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+                                    <label className="text-xs font-bold text-red-900 mb-2 block">Reason for flagging:</label>
+                                    <textarea
+                                      className="w-full rounded-lg border border-red-200 bg-white p-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-red-400"
+                                      rows={3}
+                                      value={flagReason}
+                                      onChange={e => setFlagReason(e.target.value)}
+                                      placeholder="Explain the conflict or safety concern..."
+                                    />
+                                    <div className="mt-3 flex gap-2">
+                                      <button
+                                        onClick={() => {
+                                          if (flagReason.trim()) {
+                                            submitBlockFlag(b.block_id, flagReason, userContext?.department || 'Unknown')
+                                            setOpenBlockId(null)
+                                          }
+                                        }}
+                                        className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-xs font-bold text-white hover:bg-red-700"
+                                      >
+                                        Submit Flag
+                                      </button>
+                                      <button
+                                        onClick={() => setIsFlagging(false)}
+                                        className="flex-1 rounded-lg bg-white border border-red-200 px-3 py-2 text-xs font-bold text-red-700 hover:bg-red-100"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>

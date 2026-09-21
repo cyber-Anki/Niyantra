@@ -14,6 +14,7 @@ export function DataProvider({ children, userContext }) {
   const [unscheduledTaskIds, setUnscheduledTaskIds] = useState([])
   const [monthlyPlan, setMonthlyPlan] = useState(null)
   const [weekStart, setWeekStart] = useState(DEFAULT_WEEK_START)
+  const [flaggedBlocksInfo, setFlaggedBlocksInfo] = useState([])
 
   const [bootLoading, setBootLoading] = useState(true)
   const [priorityLoading, setPriorityLoading] = useState(false)
@@ -102,6 +103,20 @@ export function DataProvider({ children, userContext }) {
     })
   }, [])
 
+  const submitBlockFlag = useCallback((blockId, reason, department) => {
+    setFlaggedBlocksInfo((prev) => [
+      ...prev,
+      { block_id: blockId, reason, department, timestamp: new Date().toISOString() }
+    ])
+    // Also locally mark the block as flagged for UI feedback
+    setBlocks((prev) => prev.map(b => b.block_id === blockId ? { ...b, status: 'flagged' } : b))
+  }, [])
+
+  const resolveBlockFlag = useCallback((blockId) => {
+    setFlaggedBlocksInfo((prev) => prev.filter(f => f.block_id !== blockId))
+    setBlocks((prev) => prev.map(b => b.block_id === blockId ? { ...b, status: 'pending' } : b))
+  }, [])
+
   const commitSimulation = useCallback((simBlocks, simUnscheduled) => {
     setBlocks(simBlocks.map((b) => ({ ...b, status: b.status || 'pending' })))
     setUnscheduledTaskIds(simUnscheduled)
@@ -159,6 +174,9 @@ export function DataProvider({ children, userContext }) {
       decideBlock,
       flaggedTaskIds,
       toggleFlag,
+      flaggedBlocksInfo,
+      submitBlockFlag,
+      resolveBlockFlag,
       commitSimulation,
     }),
     [
@@ -180,6 +198,9 @@ export function DataProvider({ children, userContext }) {
       decideBlock,
       flaggedTaskIds,
       toggleFlag,
+      flaggedBlocksInfo,
+      submitBlockFlag,
+      resolveBlockFlag,
       commitSimulation,
     ]
   )

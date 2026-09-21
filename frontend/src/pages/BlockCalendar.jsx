@@ -5,8 +5,8 @@ import MonthRollup from '../components/calendar/MonthRollup.jsx'
 import { dayFromCorridorDay } from '../components/calendar/deptColors.js'
 import { useTranslation } from '../store/TranslationContext.jsx'
 
-export default function BlockCalendar() {
-  const { corridors, blocks, decideBlock, monthlyPlan, runSimulateMonthly, monthlyLoading } = useNiyantraData()
+export default function BlockCalendar({ userContext }) {
+  const { corridors, blocks, decideBlock, submitBlockFlag, monthlyPlan, runSimulateMonthly, monthlyLoading } = useNiyantraData()
   const { t } = useTranslation()
   const [view, setView] = useState('day')
   const [section, setSection] = useState(null)
@@ -105,6 +105,8 @@ export default function BlockCalendar() {
           corridors={sectionCorridors.filter((c) => dayCorridorIds.has(c.corridor_id))}
           blocks={dayBlocks}
           onDecide={decideBlock}
+          submitBlockFlag={submitBlockFlag}
+          userContext={userContext}
           onPrevDay={() => setDayOffset((d) => d - 1)}
           onNextDay={() => setDayOffset((d) => d + 1)}
         />

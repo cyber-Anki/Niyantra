@@ -58,7 +58,7 @@ function Shell({ userContext, onLogout }) {
             <>
               {page === 'overview' && <Overview setPage={setPage} userContext={userContext} />}
               {page === 'priority' && <PriorityQueue />}
-              {page === 'calendar' && <BlockCalendar />}
+              {page === 'calendar' && <BlockCalendar userContext={userContext} />}
               {page === 'conflicts' && userContext?.role === 'DRM' && <ConflictResolution />}
               {page === 'simulator' && <WhatIfSimulator />}
               {page === 'reports' && <ReportsAnalytics />}
