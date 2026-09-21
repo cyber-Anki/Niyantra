@@ -4,11 +4,47 @@ import heroImage from '../assets/portal_hero.jpg'
 import emblemImg from '../assets/emblem.jpg'
 import swachhImg from '../assets/swachh.jpg'
 import g20Img from '../assets/g20.jpg'
-import { ShieldAlert, SplitSquareHorizontal, LineChart, ChevronRight } from 'lucide-react'
+import nrImage from '../assets/nr_train.jpg'
+import wrImage from '../assets/wr_train.jpg'
+import erImage from '../assets/er_train.jpg'
+import srImage from '../assets/sr_train.jpg'
+import { ShieldAlert, SplitSquareHorizontal, LineChart, ChevronRight, X } from 'lucide-react'
 
 export default function Landing({ onNavigateLogin }) {
   const { t, lang, toggleLanguage } = useTranslation()
   const [textSize, setTextSize] = useState('16px')
+  const [selectedDiv, setSelectedDiv] = useState(null)
+
+  const divisionDetails = {
+    NR: {
+      id: 'NR',
+      name: t('landing.div_northern') || 'Northern Railway',
+      image: nrImage,
+      description: 'The Northern Railway is one of the oldest and largest zones, covering the majestic mountainous regions, the capital city of New Delhi, and serving millions of passengers daily. It is critical for the nation’s strategic mobility and tourism.',
+      stats: { hq: 'Baroda House, New Delhi', routeKm: '6,968 km', states: 'Punjab, Haryana, HP, UP, UK, Delhi, J&K' }
+    },
+    WR: {
+      id: 'WR',
+      name: t('landing.div_western') || 'Western Railway',
+      image: wrImage,
+      description: 'Operating out of the bustling financial capital of Mumbai, the Western Railway boasts incredibly busy suburban networks, gorgeous heritage stations, and highly modernized rapid transit infrastructure along the coast.',
+      stats: { hq: 'Churchgate, Mumbai', routeKm: '6,182 km', states: 'Maharashtra, Gujarat, MP, Rajasthan' }
+    },
+    ER: {
+      id: 'ER',
+      name: t('landing.div_eastern') || 'Eastern Railway',
+      image: erImage,
+      description: 'Rooted in history, Eastern Railway is the lifeline of the eastern corridor. Traversing massive rivers and historic bridges, it fuels the heavily industrialized mining and steel sectors of eastern India.',
+      stats: { hq: 'Fairlie Place, Kolkata', routeKm: '2,823 km', states: 'West Bengal, Bihar, Jharkhand' }
+    },
+    SR: {
+      id: 'SR',
+      name: t('landing.div_southern') || 'Southern Railway',
+      image: srImage,
+      description: 'Snaking through lush tropical landscapes and palm-fringed coastlines, the Southern Railway provides vital connectivity across the culturally rich and industrially thriving states of southern India.',
+      stats: { hq: 'Chennai Central', routeKm: '5,081 km', states: 'Tamil Nadu, Kerala, AP, Karnataka' }
+    }
+  }
 
   useEffect(() => {
     document.documentElement.style.fontSize = textSize
@@ -121,25 +157,66 @@ export default function Landing({ onNavigateLogin }) {
         <div className="max-w-6xl mx-auto">
           <h3 className="text-3xl font-black text-slate-900 uppercase tracking-widest mb-10 border-b-4 border-amber-400 inline-block pb-2">{t('landing.div_title')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 border-2 border-slate-200 shadow-sm hover:border-navy hover:shadow-md transition-all text-center">
-              <div className="h-16 w-16 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-black">NR</div>
-              <h4 className="font-bold text-slate-800">{t('landing.div_northern')}</h4>
-            </div>
-            <div className="bg-white p-6 border-2 border-slate-200 shadow-sm hover:border-navy hover:shadow-md transition-all text-center">
-              <div className="h-16 w-16 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-black">WR</div>
-              <h4 className="font-bold text-slate-800">{t('landing.div_western')}</h4>
-            </div>
-            <div className="bg-white p-6 border-2 border-slate-200 shadow-sm hover:border-navy hover:shadow-md transition-all text-center">
-              <div className="h-16 w-16 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-black">ER</div>
-              <h4 className="font-bold text-slate-800">{t('landing.div_eastern')}</h4>
-            </div>
-            <div className="bg-white p-6 border-2 border-slate-200 shadow-sm hover:border-navy hover:shadow-md transition-all text-center">
-              <div className="h-16 w-16 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-black">SR</div>
-              <h4 className="font-bold text-slate-800">{t('landing.div_southern')}</h4>
-            </div>
+            
+            {['NR', 'WR', 'ER', 'SR'].map(divId => {
+              const div = divisionDetails[divId]
+              return (
+                <div 
+                  key={divId}
+                  onClick={() => setSelectedDiv(div)}
+                  className="group relative h-64 bg-slate-900 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                >
+                  <img src={div.image} alt={div.name} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                    <div className="h-12 w-12 bg-amber-500 text-slate-900 rounded-full flex items-center justify-center mb-3 text-lg font-black shadow-lg transform group-hover:scale-110 transition-transform">{divId}</div>
+                    <h4 className="font-bold text-white text-lg leading-tight">{div.name}</h4>
+                  </div>
+                </div>
+              )
+            })}
+            
           </div>
         </div>
       </section>
+
+      {/* Division Modal Popup */}
+      {selectedDiv && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onClick={() => setSelectedDiv(null)}></div>
+          <div className="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-300">
+            <button onClick={() => setSelectedDiv(null)} className="absolute top-4 right-4 z-10 bg-black/40 text-white hover:bg-black/60 p-2 rounded-full backdrop-blur-md transition-colors">
+              <X size={24} />
+            </button>
+            <div className="h-64 sm:h-80 relative">
+              <img src={selectedDiv.image} alt={selectedDiv.name} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 p-6 sm:p-8">
+                <div className="inline-block bg-amber-500 text-slate-900 font-black px-4 py-1 rounded-full text-sm mb-3 shadow-md">{selectedDiv.id}</div>
+                <h3 className="text-3xl sm:text-4xl font-black text-white">{selectedDiv.name}</h3>
+              </div>
+            </div>
+            <div className="p-6 sm:p-8">
+              <p className="text-lg text-slate-700 font-medium leading-relaxed mb-6">{selectedDiv.description}</p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-200 pt-6">
+                <div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Headquarters</div>
+                  <div className="font-bold text-slate-900">{selectedDiv.stats.hq}</div>
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Route Length</div>
+                  <div className="font-bold text-slate-900">{selectedDiv.stats.routeKm}</div>
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">States Covered</div>
+                  <div className="font-bold text-slate-900">{selectedDiv.stats.states}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Services Section */}
       <section id="services" className="py-20 px-8 bg-white border-b border-slate-200">
