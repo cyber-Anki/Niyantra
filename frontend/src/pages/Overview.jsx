@@ -29,7 +29,7 @@ function StatBox({ label, value, unit, highlight = false, alert = false, icon: I
   return (
     <div className={`relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${appliedColor}`}>
       <div className="relative z-10">
-        <div className="text-[11px] uppercase font-bold tracking-widest mb-3 opacity-90">{label}</div>
+        <div className="text-[20px] uppercase font-bold tracking-wide mb-3 opacity-90 leading-snug">{label}</div>
         <div className="text-4xl font-black">{value} {unit && <span className="text-sm font-bold opacity-90">{unit}</span>}</div>
       </div>
       {Icon && (
