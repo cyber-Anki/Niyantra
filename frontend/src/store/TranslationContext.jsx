@@ -1,0 +1,306 @@
+import { createContext, useContext, useState } from 'react'
+
+const TRANSLATIONS = {
+  en: {
+    // Landing & Sidebar
+    'landing.title': 'MINISTRY OF RAILWAYS',
+    'landing.subtitle': 'GOVERNMENT OF INDIA',
+    'landing.home': 'Home',
+    'landing.about': 'About Us',
+    'landing.divisions': 'Divisions',
+    'landing.services': 'Services',
+    'landing.notifications': 'Notifications',
+    'landing.login': 'Login to Niyantran',
+    'landing.skip': 'Skip to main content',
+    
+    // Extended Landing Content
+    'landing.about_title': 'About Niyantran',
+    'landing.about_text': 'Niyantran is a Next-Generation AI-driven block management system for Indian Railways. It optimizes maintenance schedules, prioritizes critical defects, and automates conflict resolution to ensure maximum network efficiency and safety.',
+    'landing.div_title': 'Major Divisions',
+    'landing.div_northern': 'Northern Railway (NR)',
+    'landing.div_western': 'Western Railway (WR)',
+    'landing.div_eastern': 'Eastern Railway (ER)',
+    'landing.div_southern': 'Southern Railway (SR)',
+    'landing.serv_title': 'Core Services',
+    'landing.serv_ai': 'AI Priority Queuing',
+    'landing.serv_ai_desc': 'Smart prioritization of track maintenance tasks.',
+    'landing.serv_conflict': 'Conflict Resolution',
+    'landing.serv_conflict_desc': 'Automated deconfliction of multi-department possessions.',
+    'landing.serv_sim': 'What-If Simulation',
+    'landing.serv_sim_desc': 'Forecast network capacity based on future block requests.',
+    'landing.notif_title': 'Recent Circulars',
+    'landing.notif_1': 'Maintenance Circular #42: Pre-Monsoon Preparation',
+    'landing.notif_2': 'System Downtime Scheduled for Database Upgrade',
+    'landing.notif_3': 'New AI Model v2.4 deployed to Production',
+    'landing.footer_text': '© 2026 Ministry of Railways, Government of India.',
+
+    'sidebar.overview': 'Overview',
+    'sidebar.priority': 'Priority Queue',
+    'sidebar.calendar': 'Block Calendar',
+    'sidebar.conflicts': 'Conflict Resolution',
+    'sidebar.simulator': 'What-If Simulator',
+    'sidebar.reports': 'Reports / Analytics',
+    'sidebar.settings': 'Settings',
+    'topbar.title': 'Niyantran Command Center',
+
+    // Login & Auth
+    'auth.login_title': 'Rly Users Login Here',
+    'auth.register_title': 'Register New Account',
+    'auth.security_verification': 'Security Verification',
+    'auth.recover_account': 'Recover Account',
+    'auth.new_password': 'Create New Password',
+    'auth.full_name': 'Full Name',
+    'auth.email': 'Email Address',
+    'auth.password': 'Password',
+    'auth.role': 'Role Selection',
+    'auth.remember': 'Remember me',
+    'auth.forgot': 'Forgot Password?',
+    'auth.proceed_verification': 'Proceed to Verification',
+    'auth.register_btn': 'Register Account',
+    'auth.hrms_login': 'Login using HRMS Single Sign On',
+    'auth.otp_sent': 'An OTP has been sent to',
+    'auth.enter_4_digit': 'Please enter the 4-digit code below.',
+    'auth.4_digit_otp': '4-Digit OTP',
+    'auth.verify_login': 'Verify & Login',
+    'auth.verify_register': 'Verify & Register',
+    'auth.cancel_return': 'Cancel & Return to Login',
+    'auth.tab_login': 'Login',
+    'auth.tab_register': 'Register',
+
+    // Dashboards Common
+    'dash.corridor': 'CORRIDOR',
+    'dash.division': 'DIVISION',
+    'dash.status_online': 'STATUS: ONLINE',
+    'dash.system_offline': 'SYSTEM OFFLINE.',
+    
+    // Engineer Dashboard
+    'eng.portal': 'Section Engineer Portal',
+    'eng.total_open': 'Total Open Tasks',
+    'eng.critical_defects': 'Critical Defects',
+    'eng.pending_blocks': 'Pending Blocks',
+    'eng.approved_blocks': 'Approved Blocks',
+    'eng.health': 'Corridor Health',
+    'eng.nominal': 'Nominal',
+    'eng.upcoming_schedule': 'Upcoming Block Schedule',
+    'eng.start_time': 'Start Time',
+    'eng.end_time': 'End Time',
+    'eng.departments': 'Departments',
+    'eng.status': 'Status',
+    'eng.no_blocks': 'No Blocks Scheduled',
+    'eng.priority_queue': 'Priority Queue',
+    'eng.manage_defects': 'Manage corridor defects',
+    'eng.block_calendar': 'Block Calendar',
+    'eng.view_timeline': 'View full timeline',
+
+    // Controller Dashboard
+    'ctrl.dashboard': 'Division Controller',
+    'ctrl.subtitle': 'LIVE TRAFFIC & CONFLICTS',
+    'ctrl.pending_requests': 'Pending Block Requests',
+    'ctrl.active_blocks': 'Active Approved Blocks',
+    'ctrl.total_corridors': 'Total Corridors',
+    'ctrl.network_status': 'Network Status',
+    'ctrl.active': 'ACTIVE',
+    'ctrl.live_requests': 'Live Block Requests',
+    'ctrl.duration': 'Duration',
+    'ctrl.req_depts': 'Requesting Depts',
+    'ctrl.action': 'Action',
+    'ctrl.review': 'Review',
+    'ctrl.all_resolved': 'All conflicts resolved',
+    'ctrl.conflict_res': 'Conflict Resolution',
+    'ctrl.resolve_pending': 'Resolve pending requests',
+    'ctrl.master_calendar': 'Master Calendar',
+    'ctrl.view_all_timelines': 'View all timelines',
+
+    // DRM Dashboard
+    'drm.summary': 'DRM Executive Summary',
+    'drm.command_center': 'COMMAND CENTER',
+    'drm.total_active': 'Total Active Tasks',
+    'drm.div_pending': 'Division Pending Blocks',
+    'drm.approved_possessions': 'Approved Possessions',
+    'drm.critical_div': 'Critical Division Defects',
+    'drm.dept_breakdown': 'Departmental Breakdown',
+    'drm.total': 'Total',
+    'drm.critical': 'Critical',
+    'drm.reports': 'Reports & Analytics',
+    'drm.div_kpis': 'Division KPIs',
+    'drm.whatif': 'What-If Simulator',
+    'drm.forecast': 'Forecast capacity',
+
+    // Reports
+    'rep.title': 'Reports & Analytics',
+    'rep.subtitle': 'Downtime, SLA, utilization and 4-week risk forecast',
+    'rep.export': 'Export CSV',
+    'rep.run_forecast': 'RUN 4-WEEK FORECAST',
+    'rep.simulating': 'SIMULATING...',
+    'rep.efficiency': 'Block Utilization Efficiency',
+    'rep.rolled_forward': 'Tasks Rolled Forward',
+    'rep.merges': 'Cross-Department Merges',
+    'rep.used_of': 'used of',
+    'rep.available': 'available',
+    'rep.of': 'of',
+    'rep.total_backlog': 'total backlog this week',
+    'rep.scheduled_blocks': 'scheduled blocks this week',
+  },
+  hi: {
+    // Landing & Sidebar
+    'landing.title': 'रेल मंत्रालय',
+    'landing.subtitle': 'भारत सरकार',
+    'landing.home': 'मुख्य पृष्ठ',
+    'landing.about': 'हमारे बारे में',
+    'landing.divisions': 'प्रभाग',
+    'landing.services': 'सेवाएं',
+    'landing.notifications': 'अधिसूचनाएं',
+    'landing.login': 'नियंत्रण में लॉग इन करें',
+    'landing.skip': 'मुख्य सामग्री पर जाएं',
+    
+    // Extended Landing Content
+    'landing.about_title': 'नियंत्रण के बारे में',
+    'landing.about_text': 'नियंत्रण भारतीय रेलवे के लिए एक अगली पीढ़ी का एआई-संचालित ब्लॉक प्रबंधन प्रणाली है। यह रखरखाव कार्यक्रमों को अनुकूलित करता है, गंभीर दोषों को प्राथमिकता देता है, और अधिकतम नेटवर्क दक्षता और सुरक्षा सुनिश्चित करने के लिए संघर्ष समाधान को स्वचालित करता है।',
+    'landing.div_title': 'प्रमुख प्रभाग',
+    'landing.div_northern': 'उत्तर रेलवे (NR)',
+    'landing.div_western': 'पश्चिम रेलवे (WR)',
+    'landing.div_eastern': 'पूर्व रेलवे (ER)',
+    'landing.div_southern': 'दक्षिण रेलवे (SR)',
+    'landing.serv_title': 'मुख्य सेवाएं',
+    'landing.serv_ai': 'एआई प्राथमिकता कतार',
+    'landing.serv_ai_desc': 'ट्रैक रखरखाव कार्यों की स्मार्ट प्राथमिकता।',
+    'landing.serv_conflict': 'संघर्ष समाधान',
+    'landing.serv_conflict_desc': 'बहु-विभागीय कब्जों का स्वचालित संघर्ष समाधान।',
+    'landing.serv_sim': 'सिमुलेशन (What-If)',
+    'landing.serv_sim_desc': 'भविष्य के ब्लॉक अनुरोधों के आधार पर नेटवर्क क्षमता का पूर्वानुमान।',
+    'landing.notif_title': 'नवीनतम परिपत्र',
+    'landing.notif_1': 'रखरखाव परिपत्र #42: मानसून से पहले की तैयारी',
+    'landing.notif_2': 'डेटाबेस अपग्रेड के लिए निर्धारित सिस्टम डाउनटाइम',
+    'landing.notif_3': 'नया एआई मॉडल v2.4 उत्पादन में तैनात',
+    'landing.footer_text': '© 2026 रेल मंत्रालय, भारत सरकार।',
+
+    'sidebar.overview': 'अवलोकन',
+    'sidebar.priority': 'प्राथमिकता कतार',
+    'sidebar.calendar': 'ब्लॉक कैलेंडर',
+    'sidebar.conflicts': 'संघर्ष समाधान',
+    'sidebar.simulator': 'सिम्युलेटर',
+    'sidebar.reports': 'रिपोर्ट / एनालिटिक्स',
+    'sidebar.settings': 'सेटिंग्स',
+    'topbar.title': 'नियंत्रण कमांड सेंटर',
+
+    // Login & Auth
+    'auth.login_title': 'रेलवे उपयोगकर्ता यहाँ लॉग इन करें',
+    'auth.register_title': 'नया खाता पंजीकृत करें',
+    'auth.security_verification': 'सुरक्षा सत्यापन',
+    'auth.recover_account': 'खाता पुनर्प्राप्त करें',
+    'auth.new_password': 'नया पासवर्ड बनाएं',
+    'auth.full_name': 'पूरा नाम',
+    'auth.email': 'ईमेल पता',
+    'auth.password': 'पासवर्ड',
+    'auth.role': 'भूमिका चयन',
+    'auth.remember': 'मुझे याद रखें',
+    'auth.forgot': 'पासवर्ड भूल गए?',
+    'auth.proceed_verification': 'सत्यापन के लिए आगे बढ़ें',
+    'auth.register_btn': 'खाता पंजीकृत करें',
+    'auth.hrms_login': 'HRMS सिंगल साइन ऑन का उपयोग करके लॉग इन करें',
+    'auth.otp_sent': 'इस पर एक ओटीपी भेजा गया है',
+    'auth.enter_4_digit': 'कृपया नीचे 4-अंकीय कोड दर्ज करें।',
+    'auth.4_digit_otp': '4-अंकीय ओटीपी',
+    'auth.verify_login': 'सत्यापित करें और लॉग इन करें',
+    'auth.verify_register': 'सत्यापित करें और पंजीकृत करें',
+    'auth.cancel_return': 'रद्द करें और लॉगिन पर लौटें',
+    'auth.tab_login': 'लॉग इन',
+    'auth.tab_register': 'पंजीकरण',
+
+    // Dashboards Common
+    'dash.corridor': 'कॉरिडोर',
+    'dash.division': 'प्रभाग',
+    'dash.status_online': 'स्थिति: ऑनलाइन',
+    'dash.system_offline': 'सिस्टम ऑफ़लाइन है।',
+
+    // Engineer Dashboard
+    'eng.portal': 'अनुभाग अभियंता पोर्टल',
+    'eng.total_open': 'कुल खुले कार्य',
+    'eng.critical_defects': 'गंभीर दोष',
+    'eng.pending_blocks': 'लंबित ब्लॉक',
+    'eng.approved_blocks': 'स्वीकृत ब्लॉक',
+    'eng.health': 'कॉरिडोर स्वास्थ्य',
+    'eng.nominal': 'सामान्य',
+    'eng.upcoming_schedule': 'आगामी ब्लॉक अनुसूची',
+    'eng.start_time': 'प्रारंभ समय',
+    'eng.end_time': 'समाप्ति समय',
+    'eng.departments': 'विभाग',
+    'eng.status': 'स्थिति',
+    'eng.no_blocks': 'कोई ब्लॉक निर्धारित नहीं',
+    'eng.priority_queue': 'प्राथमिकता कतार',
+    'eng.manage_defects': 'कॉरिडोर दोषों का प्रबंधन करें',
+    'eng.block_calendar': 'ब्लॉक कैलेंडर',
+    'eng.view_timeline': 'पूरा समयरेखा देखें',
+
+    // Controller Dashboard
+    'ctrl.dashboard': 'प्रभाग नियंत्रक',
+    'ctrl.subtitle': 'लाइव ट्रैफ़िक और संघर्ष',
+    'ctrl.pending_requests': 'लंबित ब्लॉक अनुरोध',
+    'ctrl.active_blocks': 'सक्रिय स्वीकृत ब्लॉक',
+    'ctrl.total_corridors': 'कुल कॉरिडोर',
+    'ctrl.network_status': 'नेटवर्क स्थिति',
+    'ctrl.active': 'सक्रिय',
+    'ctrl.live_requests': 'लाइव ब्लॉक अनुरोध',
+    'ctrl.duration': 'अवधि',
+    'ctrl.req_depts': 'अनुरोध करने वाले विभाग',
+    'ctrl.action': 'कार्रवाई',
+    'ctrl.review': 'समीक्षा',
+    'ctrl.all_resolved': 'सभी संघर्ष हल हो गए',
+    'ctrl.conflict_res': 'संघर्ष समाधान',
+    'ctrl.resolve_pending': 'लंबित अनुरोधों का समाधान करें',
+    'ctrl.master_calendar': 'मास्टर कैलेंडर',
+    'ctrl.view_all_timelines': 'सभी समयरेखाएं देखें',
+
+    // DRM Dashboard
+    'drm.summary': 'डीआरएम कार्यकारी सारांश',
+    'drm.command_center': 'कमांड सेंटर',
+    'drm.total_active': 'कुल सक्रिय कार्य',
+    'drm.div_pending': 'प्रभाग लंबित ब्लॉक',
+    'drm.approved_possessions': 'स्वीकृत अधिकार',
+    'drm.critical_div': 'गंभीर प्रभाग दोष',
+    'drm.dept_breakdown': 'विभागीय विवरण',
+    'drm.total': 'कुल',
+    'drm.critical': 'गंभीर',
+    'drm.reports': 'रिपोर्ट और एनालिटिक्स',
+    'drm.div_kpis': 'प्रभाग केपीआई',
+    'drm.whatif': 'सिम्युलेटर',
+    'drm.forecast': 'क्षमता का पूर्वानुमान लगाएं',
+
+    // Reports
+    'rep.title': 'रिपोर्ट और एनालिटिक्स',
+    'rep.subtitle': 'डाउनटाइम, एसएलए, उपयोग और 4-सप्ताह का जोखिम पूर्वानुमान',
+    'rep.export': 'CSV निर्यात करें',
+    'rep.run_forecast': '4-सप्ताह का पूर्वानुमान चलाएं',
+    'rep.simulating': 'सिमुलेट कर रहा है...',
+    'rep.efficiency': 'ब्लॉक उपयोग दक्षता',
+    'rep.rolled_forward': 'आगे बढ़ाए गए कार्य',
+    'rep.merges': 'क्रॉस-डिपार्टमेंट मर्ज',
+    'rep.used_of': 'में से उपयोग किया गया',
+    'rep.available': 'उपलब्ध',
+    'rep.of': 'में से',
+    'rep.total_backlog': 'इस सप्ताह का कुल बैकलॉग',
+    'rep.scheduled_blocks': 'इस सप्ताह निर्धारित ब्लॉक',
+  }
+}
+
+const TranslationContext = createContext(null)
+
+export function TranslationProvider({ children }) {
+  const [lang, setLang] = useState('en')
+  
+  const toggleLanguage = () => {
+    setLang(prev => prev === 'en' ? 'hi' : 'en')
+  }
+
+  const t = (key) => TRANSLATIONS[lang][key] || key
+
+  return (
+    <TranslationContext.Provider value={{ lang, toggleLanguage, t }}>
+      {children}
+    </TranslationContext.Provider>
+  )
+}
+
+export function useTranslation() {
+  return useContext(TranslationContext)
+}
