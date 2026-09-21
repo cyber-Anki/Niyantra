@@ -112,7 +112,6 @@ export default function Landing({ onNavigateLogin }) {
           <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.about')}</a></li>
           <li><a href="#divisions" onClick={(e) => { e.preventDefault(); scrollToSection('divisions'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.divisions')}</a></li>
           <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.services')}</a></li>
-          <li><a href="#notifications" onClick={(e) => { e.preventDefault(); scrollToSection('notifications'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.notifications')}</a></li>
         </ul>
       </nav>
 

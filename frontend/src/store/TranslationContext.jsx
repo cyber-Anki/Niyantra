@@ -41,10 +41,10 @@ const TRANSLATIONS = {
     'sidebar.simulator': 'What-If Simulator',
     'sidebar.reports': 'Reports / Analytics',
     'sidebar.settings': 'Settings',
-    'topbar.title': 'Niyantran Command Center',
+    'topbar.title': 'Niyantran',
 
     // Login & Auth
-    'auth.login_title': 'Rly Users Login Here',
+    'auth.login_title': 'Login',
     'auth.register_title': 'Register New Account',
     'auth.security_verification': 'Security Verification',
     'auth.recover_account': 'Recover Account',
