@@ -22,7 +22,7 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
       className={`relative shrink-0 bg-slate-900 border-r border-slate-800 text-slate-300 transition-[width] duration-200 h-full ${
-        collapsed ? 'w-20' : 'w-64'
+        collapsed ? 'w-20' : 'w-72'
       }`}
     >
       <button
@@ -34,16 +34,16 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
       </button>
 
       <div className="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
-        <img src={logoMark} alt="Niyantran" className="h-8 w-8 object-contain shrink-0" />
+        <img src={logoMark} alt="Niyantran" className="h-9 w-9 object-contain shrink-0" />
         {!collapsed && (
           <div className="overflow-hidden whitespace-nowrap">
-            <h1 className="font-serif text-lg font-bold tracking-wide text-white">Niyantran</h1>
-            <p className="text-xs uppercase tracking-wider text-slate-400">Indian Railways</p>
+            <h1 className="font-serif text-xl font-bold tracking-wide text-white">Niyantran</h1>
+            <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold">Indian Railways</p>
           </div>
         )}
       </div>
 
-      <nav className="space-y-1 p-3">
+      <nav className="space-y-1.5 p-3.5">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
           const active = page === item.id
@@ -51,13 +51,13 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
             <button
               key={item.id}
               onClick={() => setPage(item.id)}
-              className={`focus-ring flex w-full items-center gap-3 rounded-lg px-3.5 py-3 text-sm font-medium transition ${
+              className={`focus-ring flex w-full items-center gap-3.5 rounded-xl px-4 py-3.5 text-base sm:text-lg font-semibold transition ${
                 active
-                  ? 'bg-gold text-slate-900 shadow-sm font-bold'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  ? 'bg-gold text-slate-900 shadow-md font-bold'
+                  : 'text-slate-200 hover:bg-slate-800 hover:text-white'
               }`}
             >
-              <Icon size={18} className="shrink-0" />
+              <Icon size={22} className="shrink-0" />
               {!collapsed && <span className="truncate">{item.label}</span>}
             </button>
           )
