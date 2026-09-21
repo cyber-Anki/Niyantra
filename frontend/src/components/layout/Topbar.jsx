@@ -1,9 +1,22 @@
 import { useState, useRef, useEffect } from 'react'
-import { Moon, Sun, Bell, LogOut, AlertTriangle, ClipboardCheck, GitPullRequestArrow, Menu } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Moon,
+  Sun,
+  Bell,
+  LogOut,
+  AlertTriangle,
+  ClipboardCheck,
+  GitPullRequestArrow,
+  Menu,
+  CheckCircle2,
+  CheckCheck,
+  ChevronRight,
+} from 'lucide-react'
 import { useNiyantraData } from '../../store/DataContext.jsx'
 import { useTranslation } from '../../store/TranslationContext.jsx'
 
-function NotificationPanel({ onClose, onNavigate }) {
+function NotificationPanel({ onClose, onNavigate, onMarkAllRead, isMarkedRead }) {
   const { rankedTasks, blocks, unscheduledTaskIds } = useNiyantraData()
   const critical = rankedTasks.filter((t) => t.severity === 'critical').slice(0, 4)
   const pendingBlocks = blocks.filter((b) => b.status === 'pending').length
@@ -11,75 +24,210 @@ function NotificationPanel({ onClose, onNavigate }) {
 
   useEffect(() => {
     const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) onClose()
+      if (ref.current && !ref.current.contains(e.target)) {
+        onClose()
+      }
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [onClose])
 
+  const totalUnread = isMarkedRead ? 0 : critical.length + pendingBlocks + unscheduledTaskIds.length
+
   return (
-    <div
+    <motion.div
       ref={ref}
-      className="absolute right-0 sm:right-0 sm:top-12 top-12 z-50 w-[calc(100vw-32px)] max-w-sm sm:w-96 border border-white/60 dark:border-white/15 bg-white/85 dark:bg-[#0F172A]/90 backdrop-blur-2xl p-3 shadow-[0_16px_48px_rgba(0,0,0,0.15)] rounded-2xl animate-in fade-in zoom-in-95 duration-200"
+      initial={{ opacity: 0, y: 6, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 6, scale: 0.98 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+      className="absolute right-0 top-[calc(100%+12px)] z-50 w-[calc(100vw-32px)] max-w-sm sm:w-[420px] rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0F172A] shadow-[0_20px_50px_rgba(15,23,42,0.14)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden"
     >
-      <button
-        onClick={() => { onNavigate('calendar'); onClose() }}
-        className="focus-ring flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left hover:bg-slate-100/70 dark:hover:bg-white/10 transition-colors"
-      >
-        <span className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
-          <ClipboardCheck size={16} className="text-gold-dark" />
-          Approval requests
-        </span>
-        <span className="rounded-full bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 text-xs font-bold text-amber-900 dark:text-amber-300">{pendingBlocks}</span>
-      </button>
+      {/* Subtle pointer arrow aligned with bell icon */}
+      <div className="absolute -top-1.5 right-3.5 h-3 w-3 rotate-45 border-t border-l border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0F172A] z-10 pointer-events-none" />
 
-      <button
-        onClick={() => { onNavigate('conflicts'); onClose() }}
-        className="focus-ring flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left hover:bg-slate-100/70 dark:hover:bg-white/10 transition-colors"
-      >
-        <span className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
-          <GitPullRequestArrow size={16} className="text-dept-trd" />
-          Conflict / capacity alerts
-        </span>
-        <span className="rounded-full bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 text-xs font-bold text-amber-900 dark:text-amber-300">{unscheduledTaskIds.length}</span>
-      </button>
-
-      <div className="my-2 border-t border-slate-200/50 dark:border-white/10" />
-
-      <button
-        onClick={() => { onNavigate('priority'); onClose() }}
-        className="mb-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-100/70 dark:hover:bg-white/10 transition-colors"
-      >
-        <AlertTriangle size={16} className="text-severity-critical" />
-        SLA breach warnings
-      </button>
-      {critical.length === 0 && (
-        <p className="px-3 py-3 text-sm font-medium text-slate-400">No critical severity items right now.</p>
-      )}
-      <div className="flex flex-col gap-1">
-        {critical.map((t) => (
-          <button
-            key={t.task_id}
-            onClick={() => { onNavigate('priority'); onClose() }}
-            className="rounded-xl px-3 py-2.5 text-left hover:bg-slate-100/70 dark:hover:bg-white/10 transition-colors"
-          >
-            <div className="flex items-center justify-between text-xs font-bold">
-              <span className="font-mono text-slate-500 dark:text-slate-400">{t.task_id}</span>
-              <span className="rounded-full bg-severity-criticalBg px-2 py-0.5 font-bold text-severity-critical">
-                critical
-              </span>
-            </div>
-            <p className="mt-0.5 text-sm capitalize font-semibold text-slate-900 dark:text-white">{t.defect_type.replaceAll('_', ' ')}</p>
-            <p className="text-xs text-slate-400 font-medium">{t.section} · {t.overdue_days}d overdue</p>
-          </button>
-        ))}
+      {/* Header */}
+      <div className="relative z-20 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/60 px-4 py-3.5">
+        <div className="flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400">
+            <Bell size={15} />
+          </div>
+          <h2 className="font-serif text-base font-bold text-slate-900 dark:text-white tracking-tight">
+            Notifications
+          </h2>
+          {totalUnread > 0 && (
+            <span className="rounded-full bg-red-500/15 border border-red-500/30 px-2 py-0.5 text-[11px] font-bold text-red-700 dark:text-red-300">
+              {totalUnread} new
+            </span>
+          )}
+        </div>
+        <button
+          onClick={onMarkAllRead}
+          className="focus-ring inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-indigo-700 dark:text-amber-400 hover:bg-indigo-50 dark:hover:bg-white/10 transition-colors"
+        >
+          <CheckCheck size={14} />
+          <span>Mark all as read</span>
+        </button>
       </div>
-    </div>
+
+      {/* Notification Body */}
+      <div className="p-3 space-y-1.5 max-h-[70vh] overflow-y-auto">
+        {/* Category 1: Approval Requests */}
+        <button
+          onClick={() => {
+            onNavigate('calendar')
+            onClose()
+          }}
+          className="focus-ring group flex w-full items-center justify-between rounded-xl p-2.5 text-left transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/60 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-700/50"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-50 dark:bg-amber-950/50 border border-amber-200/70 dark:border-amber-800/60 text-amber-600 dark:text-amber-400">
+              <ClipboardCheck size={18} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
+                Approval requests
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Pending maintenance block clearances
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700/50 px-2.5 py-0.5 text-xs font-bold text-amber-800 dark:text-amber-300">
+              {pendingBlocks}
+            </span>
+            <ChevronRight size={15} className="text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors" />
+          </div>
+        </button>
+
+        {/* Category 2: Conflict / Capacity Alerts */}
+        <button
+          onClick={() => {
+            onNavigate('conflicts')
+            onClose()
+          }}
+          className="focus-ring group flex w-full items-center justify-between rounded-xl p-2.5 text-left transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/60 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-700/50"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200/70 dark:border-indigo-800/60 text-indigo-600 dark:text-indigo-400">
+              <GitPullRequestArrow size={18} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">
+                Conflict / capacity alerts
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Unscheduled tasks & corridor overlaps
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700/50 px-2.5 py-0.5 text-xs font-bold text-indigo-800 dark:text-indigo-300">
+              {unscheduledTaskIds.length}
+            </span>
+            <ChevronRight size={15} className="text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors" />
+          </div>
+        </button>
+
+        {/* Divider */}
+        <div className="my-1.5 border-t border-slate-100 dark:border-slate-800/80" />
+
+        {/* Category 3: SLA Breach Warnings */}
+        <div className="pt-0.5">
+          <button
+            onClick={() => {
+              onNavigate('priority')
+              onClose()
+            }}
+            className="focus-ring group flex w-full items-center justify-between rounded-xl p-2.5 text-left transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/60 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-700/50"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 dark:bg-red-950/50 border border-red-200/70 dark:border-red-800/60 text-red-600 dark:text-red-400">
+                <AlertTriangle size={18} />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                  SLA breach warnings
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                  Overdue critical track defects
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700/50 px-2.5 py-0.5 text-xs font-bold text-red-700 dark:text-red-300">
+                {critical.length}
+              </span>
+              <ChevronRight size={15} className="text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors" />
+            </div>
+          </button>
+
+          {/* SLA Critical Items list or Empty State */}
+          {critical.length === 0 ? (
+            <div className="mx-1 my-2 flex items-center gap-3 rounded-xl border border-emerald-200/70 bg-emerald-50/50 dark:border-emerald-800/50 dark:bg-emerald-950/20 p-3 text-left">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
+                <CheckCircle2 size={16} />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">You're all caught up</p>
+                <p className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400">No critical severity items right now.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-1 space-y-1.5 pl-2 pr-1">
+              {critical.map((t) => (
+                <button
+                  key={t.task_id}
+                  onClick={() => {
+                    onNavigate('priority')
+                    onClose()
+                  }}
+                  className="group w-full rounded-xl border border-slate-200/60 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40 p-2.5 text-left transition-colors duration-150 hover:bg-slate-100/90 dark:hover:bg-slate-800/70 hover:border-red-200/60 dark:hover:border-red-900/40"
+                >
+                  <div className="flex items-center justify-between text-xs font-bold">
+                    <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700">
+                      {t.task_id}
+                    </span>
+                    <span className="rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 px-2 py-0.5 text-[10px] font-bold text-red-700 dark:text-red-300 uppercase tracking-wider">
+                      critical
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-xs font-bold capitalize text-slate-800 dark:text-slate-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                    {t.defect_type.replaceAll('_', ' ')}
+                  </p>
+                  <p className="mt-0.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                    <span>{t.section}</span>
+                    <span>·</span>
+                    <span className="text-red-600 dark:text-red-400 font-semibold">{t.overdue_days}d overdue</span>
+                  </p>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60 px-4 py-2.5 flex items-center justify-between text-xs">
+        <span className="text-slate-500 dark:text-slate-400 font-medium">Niyantra Operational Alert Center</span>
+        <button
+          onClick={() => {
+            onNavigate('priority')
+            onClose()
+          }}
+          className="font-bold text-indigo-700 dark:text-amber-400 hover:underline flex items-center gap-0.5"
+        >
+          View all <ChevronRight size={13} />
+        </button>
+      </div>
+    </motion.div>
   )
 }
 
 export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
   const [notifOpen, setNotifOpen] = useState(false)
+  const [isMarkedRead, setIsMarkedRead] = useState(false)
   const [isDark, setIsDark] = useState(false)
   const { rankedTasks, blocks, unscheduledTaskIds } = useNiyantraData()
   const { toggleLanguage, t } = useTranslation()
@@ -93,10 +241,11 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
     }
   }, [isDark])
 
-  const alertCount =
-    rankedTasks.filter((t) => t.severity === 'critical').length +
-    blocks.filter((b) => b.status === 'pending').length +
-    unscheduledTaskIds.length
+  const alertCount = isMarkedRead
+    ? 0
+    : rankedTasks.filter((t) => t.severity === 'critical').length +
+      blocks.filter((b) => b.status === 'pending').length +
+      unscheduledTaskIds.length
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between bg-white/70 dark:bg-[#0F172A]/75 backdrop-blur-2xl backdrop-saturate-150 border-b border-white/60 dark:border-white/10 px-4 md:px-6 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.3)] sticky top-0 z-30">
@@ -127,18 +276,29 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
           <button
             onClick={() => setNotifOpen(!notifOpen)}
             title="Notifications"
-            className="focus-ring relative rounded-xl p-2.5 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/15 backdrop-blur-md border border-white/60 dark:border-white/10 text-slate-700 dark:text-white shadow-sm transition-all duration-200"
+            className={`focus-ring relative rounded-xl p-2.5 transition-all duration-200 ${
+              notifOpen
+                ? 'bg-amber-500/15 dark:bg-amber-400/20 text-indigo-950 dark:text-amber-300 border border-amber-500/40 shadow-sm'
+                : 'bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/15 backdrop-blur-md border border-white/60 dark:border-white/10 text-slate-700 dark:text-white shadow-sm'
+            }`}
           >
             <Bell size={18} />
             {alertCount > 0 && (
-              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-severity-critical text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900">
+              <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-red-600 text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900">
                 {alertCount}
               </span>
             )}
           </button>
-          {notifOpen && (
-            <NotificationPanel onClose={() => setNotifOpen(false)} onNavigate={setPage} />
-          )}
+          <AnimatePresence>
+            {notifOpen && (
+              <NotificationPanel
+                onClose={() => setNotifOpen(false)}
+                onNavigate={setPage}
+                onMarkAllRead={() => setIsMarkedRead(true)}
+                isMarkedRead={isMarkedRead}
+              />
+            )}
+          </AnimatePresence>
         </div>
         
         <div className="h-6 w-px bg-slate-300/60 dark:bg-white/20 hidden sm:block"></div>
@@ -155,3 +315,4 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
     </header>
   )
 }
+
