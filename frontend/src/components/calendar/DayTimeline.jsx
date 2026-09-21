@@ -49,7 +49,51 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
   const dayKey = date.toDateString()
   const traffic = useSyntheticTraffic(dayKey, section)
 
-  const dayBlocks = blocks.filter((b) => b.start_minute >= 0 && b.start_minute <= 1440)
+  const dayBlocks = useMemo(
+    () => blocks.filter((b) => b.start_minute >= 0 && b.start_minute <= 1440),
+    [blocks]
+  )
+
+  // Stagger overlapping traffic slots into distinct vertical sub-lanes
+  const positionedTraffic = useMemo(() => {
+    const lanes = []
+    const sorted = [...traffic].sort((a, b) => a.start - b.start)
+    return sorted.map((tr) => {
+      // Allow visual buffer so minimum chip width (~75px / ~60min equivalent) doesn't collide
+      const visualEnd = Math.max(tr.end, tr.start + 55) + 15
+      let lane = 0
+      while (lanes[lane] !== undefined && lanes[lane] > tr.start) {
+        lane++
+      }
+      lanes[lane] = visualEnd
+      return { ...tr, lane }
+    })
+  }, [traffic])
+
+  const trafficLaneCount = useMemo(
+    () => Math.max(1, ...positionedTraffic.map((t) => t.lane + 1)),
+    [positionedTraffic]
+  )
+
+  // Stagger overlapping blocks into distinct vertical sub-lanes if necessary
+  const positionedBlocks = useMemo(() => {
+    const lanes = []
+    const sorted = [...dayBlocks].sort((a, b) => a.start_minute - b.start_minute)
+    return sorted.map((b) => {
+      const visualEnd = Math.max(b.end_minute, b.start_minute + 75) + 15
+      let lane = 0
+      while (lanes[lane] !== undefined && lanes[lane] > b.start_minute) {
+        lane++
+      }
+      lanes[lane] = visualEnd
+      return { ...b, lane }
+    })
+  }, [dayBlocks])
+
+  const blockLaneCount = useMemo(
+    () => Math.max(1, ...positionedBlocks.map((b) => b.lane + 1)),
+    [positionedBlocks]
+  )
 
   return (
     <div className="rounded-2xl bg-[#FDF9F1] p-6 h-full relative overflow-hidden">
@@ -94,14 +138,22 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
           transition={{ duration: 0.18 }}
           className="overflow-x-auto"
         >
-          <div className="min-w-[900px]">
+          <div className="min-w-[950px]">
             {/* hour ruler */}
             <div className="relative ml-24 h-6 border-b border-slate-200/60 mb-1">
-              {HOURS.filter((_, idx) => idx % 2 === 0).map((h) => (
+              {HOURS.filter((_, idx) => idx % 2 === 0).map((h, idx, arr) => (
                 <span
                   key={h}
-                  className="absolute -translate-x-1/2 text-xs font-bold text-slate-400 font-mono"
-                  style={{ left: `${pct(h)}%` }}
+                  className="absolute text-xs font-bold text-slate-400 font-mono"
+                  style={{
+                    left: `${pct(h)}%`,
+                    transform:
+                      idx === 0
+                        ? 'translateX(0%)'
+                        : idx === arr.length - 1
+                        ? 'translateX(-100%)'
+                        : 'translateX(-50%)',
+                  }}
                 >
                   {String(Math.floor(h / 60)).padStart(2, '0')}:00
                 </span>
@@ -109,20 +161,25 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
             </div>
 
             {/* TRAFFIC row */}
-            <Row label="TRAFFIC">
-              {traffic.map((tr, i) => (
+            <Row label="TRAFFIC" heightStyle={{ minHeight: `${Math.max(54, trafficLaneCount * 38 + 12)}px` }}>
+              {positionedTraffic.map((tr, i) => (
                 <motion.div
                   key={tr.id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.2, delay: i * 0.03 }}
                   title={`${tr.id} · ${formatTimeOfDay(tr.start)}–${formatTimeOfDay(tr.end)}`}
-                  className={`absolute top-2.5 flex h-9 items-center justify-center rounded-lg px-2 text-xs font-bold shadow-sm ${
+                  className={`absolute flex h-8 items-center justify-center rounded-lg px-2.5 text-xs font-bold shadow-sm whitespace-nowrap transition-all hover:z-20 hover:scale-105 ${
                     tr.isFreight
-                      ? 'bg-[#FDF0E1] text-[#D88A58]'
-                      : 'bg-[#E4EEFF] text-[#426BB4]'
+                      ? 'bg-[#FDF0E1] text-[#D88A58] border border-[#F3D1AE]'
+                      : 'bg-[#E4EEFF] text-[#426BB4] border border-[#BFD5FA]'
                   }`}
-                  style={{ left: `${pct(tr.start)}%`, width: `${Math.max(pct(tr.end) - pct(tr.start), 4)}%` }}
+                  style={{
+                    left: `${pct(tr.start)}%`,
+                    width: `${Math.max(pct(tr.end) - pct(tr.start), 5.5)}%`,
+                    minWidth: '76px',
+                    top: `${tr.lane * 38 + 6}px`,
+                  }}
                 >
                   <span className="truncate">{tr.id}</span>
                 </motion.div>
@@ -130,21 +187,25 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
             </Row>
 
             {/* BLOCKS row */}
-            <Row label="BLOCKS" tall>
-              {dayBlocks.map((b, i) => {
+            <Row label="BLOCKS" heightStyle={{ minHeight: `${Math.max(68, blockLaneCount * 54 + 14)}px` }}>
+              {positionedBlocks.map((b, i) => {
                 const color = blockPrimaryColor(b.departments)
-                const isPending = b.status === 'pending'
                 const isRejected = b.status === 'rejected'
                 const blockLeft = pct(b.start_minute)
-                const blockWidth = Math.max(pct(b.end_minute) - blockLeft, 6)
+                const blockWidth = Math.max(pct(b.end_minute) - blockLeft, 6.5)
                 return (
                   <motion.div
                     key={b.block_id}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.22, delay: i * 0.04 }}
-                    className="absolute top-2"
-                    style={{ left: `${blockLeft}%`, width: `${blockWidth}%` }}
+                    className="absolute z-10 hover:z-20"
+                    style={{
+                      left: `${blockLeft}%`,
+                      width: `${blockWidth}%`,
+                      minWidth: '85px',
+                      top: `${b.lane * 54 + 6}px`,
+                    }}
                   >
                     <button
                       onClick={() => {
@@ -152,7 +213,9 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                         setIsFlagging(false)
                         setFlagReason('')
                       }}
-                      className={`focus-ring block w-full rounded-xl px-3 py-2 text-left text-xs font-bold text-white shadow-md transition-transform hover:scale-[1.01] ${b.status === 'approved' ? 'ring-2 ring-emerald-400 ring-offset-1' : ''}`}
+                      className={`focus-ring flex flex-col justify-center h-12 w-full rounded-xl px-3 py-1.5 text-left text-xs font-bold text-white shadow-md transition-transform hover:scale-[1.01] ${
+                        b.status === 'approved' ? 'ring-2 ring-emerald-400 ring-offset-1' : ''
+                      }`}
                       style={{
                         backgroundColor: isRejected ? '#94A3B8' : color,
                         backgroundImage: b.is_merged
@@ -160,8 +223,8 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                           : 'none',
                       }}
                     >
-                      <p className="truncate">{b.is_merged ? `${b.departments.join('+')} Block` : `${b.departments[0]} Block`}</p>
-                      <p className="text-xs font-medium opacity-90 mt-0.5">
+                      <p className="truncate leading-tight">{b.is_merged ? `${b.departments.join('+')} Block` : `${b.departments[0]} Block`}</p>
+                      <p className="text-[11px] font-medium opacity-95 leading-tight mt-0.5">
                         {b.status === 'approved' ? '✓ Approved' : b.status === 'rejected' ? '✕ Rejected' : b.status === 'flagged' ? '⚑ Flagged' : 'Pending'}
                       </p>
                     </button>
@@ -323,13 +386,13 @@ function Legend({ swatch, label }) {
   )
 }
 
-function Row({ label, children, tall }) {
+function Row({ label, children, heightStyle }) {
   return (
-    <div className="flex border-b border-slate-200/50 last:border-0 relative items-center">
+    <div className="flex border-b border-slate-200/50 last:border-0 relative items-stretch py-1">
       <div className="flex w-24 shrink-0 items-center text-xs font-bold tracking-widest text-slate-600 pr-4 z-10 bg-[#FDF9F1]">
         {label}
       </div>
-      <div className={`relative flex-1 ${tall ? 'h-24' : 'h-16'}`}>
+      <div className="relative flex-1" style={heightStyle}>
         {/* hour gridlines */}
         {HOURS.map((h) => (
           <div key={h} className="absolute top-0 h-full w-px bg-slate-200/50 pointer-events-none" style={{ left: `${pct(h)}%` }} />
