@@ -76,8 +76,8 @@ function ActionButton({ title, subtitle, icon: Icon, onClick, primary = false })
     <button onClick={onClick} className={`focus-ring group relative overflow-hidden rounded-2xl p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${!primary ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-glow-emerald border-none' : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-glow-blue border-none'}`}>
       <div className="flex justify-between items-center relative z-10">
         <div>
-          <h3 className="font-bold text-lg font-serif">{title}</h3>
-          <p className="text-sm mt-1 flex items-center gap-1 font-medium text-white/90">{subtitle} <span className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">&rarr;</span></p>
+          <h3 className="font-bold text-[14px] font-serif leading-snug">{title}</h3>
+          <p className="text-[10px] mt-1 flex items-center gap-1 font-medium text-white/90 leading-tight">{subtitle} <span className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">&rarr;</span></p>
         </div>
         <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
           <Icon size={24} className="text-white" />
