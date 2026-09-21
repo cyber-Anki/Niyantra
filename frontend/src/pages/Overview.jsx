@@ -192,7 +192,7 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
         <StatBox label={t('controller.asset_availability')} value="94.2%" highlight icon={Activity} />
         <StatBox label={t('controller.pending_requests')} value={pendingRequests} icon={Clock} color="amber" />
         <StatBox label={t('controller.active_blocks')} value={activeBlocks} icon={CheckCircle} color="emerald" />
-        <StatBox label={t('controller.total_corridors')} value="12" icon={Train} color="blue" />
+        <StatBox label={t('controller.total_corridors')} value="12" icon={TrainFront} color="blue" />
         <StatBox label={t('controller.network_status')} value="Nominal" icon={Activity} color="indigo" />
       </div>
 
@@ -270,7 +270,7 @@ function DRMDashboard({ userContext, tasks, blocks, corridors, setPage }) {
         <StatBox label={t('drm.total_critical')} value={totalCritical} alert icon={AlertTriangle} />
         <StatBox label={t('drm.total_pending_blocks')} value={totalPending} icon={Clock} color="amber" />
         <StatBox label={t('drm.system_health')} value="92%" highlight icon={Activity} />
-        <StatBox label={t('drm.active_corridors')} value="14" icon={Train} color="blue" />
+        <StatBox label={t('drm.active_corridors')} value="14" icon={TrainFront} color="blue" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
