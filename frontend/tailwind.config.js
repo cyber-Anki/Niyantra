@@ -5,8 +5,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["'Inter'", "system-ui", "sans-serif"],
-        serif: ["'Outfit'", "system-ui", "sans-serif"],
+        sans: ["'Noto Sans'", "system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
+        serif: ["'Noto Serif'", "Georgia", "Cambria", "'Times New Roman'", "Times", "serif"],
+        heading: ["'Noto Serif'", "Georgia", "Cambria", "'Times New Roman'", "Times", "serif"],
       },
       colors: {
         brand: {
