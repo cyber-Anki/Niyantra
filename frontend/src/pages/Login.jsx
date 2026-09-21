@@ -46,7 +46,7 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
     >
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
-      <div className="relative z-10 flex w-full max-w-md flex-col items-center">
+      <div className="relative z-10 flex w-full max-w-md flex-col items-center px-4 sm:px-0 py-8">
         {/* Top Header */}
         <div className="mb-6 text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center bg-white p-2 border-4 border-amber-500 rounded-2xl shadow-[0_0_15px_rgba(255,204,0,0.5)]">

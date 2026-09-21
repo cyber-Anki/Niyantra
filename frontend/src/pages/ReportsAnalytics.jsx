@@ -194,32 +194,34 @@ export default function ReportsAnalytics() {
         </div>
 
         {/* SLA table */}
-        <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
+        <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 overflow-hidden">
           <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white border-b-2 border-slate-200 dark:border-slate-700 pb-2">
             Department SLA Compliance
           </h3>
-          <table className="w-full text-left">
-            <thead className="bg-slate-100 dark:bg-slate-700 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-              <tr>
-                <th className="p-2.5">Department</th>
-                <th className="p-2.5">Total Raised</th>
-                <th className="p-2.5">Scheduled / Resolved</th>
-                <th className="p-2.5">Pending</th>
-                <th className="p-2.5">Weekly Clearance %</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300">
-              {deptStats.map((d) => (
-                <tr key={d.dept} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                  <td className="p-2.5 font-bold text-slate-900 dark:text-white">{d.dept}</td>
-                  <td className="p-2.5">{d.raised}</td>
-                  <td className="p-2.5">{d.resolved}</td>
-                  <td className="p-2.5">{d.pending}</td>
-                  <td className="p-2.5 font-bold text-indigo-600 dark:text-amber-500">{d.sla}%</td>
+          <div className="overflow-x-auto no-scrollbar">
+            <table className="w-full text-left min-w-[500px]">
+              <thead className="bg-slate-100 dark:bg-slate-700 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                <tr>
+                  <th className="p-2.5">Department</th>
+                  <th className="p-2.5">Total Raised</th>
+                  <th className="p-2.5">Scheduled / Resolved</th>
+                  <th className="p-2.5">Pending</th>
+                  <th className="p-2.5">Weekly Clearance %</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300">
+                {deptStats.map((d) => (
+                  <tr key={d.dept} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <td className="p-2.5 font-bold text-slate-900 dark:text-white">{d.dept}</td>
+                    <td className="p-2.5">{d.raised}</td>
+                    <td className="p-2.5">{d.resolved}</td>
+                    <td className="p-2.5">{d.pending}</td>
+                    <td className="p-2.5 font-bold text-indigo-600 dark:text-amber-500">{d.sla}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

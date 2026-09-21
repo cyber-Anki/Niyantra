@@ -20,7 +20,7 @@ function NotificationPanel({ onClose, onNavigate }) {
   return (
     <div
       ref={ref}
-      className="absolute right-0 top-11 z-20 w-96 border border-slate-200 bg-white p-3 shadow-lg"
+      className="absolute right-0 sm:right-0 sm:top-11 top-11 z-20 w-[calc(100vw-32px)] max-w-sm sm:w-96 border border-slate-200 bg-white p-3 shadow-lg rounded-b-lg sm:rounded-lg"
     >
       <button
         onClick={() => { onNavigate('calendar'); onClose() }}

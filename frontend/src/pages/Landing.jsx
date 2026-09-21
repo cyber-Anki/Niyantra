@@ -83,36 +83,38 @@ export default function Landing({ onNavigateLogin }) {
       </div>
 
       {/* Main Branding Header */}
-      <div className="bg-white px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-6 shadow-sm relative z-20">
-        <div className="flex items-center gap-4">
+      <div className="bg-white px-4 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-sm relative z-20">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
           <img 
             src={emblemImg}
             alt="Emblem of India" 
             width="64"
             height="64"
             loading="lazy"
-            className="h-16 w-auto mix-blend-multiply"
+            className="h-14 sm:h-16 w-auto mix-blend-multiply"
           />
           <div className="flex flex-col">
-            <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-tight">{t('landing.title')}</h1>
-            <p className="text-xs md:text-sm font-semibold text-slate-500 uppercase tracking-widest">{t('landing.subtitle')}</p>
+            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-tight">{t('landing.title')}</h1>
+            <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 uppercase tracking-widest">{t('landing.subtitle')}</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-4 md:gap-8 overflow-x-auto bg-white rounded p-1">
-          <img src={swachhImg} alt="Swachh Bharat" width="100" height="48" loading="lazy" className="h-12 w-auto mix-blend-multiply" />
-          <img src={g20Img} alt="G20 India" width="100" height="48" loading="lazy" className="h-12 w-auto mix-blend-multiply" />
+        <div className="flex items-center justify-center gap-4 md:gap-8 bg-white rounded p-1 w-full md:w-auto mt-2 md:mt-0">
+          <img src={swachhImg} alt="Swachh Bharat" width="100" height="48" loading="lazy" className="h-10 sm:h-12 w-auto mix-blend-multiply" />
+          <img src={g20Img} alt="G20 India" width="100" height="48" loading="lazy" className="h-10 sm:h-12 w-auto mix-blend-multiply" />
         </div>
       </div>
 
       {/* Sticky Navigation Bar */}
-      <nav aria-label="Main Navigation" className="bg-slate-900/95 backdrop-blur-md px-4 md:px-8 text-white sticky top-0 z-50 shadow-lg border-b border-white/10">
-        <ul className="flex flex-wrap items-center gap-6 text-sm font-bold uppercase tracking-wider">
-          <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.home')}</a></li>
-          <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.about')}</a></li>
-          <li><a href="#divisions" onClick={(e) => { e.preventDefault(); scrollToSection('divisions'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.divisions')}</a></li>
-          <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.services')}</a></li>
-        </ul>
+      <nav aria-label="Main Navigation" className="bg-slate-900/95 backdrop-blur-md px-4 md:px-8 text-white sticky top-0 z-50 shadow-lg border-b border-white/10 overflow-hidden">
+        <div className="overflow-x-auto no-scrollbar">
+          <ul className="flex items-center gap-6 text-sm font-bold uppercase tracking-wider min-w-max">
+            <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.home')}</a></li>
+            <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.about')}</a></li>
+            <li><a href="#divisions" onClick={(e) => { e.preventDefault(); scrollToSection('divisions'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.divisions')}</a></li>
+            <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.services')}</a></li>
+          </ul>
+        </div>
       </nav>
 
       {/* Hero Section */}
@@ -274,26 +276,26 @@ export default function Landing({ onNavigateLogin }) {
             </h3>
           </div>
           <div className="space-y-4">
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex items-center justify-between group">
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex sm:items-center justify-between flex-col sm:flex-row gap-4 group">
               <div className="flex items-center gap-4">
-                <div className="bg-indigo-100 text-indigo-600 p-3 rounded-xl group-hover:scale-110 transition-transform"><Bell size={24} /></div>
+                <div className="bg-indigo-100 text-indigo-600 p-3 rounded-xl group-hover:scale-110 transition-transform shrink-0"><Bell size={24} /></div>
                 <span className="font-bold text-slate-800 text-lg">{t('landing.notif_1')}</span>
               </div>
-              <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">New</span>
+              <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm self-start sm:self-auto shrink-0">New</span>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex items-center justify-between group">
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex sm:items-center justify-between flex-col sm:flex-row gap-4 group">
               <div className="flex items-center gap-4">
-                <div className="bg-amber-100 text-amber-600 p-3 rounded-xl group-hover:scale-110 transition-transform"><AlertCircle size={24} /></div>
+                <div className="bg-amber-100 text-amber-600 p-3 rounded-xl group-hover:scale-110 transition-transform shrink-0"><AlertCircle size={24} /></div>
                 <span className="font-bold text-slate-800 text-lg">{t('landing.notif_2')}</span>
               </div>
-              <span className="bg-amber-500 text-slate-900 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">Warning</span>
+              <span className="bg-amber-500 text-slate-900 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm self-start sm:self-auto shrink-0">Warning</span>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex items-center justify-between group">
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex sm:items-center justify-between flex-col sm:flex-row gap-4 group">
               <div className="flex items-center gap-4">
-                <div className="bg-slate-100 text-slate-600 p-3 rounded-xl group-hover:scale-110 transition-transform"><Info size={24} /></div>
+                <div className="bg-slate-100 text-slate-600 p-3 rounded-xl group-hover:scale-110 transition-transform shrink-0"><Info size={24} /></div>
                 <span className="font-bold text-slate-600 text-lg">{t('landing.notif_3')}</span>
               </div>
-              <span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">Info</span>
+              <span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm self-start sm:self-auto shrink-0">Info</span>
             </div>
           </div>
         </div>
