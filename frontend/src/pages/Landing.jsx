@@ -8,7 +8,7 @@ import nrImage from '../assets/nr_train.jpg'
 import wrImage from '../assets/wr_train.jpg'
 import erImage from '../assets/er_train.jpg'
 import srImage from '../assets/sr_train.jpg'
-import { ShieldAlert, SplitSquareHorizontal, LineChart, ChevronRight, X } from 'lucide-react'
+import { ShieldAlert, SplitSquareHorizontal, LineChart, ChevronRight, X, Bell, AlertCircle, Info, Quote } from 'lucide-react'
 
 export default function Landing({ onNavigateLogin }) {
   const { t, lang, toggleLanguage } = useTranslation()
@@ -106,13 +106,13 @@ export default function Landing({ onNavigateLogin }) {
       </div>
 
       {/* Sticky Navigation Bar */}
-      <nav aria-label="Main Navigation" className="bg-slate-900 px-4 md:px-8 text-white sticky top-0 z-50 shadow-md">
-        <ul className="flex flex-wrap items-center gap-6 text-sm font-semibold">
-          <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="py-4 block hover:text-amber-400 transition">{t('landing.home')}</a></li>
-          <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="py-4 block hover:text-amber-400 transition">{t('landing.about')}</a></li>
-          <li><a href="#divisions" onClick={(e) => { e.preventDefault(); scrollToSection('divisions'); }} className="py-4 block hover:text-amber-400 transition">{t('landing.divisions')}</a></li>
-          <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="py-4 block hover:text-amber-400 transition">{t('landing.services')}</a></li>
-          <li><a href="#notifications" onClick={(e) => { e.preventDefault(); scrollToSection('notifications'); }} className="py-4 block hover:text-amber-400 transition">{t('landing.notifications')}</a></li>
+      <nav aria-label="Main Navigation" className="bg-slate-900/95 backdrop-blur-md px-4 md:px-8 text-white sticky top-0 z-50 shadow-lg border-b border-white/10">
+        <ul className="flex flex-wrap items-center gap-6 text-sm font-bold uppercase tracking-wider">
+          <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.home')}</a></li>
+          <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.about')}</a></li>
+          <li><a href="#divisions" onClick={(e) => { e.preventDefault(); scrollToSection('divisions'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.divisions')}</a></li>
+          <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.services')}</a></li>
+          <li><a href="#notifications" onClick={(e) => { e.preventDefault(); scrollToSection('notifications'); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.notifications')}</a></li>
         </ul>
       </nav>
 
@@ -143,12 +143,21 @@ export default function Landing({ onNavigateLogin }) {
       </div>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-8 bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-3xl font-black text-slate-900 uppercase tracking-widest mb-6 border-b-4 border-amber-400 inline-block pb-2">{t('landing.about_title')}</h3>
-          <p className="text-lg text-slate-600 leading-relaxed font-medium">
-            {t('landing.about_text')}
-          </p>
+      <section id="about" className="py-24 px-8 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-600/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h3 className="text-4xl font-black text-slate-900 uppercase tracking-widest mb-8 inline-block relative">
+            {t('landing.about_title')}
+            <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-1/2 h-1.5 bg-amber-400 rounded-full"></div>
+          </h3>
+          <div className="relative mt-8">
+            <Quote className="absolute -top-6 -left-6 text-slate-200 rotate-180" size={64} />
+            <p className="text-xl md:text-2xl text-slate-700 leading-relaxed font-serif relative z-10 px-8">
+              {t('landing.about_text')}
+            </p>
+            <Quote className="absolute -bottom-6 -right-6 text-slate-200" size={64} />
+          </div>
         </div>
       </section>
 
@@ -219,47 +228,75 @@ export default function Landing({ onNavigateLogin }) {
       )}
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-8 bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl font-black text-slate-900 uppercase tracking-widest mb-10 border-b-4 border-amber-400 inline-block pb-2">{t('landing.serv_title')}</h3>
+      <section id="services" className="py-24 px-8 bg-slate-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-black text-white uppercase tracking-widest inline-block relative">
+              {t('landing.serv_title')}
+              <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-1/2 h-1.5 bg-indigo-500 rounded-full"></div>
+            </h3>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 bg-slate-50 border border-slate-200 flex flex-col items-start">
-              <ShieldAlert size={48} className="text-slate-900 mb-4" />
-              <h4 className="text-xl font-bold text-slate-800 mb-2 uppercase">{t('landing.serv_ai')}</h4>
-              <p className="text-slate-600 font-medium">{t('landing.serv_ai_desc')}</p>
+            <div className="p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md flex flex-col items-start hover:-translate-y-2 hover:bg-white/10 transition-all duration-300 shadow-2xl group">
+              <div className="p-4 bg-indigo-500/20 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-indigo-500 transition-all duration-300">
+                <ShieldAlert size={40} className="text-indigo-400 group-hover:text-white transition-colors" />
+              </div>
+              <h4 className="text-2xl font-bold text-white mb-3 uppercase tracking-wide">{t('landing.serv_ai')}</h4>
+              <p className="text-slate-400 font-medium leading-relaxed">{t('landing.serv_ai_desc')}</p>
             </div>
-            <div className="p-8 bg-slate-50 border border-slate-200 flex flex-col items-start">
-              <SplitSquareHorizontal size={48} className="text-slate-900 mb-4" />
-              <h4 className="text-xl font-bold text-slate-800 mb-2 uppercase">{t('landing.serv_conflict')}</h4>
-              <p className="text-slate-600 font-medium">{t('landing.serv_conflict_desc')}</p>
+            <div className="p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md flex flex-col items-start hover:-translate-y-2 hover:bg-white/10 transition-all duration-300 shadow-2xl group">
+              <div className="p-4 bg-amber-500/20 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 transition-all duration-300">
+                <SplitSquareHorizontal size={40} className="text-amber-400 group-hover:text-slate-900 transition-colors" />
+              </div>
+              <h4 className="text-2xl font-bold text-white mb-3 uppercase tracking-wide">{t('landing.serv_conflict')}</h4>
+              <p className="text-slate-400 font-medium leading-relaxed">{t('landing.serv_conflict_desc')}</p>
             </div>
-            <div className="p-8 bg-slate-50 border border-slate-200 flex flex-col items-start">
-              <LineChart size={48} className="text-slate-900 mb-4" />
-              <h4 className="text-xl font-bold text-slate-800 mb-2 uppercase">{t('landing.serv_sim')}</h4>
-              <p className="text-slate-600 font-medium">{t('landing.serv_sim_desc')}</p>
+            <div className="p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md flex flex-col items-start hover:-translate-y-2 hover:bg-white/10 transition-all duration-300 shadow-2xl group">
+              <div className="p-4 bg-emerald-500/20 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-emerald-500 transition-all duration-300">
+                <LineChart size={40} className="text-emerald-400 group-hover:text-white transition-colors" />
+              </div>
+              <h4 className="text-2xl font-bold text-white mb-3 uppercase tracking-wide">{t('landing.serv_sim')}</h4>
+              <p className="text-slate-400 font-medium leading-relaxed">{t('landing.serv_sim_desc')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Notifications Section */}
-      <section id="notifications" className="py-20 px-8 bg-slate-50">
+      <section id="notifications" className="py-24 px-8 bg-white relative">
         <div className="max-w-4xl mx-auto">
-          <h3 className="text-3xl font-black text-slate-900 uppercase tracking-widest mb-10 border-b-4 border-amber-400 inline-block pb-2">{t('landing.notif_title')}</h3>
-          <ul className="space-y-4">
-            <li className="bg-white p-6 border-l-4 border-indigo-600 shadow-sm flex items-center justify-between">
-              <span className="font-bold text-slate-800">{t('landing.notif_1')}</span>
-              <span className="text-xs font-bold text-slate-400 uppercase">New</span>
-            </li>
-            <li className="bg-white p-6 border-l-4 border-amber-400 shadow-sm flex items-center justify-between">
-              <span className="font-bold text-slate-800">{t('landing.notif_2')}</span>
-              <span className="text-xs font-bold text-slate-400 uppercase">Warning</span>
-            </li>
-            <li className="bg-white p-6 border-l-4 border-slate-300 shadow-sm flex items-center justify-between">
-              <span className="font-bold text-slate-600">{t('landing.notif_3')}</span>
-              <span className="text-xs font-bold text-slate-400 uppercase">Info</span>
-            </li>
-          </ul>
+          <div className="text-center mb-12">
+            <h3 className="text-4xl font-black text-slate-900 uppercase tracking-widest inline-block relative">
+              {t('landing.notif_title')}
+              <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-1/2 h-1.5 bg-amber-400 rounded-full"></div>
+            </h3>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex items-center justify-between group">
+              <div className="flex items-center gap-4">
+                <div className="bg-indigo-100 text-indigo-600 p-3 rounded-xl group-hover:scale-110 transition-transform"><Bell size={24} /></div>
+                <span className="font-bold text-slate-800 text-lg">{t('landing.notif_1')}</span>
+              </div>
+              <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">New</span>
+            </div>
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex items-center justify-between group">
+              <div className="flex items-center gap-4">
+                <div className="bg-amber-100 text-amber-600 p-3 rounded-xl group-hover:scale-110 transition-transform"><AlertCircle size={24} /></div>
+                <span className="font-bold text-slate-800 text-lg">{t('landing.notif_2')}</span>
+              </div>
+              <span className="bg-amber-500 text-slate-900 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">Warning</span>
+            </div>
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow flex items-center justify-between group">
+              <div className="flex items-center gap-4">
+                <div className="bg-slate-100 text-slate-600 p-3 rounded-xl group-hover:scale-110 transition-transform"><Info size={24} /></div>
+                <span className="font-bold text-slate-600 text-lg">{t('landing.notif_3')}</span>
+              </div>
+              <span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">Info</span>
+            </div>
+          </div>
         </div>
       </section>
 
