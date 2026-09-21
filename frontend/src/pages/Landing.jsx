@@ -83,7 +83,7 @@ export default function Landing({ onNavigateLogin }) {
       </div>
 
       {/* Main Branding Header */}
-      <div className="bg-white px-4 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-sm relative z-20">
+      <div className="bg-white/80 backdrop-blur-xl px-4 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-sm border-b border-slate-200/50 relative z-20">
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
           <img 
             src={emblemImg}
@@ -99,14 +99,14 @@ export default function Landing({ onNavigateLogin }) {
           </div>
         </div>
         
-        <div className="flex items-center justify-center gap-4 md:gap-8 bg-white rounded p-1 w-full md:w-auto mt-2 md:mt-0">
+        <div className="flex items-center justify-center gap-4 md:gap-8 bg-white/60 backdrop-blur-md rounded-xl p-1.5 border border-white/40 w-full md:w-auto mt-2 md:mt-0 shadow-sm">
           <img src={swachhImg} alt="Swachh Bharat" width="100" height="48" loading="lazy" className="h-10 sm:h-12 w-auto mix-blend-multiply" />
           <img src={g20Img} alt="G20 India" width="100" height="48" loading="lazy" className="h-10 sm:h-12 w-auto mix-blend-multiply" />
         </div>
       </div>
 
       {/* Sticky Navigation Bar */}
-      <nav aria-label="Main Navigation" className="bg-slate-900/95 backdrop-blur-md px-4 md:px-8 text-white sticky top-0 z-50 shadow-lg border-b border-white/10 overflow-hidden">
+      <nav aria-label="Main Navigation" className="bg-slate-900/80 backdrop-blur-2xl backdrop-saturate-150 px-4 md:px-8 text-white sticky top-0 z-50 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] border-b border-white/10 overflow-hidden transition-all">
         <div className="overflow-x-auto no-scrollbar">
           <ul className="flex items-center gap-6 text-sm font-bold uppercase tracking-wider min-w-max">
             <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="py-4 block text-slate-300 hover:text-amber-400 transition-colors">{t('landing.home')}</a></li>
