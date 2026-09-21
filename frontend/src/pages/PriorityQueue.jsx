@@ -3,6 +3,7 @@ import { RefreshCw, ChevronDown, Flag, Send, CheckCircle2, ArrowUpDown, ChevronR
 import { useNiyantraData } from '../store/DataContext.jsx'
 import SeverityBadge from '../components/ui/SeverityBadge.jsx'
 import { formatTimeOfDay } from '../components/calendar/deptColors.js'
+import { useTranslation } from '../store/TranslationContext.jsx'
 
 const DEPT_LABEL = { ENG: 'Engineering', SNT: 'Signal & Telecom', TRD: 'Traction/OHE' }
 const SEVERITY_FILTERS = ['all', 'critical', 'major', 'minor']
@@ -31,10 +32,11 @@ function SortHeader({ label, sortKey, sortBy, sortDir, onSort, className = '' })
 
 function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToScheduler }) {
   const [open, setOpen] = useState(false)
+  const { t } = useTranslation()
 
   return (
     <>
-      <tr className="border-b border-slate-100 hover:bg-slate-50">
+      <tr className="border-b border-slate-200/50 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
         <td className="py-2 pl-4 pr-2">
           <button onClick={() => setOpen(!open)} className="text-slate-400 hover:text-slate-900">
             {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
@@ -50,43 +52,43 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
         <td className="py-2 px-4 text-xs text-slate-500">
           {block
             ? `${formatTimeOfDay(block.start_minute)}–${formatTimeOfDay(block.end_minute)} · ${block.status}`
-            : 'Not yet scheduled'}
+            : t('pq.not_scheduled')}
         </td>
       </tr>
       {open && (
-        <tr className="bg-slate-50 border-b border-slate-200">
-          <td colSpan={9} className="p-4">
+        <tr className="bg-white/40 dark:bg-black/20 border-b border-slate-200/50 dark:border-white/10">
+          <td colSpan={9} className="p-5">
             <div className="flex gap-6">
               <div className="flex-1">
                 <p className="mb-3 text-xs text-slate-600">{task.reasoning}</p>
                 <div className="grid grid-cols-4 gap-4">
-                  <Metric label="Severity" value={task.severity} />
-                  <Metric label="Urgency ratio" value={`${task.overdue_days}d / 120d cycle`} />
-                  <Metric label="Traffic density" value={`${task.traffic_density ?? 0}/day`} />
-                  <Metric label="Co-located defects" value={task.colocation_risk ?? 0} />
+                  <Metric label={t('pq.severity')} value={task.severity} />
+                  <Metric label={t('pq.urgency_ratio')} value={`${task.overdue_days}d / 120d cycle`} />
+                  <Metric label={t('pq.traffic')} value={`${task.traffic_density ?? 0}/day`} />
+                  <Metric label={t('pq.co_located')} value={task.colocation_risk ?? 0} />
                 </div>
               </div>
-              <div className="flex w-64 flex-col gap-2 border-l border-slate-200 pl-6">
+              <div className="flex w-64 flex-col gap-2 border-l border-slate-200/50 dark:border-white/10 pl-6">
                 <button
                   onClick={() => onApprove(task, block)}
                   disabled={!block || block.status !== 'pending'}
-                  className="focus-ring flex items-center gap-1.5 rounded bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800er disabled:cursor-not-allowed disabled:opacity-40"
+                  className="focus-ring flex items-center gap-1.5 rounded-lg bg-indigo-600 dark:bg-amber-500 px-4 py-2 text-xs font-bold text-white dark:text-slate-900 transition hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40 shadow-sm"
                 >
-                  <CheckCircle2 size={13} /> Approve slot
+                  <CheckCircle2 size={14} /> {t('pq.approve_slot')}
                 </button>
                 <button
                   onClick={onSendToScheduler}
-                  className="focus-ring flex items-center gap-1.5 rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-slate-100"
+                  className="focus-ring flex items-center gap-1.5 rounded-lg border border-slate-200/50 dark:border-white/20 bg-white/50 dark:bg-black/20 px-4 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors hover:bg-white dark:hover:bg-white/10 shadow-sm"
                 >
-                  <Send size={13} /> Send to scheduler
+                  <Send size={14} /> {t('pq.send_scheduler')}
                 </button>
                 <button
                   onClick={() => onToggleFlag(task.task_id)}
-                  className={`focus-ring flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium ${
-                    flagged ? 'border-amber-200 bg-amber-50 text-amber-900' : 'border-slate-300 bg-white text-slate-900 hover:bg-slate-100'
+                  className={`focus-ring flex items-center gap-1.5 rounded-lg border px-4 py-2 text-xs font-bold transition-colors shadow-sm ${
+                    flagged ? 'border-amber-300 bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:border-amber-500/50 dark:text-amber-400' : 'border-slate-200/50 dark:border-white/20 bg-white/50 dark:bg-black/20 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-white/10'
                   }`}
                 >
-                  <Flag size={13} /> {flagged ? 'Flagged for review' : 'Flag for review'}
+                  <Flag size={14} /> {flagged ? t('pq.flagged') : t('pq.flag')}
                 </button>
               </div>
             </div>
@@ -111,6 +113,7 @@ export default function PriorityQueue() {
     rankedTasks, blocks, priorityLoading, runPrioritize, runOptimizeWeekly,
     flaggedTaskIds, toggleFlag, decideBlock,
   } = useNiyantraData()
+  const { t } = useTranslation()
   const [severityFilter, setSeverityFilter] = useState('all')
   const [deptFilter, setDeptFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -151,30 +154,30 @@ export default function PriorityQueue() {
   }
 
   return (
-    <div className="bg-white rounded border border-slate-200 shadow-sm min-h-full">
-      <div className="border-b border-slate-200 p-5 flex flex-wrap items-center justify-between gap-3 bg-slate-50">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-white/10 shadow-xl min-h-full transition-colors overflow-hidden">
+      <div className="border-b border-slate-200/50 dark:border-white/10 p-6 flex flex-wrap items-center justify-between gap-3 bg-white/40 dark:bg-black/20">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Priority Queue</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-amber-500 uppercase tracking-wide">{t('pq.title')}</h2>
         </div>
         <button
           onClick={() => runPrioritize()}
           disabled={priorityLoading}
-          className="focus-ring flex items-center gap-2 rounded bg-slate-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-slate-800er disabled:opacity-50"
+          className="focus-ring flex items-center gap-2 rounded-xl bg-indigo-600 dark:bg-amber-500 px-4 py-2 text-xs font-bold text-white dark:text-slate-900 transition hover:opacity-80 disabled:opacity-50 shadow-md"
         >
           <RefreshCw size={14} className={priorityLoading ? 'animate-spin' : ''} />
-          {priorityLoading ? 'Scoring…' : 'Re-run AI Prioritization'}
+          {priorityLoading ? t('pq.scoring') : t('pq.rerun')}
         </button>
       </div>
 
-      <div className="border-b border-slate-200 p-4 flex flex-wrap items-center gap-6 bg-white">
-        <FilterGroup label="Severity" options={SEVERITY_FILTERS} value={severityFilter} onChange={setSeverityFilter} />
-        <FilterGroup label="Dept" options={DEPT_FILTERS} value={deptFilter} onChange={setDeptFilter} />
-        <FilterGroup label="Status" options={STATUS_FILTERS} value={statusFilter} onChange={setStatusFilter} />
+      <div className="border-b border-slate-200/50 dark:border-white/10 p-5 flex flex-wrap items-center gap-6 bg-white/50 dark:bg-black/20 backdrop-blur-sm">
+        <FilterGroup label={t('pq.severity')} options={SEVERITY_FILTERS} value={severityFilter} onChange={setSeverityFilter} />
+        <FilterGroup label={t('pq.dept')} options={DEPT_FILTERS} value={deptFilter} onChange={setDeptFilter} />
+        <FilterGroup label={t('pq.status')} options={STATUS_FILTERS} value={statusFilter} onChange={setStatusFilter} />
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto no-scrollbar">
         <table className="w-full text-left whitespace-nowrap">
-          <thead className="bg-slate-100 text-slate-600 border-b border-slate-200">
+          <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 border-b border-slate-200/50 dark:border-white/10">
             <tr>
               <th className="py-2 pl-4 pr-2 w-8"></th>
               <th className="py-2 px-2 text-xs font-semibold uppercase tracking-wider">Asset ID</th>
@@ -226,9 +229,9 @@ function FilterGroup({ label, options, value, onChange }) {
           <button
             key={o}
             onClick={() => onChange(o)}
-            className={`px-3 py-1 text-[11px] font-semibold uppercase tracking-wider transition border ${
-              value === o ? 'border-navy bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-500 hover:bg-slate-50'
-            } ${o === options[0] ? 'rounded-l' : ''} ${o === options[options.length - 1] ? 'rounded-r' : ''} ${o !== options[0] ? '-ml-px' : ''}`}
+            className={`px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-colors border ${
+              value === o ? 'bg-indigo-600 dark:bg-amber-500 text-white dark:text-slate-900 border-indigo-600 dark:border-amber-500 shadow-sm z-10 relative' : 'border-slate-200/50 dark:border-white/20 bg-white/50 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-white/10'
+            } ${o === options[0] ? 'rounded-l-lg' : ''} ${o === options[options.length - 1] ? 'rounded-r-lg' : ''} ${o !== options[0] ? '-ml-px' : ''}`}
           >
             {o}
           </button>

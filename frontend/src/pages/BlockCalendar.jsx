@@ -3,9 +3,11 @@ import { useNiyantraData } from '../store/DataContext.jsx'
 import DayTimeline from '../components/calendar/DayTimeline.jsx'
 import MonthRollup from '../components/calendar/MonthRollup.jsx'
 import { dayFromCorridorDay } from '../components/calendar/deptColors.js'
+import { useTranslation } from '../store/TranslationContext.jsx'
 
 export default function BlockCalendar() {
   const { corridors, blocks, decideBlock, monthlyPlan, runSimulateMonthly, monthlyLoading } = useNiyantraData()
+  const { t } = useTranslation()
   const [view, setView] = useState('day')
   const [section, setSection] = useState(null)
   const [dayOffset, setDayOffset] = useState(0)
@@ -50,28 +52,28 @@ export default function BlockCalendar() {
   )
 
   return (
-    <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 p-5">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-white/10 shadow-xl min-h-full transition-colors overflow-hidden">
+      <div className="border-b border-slate-200/50 dark:border-white/10 p-6 flex flex-wrap items-center justify-between gap-3 bg-white/40 dark:bg-black/20">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Block Calendar</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-amber-500 uppercase tracking-wide">{t('bc.title')}</h2>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex rounded-md border border-slate-200 bg-white p-0.5">
+          <div className="flex rounded-xl border border-slate-200/50 dark:border-white/20 bg-white/50 dark:bg-black/20 p-1 backdrop-blur-sm shadow-inner">
             <button
               onClick={() => setView('day')}
-              className={`rounded px-3 py-1 text-xs font-semibold ${
-                view === 'day' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+              className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+                view === 'day' ? 'bg-indigo-600 dark:bg-amber-500 text-white dark:text-slate-900 shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-amber-500'
               }`}
             >
-              Day
+              {t('bc.day')}
             </button>
             <button
               onClick={() => setView('month')}
-              className={`rounded px-3 py-1 text-xs font-semibold ${
-                view === 'month' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+              className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+                view === 'month' ? 'bg-indigo-600 dark:bg-amber-500 text-white dark:text-slate-900 shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-amber-500'
               }`}
             >
-              Month Rollup
+              {t('bc.month_rollup')}
             </button>
           </div>
           {view === 'day' && sections.length > 0 && (
@@ -81,7 +83,7 @@ export default function BlockCalendar() {
                 setSection(e.target.value)
                 setDayOffset(0)
               }}
-              className="focus-ring rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-900"
+              className="focus-ring rounded-xl border border-slate-200/50 dark:border-white/20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-3 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 outline-none shadow-sm"
             >
               {sections.map((s) => (
                 <option key={s} value={s}>
@@ -92,6 +94,8 @@ export default function BlockCalendar() {
           )}
         </div>
       </div>
+
+      <div className="p-6">
 
       {view === 'day' ? (
         <DayTimeline
@@ -106,6 +110,7 @@ export default function BlockCalendar() {
       ) : (
         <MonthRollup plan={monthlyPlan} loading={monthlyLoading} onRefresh={runSimulateMonthly} />
       )}
+      </div>
     </div>
   )
 }

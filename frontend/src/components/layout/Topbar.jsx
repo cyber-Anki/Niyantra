@@ -20,7 +20,7 @@ function NotificationPanel({ onClose, onNavigate }) {
   return (
     <div
       ref={ref}
-      className="absolute right-0 sm:right-0 sm:top-11 top-11 z-20 w-[calc(100vw-32px)] max-w-sm sm:w-96 border border-slate-200 bg-white p-3 shadow-lg rounded-b-lg sm:rounded-lg"
+      className="absolute right-0 sm:right-0 sm:top-11 top-11 z-20 w-[calc(100vw-32px)] max-w-sm sm:w-96 border border-slate-200/50 dark:border-white/10 bg-white/90 dark:bg-[#0B1120]/90 backdrop-blur-xl p-3 shadow-2xl rounded-b-lg sm:rounded-2xl"
     >
       <button
         onClick={() => { onNavigate('calendar'); onClose() }}
@@ -99,26 +99,26 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
     unscheduledTaskIds.length
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between bg-indigo-600 dark:bg-slate-900 px-4 md:px-6 transition-colors rounded-none shadow-md">
+    <header className="flex h-16 shrink-0 items-center justify-between bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/10 px-4 md:px-6 transition-colors shadow-sm relative z-20">
       <div className="flex items-center gap-3">
-        <button className="md:hidden p-2 -ml-2 text-white hover:text-white/80" onClick={onToggleMobileMenu}>
+        <button className="md:hidden p-2 -ml-2 text-slate-700 dark:text-white hover:text-slate-900 dark:hover:text-white/80" onClick={onToggleMobileMenu}>
           <Menu size={24} />
         </button>
-        <h1 className="font-serif text-xl font-black text-white tracking-widest hidden sm:block">{t('topbar.title')}</h1>
+        <h1 className="font-serif text-xl font-black text-indigo-900 dark:text-white tracking-widest hidden sm:block drop-shadow-sm">{t('topbar.title')}</h1>
       </div>
 
       <div className="flex items-center gap-2 md:gap-3">
         <button
           onClick={() => setIsDark(!isDark)}
           title="Toggle Theme"
-          className="focus-ring rounded-none p-2 text-white hover:bg-white/10 transition"
+          className="focus-ring rounded-xl p-2 text-slate-600 dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/10 transition"
         >
           {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
         <button
           onClick={toggleLanguage}
           title="Translate"
-          className="focus-ring rounded-none p-2 text-white hover:bg-white/10 transition font-bold text-sm"
+          className="focus-ring rounded-xl p-2 text-slate-600 dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/10 transition font-bold text-sm"
         >
           A/अ
         </button>
@@ -127,7 +127,7 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
           <button
             onClick={() => setNotifOpen(!notifOpen)}
             title="Notifications"
-            className="focus-ring relative rounded p-2 text-white/80 hover:bg-white/10 hover:text-white transition"
+            className="focus-ring relative rounded-xl p-2 text-slate-600 dark:text-white/80 hover:bg-slate-200/50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition"
           >
             <Bell size={18} />
             {alertCount > 0 && (
@@ -141,12 +141,12 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
           )}
         </div>
         
-        <div className="h-4 w-px bg-white/20 hidden sm:block"></div>
+        <div className="h-6 w-px bg-slate-300 dark:bg-white/20 hidden sm:block"></div>
         
         <button
           onClick={onLogout}
           title="Logout"
-          className="focus-ring flex items-center gap-2 rounded p-2 text-white/80 hover:bg-white/10 hover:text-white transition"
+          className="focus-ring flex items-center gap-2 rounded-xl p-2 text-slate-600 dark:text-white/80 hover:bg-slate-200/50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition"
         >
           <LogOut size={18} />
           <span className="hidden sm:inline-block text-sm font-semibold">Logout</span>

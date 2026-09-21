@@ -21,7 +21,7 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
     <aside
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
-      className={`relative shrink-0 bg-slate-900 text-slate-300 transition-[width] duration-200 h-full ${
+      className={`relative shrink-0 bg-slate-900 border-r border-slate-800 text-slate-300 transition-[width] duration-200 h-full ${
         collapsed ? 'w-20' : 'w-64'
       }`}
     >
@@ -33,7 +33,7 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
         {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
 
-      <div className="flex h-16 items-center gap-3 border-b border-navy-light px-5">
+      <div className="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
         <img src={logoMark} alt="Niyantran" className="h-8 w-8 object-contain shrink-0" />
         {!collapsed && (
           <div className="overflow-hidden whitespace-nowrap">
@@ -51,9 +51,9 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
             <button
               key={item.id}
               onClick={() => setPage(item.id)}
-              className={`focus-ring flex w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-sm font-medium transition ${
+              className={`focus-ring flex w-full items-center gap-3 rounded-lg px-3.5 py-3 text-sm font-medium transition ${
                 active
-                  ? 'bg-gold text-slate-900 font-semibold shadow-card'
+                  ? 'bg-gold text-slate-900 shadow-sm font-bold'
                   : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               }`}
             >

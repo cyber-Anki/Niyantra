@@ -99,8 +99,8 @@ export default function ReportsAnalytics() {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-slate-300 dark:border-slate-700 shadow-sm min-h-full transition-colors">
-      <div className="border-b-4 border-indigo-600 p-5 flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-white/10 shadow-xl min-h-full transition-colors overflow-hidden">
+      <div className="border-b border-slate-200/50 dark:border-white/10 p-6 flex flex-wrap items-center justify-between gap-3 bg-white/40 dark:bg-black/20">
         <div>
           <h2 className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-amber-500 uppercase tracking-wide">
             {t('rep.title')}
@@ -109,14 +109,14 @@ export default function ReportsAnalytics() {
         <div className="flex items-center gap-2">
           <button
             onClick={exportCsv}
-            className="focus-ring flex items-center gap-2 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="focus-ring flex items-center gap-2 rounded-2xl border border-slate-200/50 dark:border-white/20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md px-4 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shadow-sm"
           >
             <Download size={14} /> {t('rep.export')}
           </button>
           <button
             onClick={() => runSimulateMonthly()}
             disabled={monthlyLoading}
-            className="focus-ring flex items-center gap-2 rounded-2xl bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-indigo-500 disabled:opacity-50"
+            className="focus-ring flex items-center gap-2 rounded-2xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-indigo-500 disabled:opacity-50 shadow-md shadow-indigo-500/20"
           >
             <RefreshCw size={14} className={monthlyLoading ? 'animate-spin' : ''} />
             {monthlyLoading ? t('rep.simulating') : t('rep.run_forecast')}
@@ -128,17 +128,17 @@ export default function ReportsAnalytics() {
         {error && <p className="mb-3 text-sm font-bold text-red-600 dark:text-red-400">{error}</p>}
 
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
+          <div className="bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-slate-200/50 dark:border-white/10 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md">
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{t('rep.efficiency')}</p>
             <p className="mt-2 text-3xl font-black text-slate-900 dark:text-white">{utilization.pct}%</p>
             <p className="mt-1 text-xs font-semibold text-slate-400 dark:text-slate-500">{utilization.actual}m {t('rep.used_of')} {utilization.planned}m {t('rep.available')}</p>
           </div>
-          <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
+          <div className="bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-slate-200/50 dark:border-white/10 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md">
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{t('rep.rolled_forward')}</p>
             <p className="mt-2 text-3xl font-black text-slate-900 dark:text-white">{unscheduledTaskIds.length}</p>
             <p className="mt-1 text-xs font-semibold text-slate-400 dark:text-slate-500">{t('rep.of')} {allTasks.length} {t('rep.total_backlog')}</p>
           </div>
-          <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
+          <div className="bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-slate-200/50 dark:border-white/10 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md">
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{t('rep.merges')}</p>
             <p className="mt-2 text-3xl font-black text-slate-900 dark:text-white">{blocks.filter((b) => b.is_merged).length}</p>
             <p className="mt-1 text-xs font-semibold text-slate-400 dark:text-slate-500">{t('rep.of')} {blocks.length} {t('rep.scheduled_blocks')}</p>
@@ -146,8 +146,8 @@ export default function ReportsAnalytics() {
         </div>
 
         {/* 4-week forecast section */}
-        <div className="mb-8 border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b-2 border-slate-200 dark:border-slate-700 pb-3">
+        <div className="mb-8 bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-slate-200/50 dark:border-white/10 p-6 rounded-2xl shadow-sm">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/50 dark:border-white/10 pb-4">
             <div>
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">4-Week Backlog &amp; Risk Trajectory</h3>
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Comparing status-quo accumulation vs. AI-optimized clearance</p>
@@ -156,7 +156,7 @@ export default function ReportsAnalytics() {
               <select
                 value={section}
                 onChange={(e) => setSection(e.target.value)}
-                className="focus-ring rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-2.5 py-1 text-xs font-bold text-slate-700 dark:text-slate-300"
+                className="focus-ring rounded-xl border border-slate-200/50 dark:border-white/20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-3 py-1.5 text-sm font-bold text-slate-700 dark:text-slate-300 outline-none"
               >
                 <option value="__all__">All Sections (Aggregate)</option>
                 {sections.map((s) => (
@@ -194,29 +194,29 @@ export default function ReportsAnalytics() {
         </div>
 
         {/* SLA table */}
-        <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 overflow-hidden">
-          <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white border-b-2 border-slate-200 dark:border-slate-700 pb-2">
+        <div className="bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-slate-200/50 dark:border-white/10 p-6 rounded-2xl shadow-sm overflow-hidden">
+          <h3 className="mb-6 text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white border-b border-slate-200/50 dark:border-white/10 pb-3">
             Department SLA Compliance
           </h3>
           <div className="overflow-x-auto no-scrollbar">
             <table className="w-full text-left min-w-[500px]">
-              <thead className="bg-slate-100 dark:bg-slate-700 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+              <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
                 <tr>
-                  <th className="p-2.5">Department</th>
-                  <th className="p-2.5">Total Raised</th>
-                  <th className="p-2.5">Scheduled / Resolved</th>
-                  <th className="p-2.5">Pending</th>
-                  <th className="p-2.5">Weekly Clearance %</th>
+                  <th className="p-4 rounded-tl-xl">Department</th>
+                  <th className="p-4">Total Raised</th>
+                  <th className="p-4">Scheduled / Resolved</th>
+                  <th className="p-4">Pending</th>
+                  <th className="p-4 rounded-tr-xl">Weekly Clearance %</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 dark:divide-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300">
+              <tbody className="divide-y divide-slate-200/50 dark:divide-white/10 text-xs font-medium text-slate-700 dark:text-slate-300">
                 {deptStats.map((d) => (
-                  <tr key={d.dept} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <td className="p-2.5 font-bold text-slate-900 dark:text-white">{d.dept}</td>
-                    <td className="p-2.5">{d.raised}</td>
-                    <td className="p-2.5">{d.resolved}</td>
-                    <td className="p-2.5">{d.pending}</td>
-                    <td className="p-2.5 font-bold text-indigo-600 dark:text-amber-500">{d.sla}%</td>
+                  <tr key={d.dept} className="hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
+                    <td className="p-4 font-bold text-slate-900 dark:text-white">{d.dept}</td>
+                    <td className="p-4">{d.raised}</td>
+                    <td className="p-4">{d.resolved}</td>
+                    <td className="p-4">{d.pending}</td>
+                    <td className="p-4 font-bold text-indigo-600 dark:text-amber-500">{d.sla}%</td>
                   </tr>
                 ))}
               </tbody>

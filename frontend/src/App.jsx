@@ -25,7 +25,7 @@ function Shell({ userContext, onLogout }) {
   }, [page, userContext.role, setPage])
 
   return (
-    <div className="flex h-screen bg-slate-100 dark:bg-slate-900 overflow-hidden font-sans transition-colors">
+    <div className="flex h-screen bg-slate-50 dark:bg-[#0B1120] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100/50 via-slate-50 to-white dark:from-indigo-900/20 dark:via-[#0B1120] dark:to-black overflow-hidden font-sans transition-colors">
       {/* Mobile Sidebar Overlay */}
       {mobileMenuOpen && (
         <div 
@@ -51,7 +51,7 @@ function Shell({ userContext, onLogout }) {
           onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)} 
           onLogout={onLogout}
         />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-100 dark:bg-slate-950 transition-colors">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 transition-colors">
           {bootLoading && <p className="text-sm font-bold text-slate-500 animate-pulse">Loading command center…</p>}
           {error && <p className="mb-3 text-sm font-bold text-red-600 dark:text-red-400">{error}</p>}
           {!bootLoading && (

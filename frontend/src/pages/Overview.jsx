@@ -115,8 +115,8 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm flex flex-col items-center justify-center transition-colors">
-          <h3 className="font-bold text-indigo-600 dark:text-amber-500 uppercase mb-6 border-b-2 border-amber-500 dark:border-slate-700 pb-2 w-full text-center">{t('eng.health')}</h3>
+        <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl flex flex-col items-center justify-center transition-colors">
+          <h3 className="font-bold text-indigo-600 dark:text-amber-500 uppercase mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2 w-full text-center">{t('eng.health')}</h3>
           <div className="relative">
             <DonutRing percentage={healthyPct} size={200} strokeWidth={24} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -126,29 +126,29 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
           </div>
         </div>
 
-        <div className="lg:col-span-2 border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-colors">
-          <div className="flex justify-between items-center mb-6 border-b-2 border-indigo-600 dark:border-slate-700 pb-2">
+        <div className="lg:col-span-2 bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl transition-colors">
+          <div className="flex justify-between items-center mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2">
             <h3 className="font-bold text-slate-800 dark:text-white uppercase flex items-center gap-2"><CalendarRange size={20}/> {t('eng.upcoming_schedule')}</h3>
           </div>
           
           {myBlocks.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse border-2 border-slate-200 dark:border-slate-700">
-                <thead className="bg-slate-50 dark:bg-slate-900 text-indigo-600 dark:text-amber-500 text-xs uppercase">
+            <div className="overflow-x-auto no-scrollbar">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-indigo-600 dark:text-amber-500 text-xs uppercase tracking-wider rounded-t-xl">
                   <tr>
-                    <th className="border-2 border-slate-300 dark:border-slate-700 p-3 text-left">{t('eng.start_time')}</th>
-                    <th className="border-2 border-slate-300 dark:border-slate-700 p-3 text-left">{t('eng.end_time')}</th>
-                    <th className="border-2 border-slate-300 dark:border-slate-700 p-3 text-left">{t('eng.departments')}</th>
-                    <th className="border-2 border-slate-300 dark:border-slate-700 p-3 text-left">{t('eng.status')}</th>
+                    <th className="p-3 rounded-tl-xl">{t('eng.start_time')}</th>
+                    <th className="p-3">{t('eng.end_time')}</th>
+                    <th className="p-3">{t('eng.departments')}</th>
+                    <th className="p-3 rounded-tr-xl">{t('eng.status')}</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
                   {myBlocks.sort((a,b) => a.start_minute - b.start_minute).slice(0, 5).map((b, i) => (
-                    <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                      <td className="border-2 border-slate-300 dark:border-slate-700 p-3 font-bold text-slate-800 dark:text-white">{formatTimeOfDay(b.start_minute)}</td>
-                      <td className="border-2 border-slate-300 dark:border-slate-700 p-3 text-slate-600 dark:text-slate-300">{formatTimeOfDay(b.end_minute)}</td>
-                      <td className="border-2 border-slate-300 dark:border-slate-700 p-3 text-slate-600 dark:text-slate-300">{b.departments?.join(', ') || 'Various'}</td>
-                      <td className="border-2 border-slate-300 dark:border-slate-700 p-3 font-bold text-xs uppercase tracking-wide">
+                    <tr key={i} className="hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
+                      <td className="p-3 font-bold text-slate-800 dark:text-white">{formatTimeOfDay(b.start_minute)}</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">{formatTimeOfDay(b.end_minute)}</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">{b.departments?.join(', ') || 'Various'}</td>
+                      <td className="p-3 font-bold text-xs uppercase tracking-wide">
                         <span className={`px-2 py-1 ${b.status === 'pending' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400' : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'}`}>{b.status}</span>
                       </td>
                     </tr>
@@ -157,8 +157,8 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
               </table>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center text-slate-400 py-12 border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-              <CalendarRange size={48} className="mb-4 opacity-20" />
+            <div className="flex flex-col items-center justify-center text-slate-400 py-12 bg-white/20 dark:bg-black/20 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+              <CalendarRange size={48} className="mb-4 opacity-30" />
               <p className="font-bold uppercase tracking-widest">{t('eng.no_blocks')}</p>
             </div>
           )}
@@ -196,31 +196,31 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
         <StatBox label={t('controller.network_status')} value="Nominal" icon={Activity} color="indigo" />
       </div>
 
-      <div className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-colors">
-        <div className="flex justify-between items-center mb-6 border-b-2 border-slate-900 dark:border-slate-700 pb-2">
+      <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl transition-colors">
+        <div className="flex justify-between items-center mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2">
           <h3 className="font-bold text-slate-800 dark:text-white uppercase flex items-center gap-2"><GitPullRequestArrow size={20} className="text-indigo-600 dark:text-amber-500" /> {t('ctrl.live_requests')}</h3>
         </div>
         
         {pendingBlocks.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse border-2 border-slate-200 dark:border-slate-700">
-              <thead className="bg-slate-900 dark:bg-black text-white text-xs uppercase tracking-wide">
+          <div className="overflow-x-auto no-scrollbar">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-indigo-600 dark:text-amber-500 text-xs uppercase tracking-wide">
                 <tr>
-                  <th className="border-2 border-slate-700 p-3 text-left">{t('dash.corridor')}</th>
-                  <th className="border-2 border-slate-700 p-3 text-left">{t('eng.start_time')}</th>
-                  <th className="border-2 border-slate-700 p-3 text-left">{t('ctrl.duration')}</th>
-                  <th className="border-2 border-slate-700 p-3 text-left">{t('ctrl.req_depts')}</th>
-                  <th className="border-2 border-slate-700 p-3 text-center">{t('ctrl.action')}</th>
+                  <th className="p-3 rounded-tl-xl">{t('dash.corridor')}</th>
+                  <th className="p-3">{t('eng.start_time')}</th>
+                  <th className="p-3">{t('ctrl.duration')}</th>
+                  <th className="p-3">{t('ctrl.req_depts')}</th>
+                  <th className="p-3 text-center rounded-tr-xl">{t('ctrl.action')}</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
                 {pendingBlocks.slice(0, 8).map((b, i) => (
-                  <tr key={i} className="hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                    <td className="border-2 border-slate-300 dark:border-slate-700 p-3 font-black text-indigo-600 dark:text-amber-500 text-base">{b.section}</td>
-                    <td className="border-2 border-slate-300 dark:border-slate-700 p-3 font-bold text-slate-700 dark:text-slate-300">{formatTimeOfDay(b.start_minute)}</td>
-                    <td className="border-2 border-slate-300 dark:border-slate-700 p-3 font-semibold text-slate-600 dark:text-slate-400">{b.end_minute - b.start_minute} mins</td>
-                    <td className="border-2 border-slate-300 dark:border-slate-700 p-3 text-slate-600 dark:text-slate-400">{b.departments?.join(', ') || 'N/A'}</td>
-                    <td className="border-2 border-slate-300 dark:border-slate-700 p-3 text-center">
+                  <tr key={i} className="hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
+                    <td className="p-3 font-black text-indigo-600 dark:text-amber-500 text-base">{b.section}</td>
+                    <td className="p-3 font-bold text-slate-700 dark:text-slate-300">{formatTimeOfDay(b.start_minute)}</td>
+                    <td className="p-3 font-semibold text-slate-600 dark:text-slate-400">{b.end_minute - b.start_minute} mins</td>
+                    <td className="p-3 text-slate-600 dark:text-slate-400">{b.departments?.join(', ') || 'N/A'}</td>
+                    <td className="p-3 text-center">
                       <span className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase">Pending</span>
                     </td>
                   </tr>
@@ -229,8 +229,8 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
             </table>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center text-slate-400 py-12 border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-            <CheckCircle size={48} className="mb-4 opacity-20 text-green-600" />
+          <div className="flex flex-col items-center justify-center text-slate-400 py-12 bg-white/20 dark:bg-black/20 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+            <CheckCircle size={48} className="mb-4 opacity-30 text-green-600" />
             <p className="font-bold uppercase tracking-widest text-green-700 dark:text-green-500">{t('ctrl.all_resolved')}</p>
           </div>
         )}
@@ -275,8 +275,8 @@ function DRMDashboard({ userContext, tasks, blocks, corridors, setPage }) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {deptData.map((d, i) => (
-          <div key={i} className="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm flex flex-col items-center transition-colors">
-            <h3 className="font-bold text-indigo-600 dark:text-amber-500 uppercase mb-4 w-full text-center border-b-2 border-slate-200 dark:border-slate-700 pb-2">{d.dept} {t('eng.departments')}</h3>
+          <div key={i} className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl flex flex-col items-center transition-colors">
+            <h3 className="font-bold text-indigo-600 dark:text-amber-500 uppercase mb-4 w-full text-center border-b border-slate-200/50 dark:border-white/10 pb-2">{d.dept} {t('eng.departments')}</h3>
             <div className="relative mb-4">
               <DonutRing percentage={d.healthyPct} size={140} strokeWidth={16} />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -284,11 +284,11 @@ function DRMDashboard({ userContext, tasks, blocks, corridors, setPage }) {
               </div>
             </div>
             <div className="w-full grid grid-cols-2 gap-2 text-center text-sm">
-              <div className="bg-slate-50 dark:bg-slate-900 p-2 border-2 border-slate-200 dark:border-slate-700">
+              <div className="bg-white/50 dark:bg-black/20 p-2 rounded-xl border border-white/40 dark:border-white/10">
                 <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">{t('drm.total')}</div>
                 <div className="font-black text-slate-700 dark:text-white">{d.total}</div>
               </div>
-              <div className={`p-2 border-2 ${d.crit > 0 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white'}`}>
+              <div className={`p-2 rounded-xl border ${d.crit > 0 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400' : 'bg-white/50 dark:bg-black/20 border-white/40 dark:border-white/10 text-slate-700 dark:text-white'}`}>
                 <div className="text-[10px] uppercase font-bold">{t('drm.critical')}</div>
                 <div className="font-black">{d.crit}</div>
               </div>
