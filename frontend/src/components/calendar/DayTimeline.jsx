@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { DEPT_COLOR, blockPrimaryColor, formatTimeOfDay } from './deptColors.js'
 
-const RANGE_START = 300 // 05:00
-const RANGE_END = 1380 // 23:00
-const HOURS = Array.from({ length: (RANGE_END - RANGE_START) / 60 + 1 }, (_, i) => RANGE_START + i * 60)
+const RANGE_START = 0 // 00:00
+const RANGE_END = 1440 // 24:00
+const HOURS = Array.from({ length: 25 }, (_, i) => i * 60)
 
 function pct(minute) {
-  return ((minute - RANGE_START) / (RANGE_END - RANGE_START)) * 100
+  const m = Math.max(RANGE_START, Math.min(minute, RANGE_END))
+  return ((m - RANGE_START) / (RANGE_END - RANGE_START)) * 100
 }
 
 function seedFromString(str) {
@@ -24,10 +25,10 @@ function useSyntheticTraffic(dayKey, section) {
       const x = Math.sin(seed + i * 999) * 10000
       return x - Math.floor(x)
     }
-    const count = 4 + Math.floor(rand(0) * 2)
+    const count = 5 + Math.floor(rand(0) * 3)
     const entries = []
     for (let i = 0; i < count; i++) {
-      const start = RANGE_START + Math.floor(rand(i + 1) * ((RANGE_END - RANGE_START) / 60 - 2)) * 60
+      const start = 240 + Math.floor(rand(i + 1) * ((1320 - 240) / 60)) * 60
       const duration = 30 + Math.floor(rand(i + 5) * 4) * 15
       const isFreight = rand(i + 10) > 0.75
       entries.push({
@@ -48,7 +49,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
   const dayKey = date.toDateString()
   const traffic = useSyntheticTraffic(dayKey, section)
 
-  const dayBlocks = blocks.filter((b) => b.start_minute >= RANGE_START - 240 && b.start_minute <= RANGE_END)
+  const dayBlocks = blocks.filter((b) => b.start_minute >= 0 && b.start_minute <= 1440)
 
   return (
     <div className="rounded-2xl bg-[#FDF9F1] p-6 h-full relative overflow-hidden">
@@ -95,11 +96,11 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
         >
           <div className="min-w-[900px]">
             {/* hour ruler */}
-            <div className="relative ml-24 h-6 border-b border-slate-100">
-              {HOURS.map((h) => (
+            <div className="relative ml-24 h-6 border-b border-slate-200/60 mb-1">
+              {HOURS.filter((_, idx) => idx % 2 === 0).map((h) => (
                 <span
                   key={h}
-                  className="absolute -translate-x-1/2 text-[10px] font-bold text-slate-400 font-mono"
+                  className="absolute -translate-x-1/2 text-xs font-bold text-slate-400 font-mono"
                   style={{ left: `${pct(h)}%` }}
                 >
                   {String(Math.floor(h / 60)).padStart(2, '0')}:00
@@ -116,12 +117,12 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.2, delay: i * 0.03 }}
                   title={`${tr.id} · ${formatTimeOfDay(tr.start)}–${formatTimeOfDay(tr.end)}`}
-                  className={`absolute top-2 flex h-9 items-center justify-center rounded-lg px-2 text-[11px] font-bold shadow-sm ${
+                  className={`absolute top-2.5 flex h-9 items-center justify-center rounded-lg px-2 text-xs font-bold shadow-sm ${
                     tr.isFreight
                       ? 'bg-[#FDF0E1] text-[#D88A58]'
                       : 'bg-[#E4EEFF] text-[#426BB4]'
                   }`}
-                  style={{ left: `${pct(tr.start)}%`, width: `${pct(tr.end) - pct(tr.start)}%` }}
+                  style={{ left: `${pct(tr.start)}%`, width: `${Math.max(pct(tr.end) - pct(tr.start), 4)}%` }}
                 >
                   <span className="truncate">{tr.id}</span>
                 </motion.div>
@@ -134,6 +135,8 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                 const color = blockPrimaryColor(b.departments)
                 const isPending = b.status === 'pending'
                 const isRejected = b.status === 'rejected'
+                const blockLeft = pct(b.start_minute)
+                const blockWidth = Math.max(pct(b.end_minute) - blockLeft, 6)
                 return (
                   <motion.div
                     key={b.block_id}
@@ -141,7 +144,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.22, delay: i * 0.04 }}
                     className="absolute top-2"
-                    style={{ left: `${pct(b.start_minute)}%`, width: `${Math.max(pct(b.end_minute) - pct(b.start_minute), 6)}%` }}
+                    style={{ left: `${blockLeft}%`, width: `${blockWidth}%` }}
                   >
                     <button
                       onClick={() => {
@@ -158,7 +161,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                       }}
                     >
                       <p className="truncate">{b.is_merged ? `${b.departments.join('+')} Block` : `${b.departments[0]} Block`}</p>
-                      <p className="text-[10px] font-medium opacity-90 mt-0.5">
+                      <p className="text-xs font-medium opacity-90 mt-0.5">
                         {b.status === 'approved' ? '✓ Approved' : b.status === 'rejected' ? '✕ Rejected' : b.status === 'flagged' ? '⚑ Flagged' : 'Pending'}
                       </p>
                     </button>
@@ -228,55 +231,66 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                             </div>
 
                             {b.status === 'pending' && (
-                              <div className="mt-8 flex flex-col gap-3">
+                              <div className="border-t border-slate-200 pt-4 flex flex-col gap-2">
                                 {!isFlagging ? (
                                   <>
-                                    <div className="flex gap-3">
-                                      <button
-                                        onClick={() => { onDecide(b.block_id, 'approve'); setOpenBlockId(null) }}
-                                        className="flex-1 rounded-xl bg-[#0A261A] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#133c2a]"
-                                      >
-                                        Approve
-                                      </button>
-                                      <button
-                                        onClick={() => { onDecide(b.block_id, 'reject'); setOpenBlockId(null) }}
-                                        className="flex-1 rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50"
-                                      >
-                                        Reject
-                                      </button>
-                                    </div>
                                     <button
-                                      onClick={() => setIsFlagging(true)}
-                                      className="w-full rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-bold text-red-700 shadow-sm transition hover:bg-red-100"
+                                      onClick={() => {
+                                        onDecide(b.block_id, 'approve')
+                                        setOpenBlockId(null)
+                                      }}
+                                      className="focus-ring flex items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 shadow-sm"
                                     >
-                                      Flag Issue
+                                      Approve Block
                                     </button>
-                                  </>
-                                ) : (
-                                  <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-                                    <label className="text-xs font-bold text-red-900 mb-2 block">Reason for flagging:</label>
-                                    <textarea
-                                      className="w-full rounded-lg border border-red-200 bg-white p-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-red-400"
-                                      rows={3}
-                                      value={flagReason}
-                                      onChange={e => setFlagReason(e.target.value)}
-                                      placeholder="Explain the conflict or safety concern..."
-                                    />
-                                    <div className="mt-3 flex gap-2">
+                                    
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <button
+                                        onClick={() => setIsFlagging(true)}
+                                        className="focus-ring flex items-center justify-center gap-1.5 rounded-xl border border-amber-300 bg-amber-50 py-2.5 text-xs font-bold text-amber-800 transition hover:bg-amber-100"
+                                      >
+                                        Flag Block
+                                      </button>
                                       <button
                                         onClick={() => {
-                                          if (flagReason.trim()) {
-                                            submitBlockFlag(b.block_id, flagReason, userContext?.department || 'Unknown')
-                                            setOpenBlockId(null)
-                                          }
+                                          onDecide(b.block_id, 'reject')
+                                          setOpenBlockId(null)
                                         }}
-                                        className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-xs font-bold text-white hover:bg-red-700"
+                                        className="focus-ring flex items-center justify-center gap-1.5 rounded-xl border border-red-200 bg-red-50 py-2.5 text-xs font-bold text-red-700 transition hover:bg-red-100"
+                                      >
+                                        Reject Block
+                                      </button>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <div className="space-y-3 bg-amber-50/60 p-4 rounded-xl border border-amber-200">
+                                    <p className="text-xs font-bold text-amber-900">Reason for Flagging:</p>
+                                    <textarea
+                                      value={flagReason}
+                                      onChange={(e) => setFlagReason(e.target.value)}
+                                      placeholder="e.g. Traffic conflict, resource unavailability..."
+                                      className="focus-ring w-full rounded-lg border border-amber-300 bg-white p-2 text-xs text-slate-800 outline-none"
+                                      rows={3}
+                                    />
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => {
+                                          if (submitBlockFlag && flagReason.trim()) {
+                                            submitBlockFlag(b, flagReason.trim())
+                                          } else if (onDecide) {
+                                            onDecide(b.block_id, 'flag')
+                                          }
+                                          setIsFlagging(false)
+                                          setOpenBlockId(null)
+                                        }}
+                                        disabled={!flagReason.trim()}
+                                        className="focus-ring flex-1 rounded-lg bg-amber-600 py-2 text-xs font-bold text-white transition hover:bg-amber-700 disabled:opacity-50"
                                       >
                                         Submit Flag
                                       </button>
                                       <button
                                         onClick={() => setIsFlagging(false)}
-                                        className="flex-1 rounded-lg bg-white border border-red-200 px-3 py-2 text-xs font-bold text-red-700 hover:bg-red-100"
+                                        className="focus-ring rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50"
                                       >
                                         Cancel
                                       </button>
@@ -311,14 +325,14 @@ function Legend({ swatch, label }) {
 
 function Row({ label, children, tall }) {
   return (
-    <div className="flex border-b border-slate-200/50 last:border-0 relative">
-      <div className="flex w-24 shrink-0 items-center text-[11px] font-bold tracking-widest text-slate-500">
+    <div className="flex border-b border-slate-200/50 last:border-0 relative items-center">
+      <div className="flex w-24 shrink-0 items-center text-xs font-bold tracking-widest text-slate-600 pr-4 z-10 bg-[#FDF9F1]">
         {label}
       </div>
-      <div className={`relative flex-1 ${tall ? 'h-20' : 'h-14'}`}>
+      <div className={`relative flex-1 ${tall ? 'h-24' : 'h-16'}`}>
         {/* hour gridlines */}
         {HOURS.map((h) => (
-          <div key={h} className="absolute top-0 h-full w-px bg-slate-200/50" style={{ left: `${pct(h)}%` }} />
+          <div key={h} className="absolute top-0 h-full w-px bg-slate-200/50 pointer-events-none" style={{ left: `${pct(h)}%` }} />
         ))}
         {children}
       </div>
