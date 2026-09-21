@@ -285,12 +285,12 @@ function DRMDashboard({ userContext, tasks, blocks, corridors, setPage }) {
             </div>
             <div className="w-full grid grid-cols-2 gap-2 text-center text-sm">
               <div className="bg-white/50 dark:bg-black/20 p-2 rounded-xl border border-white/40 dark:border-white/10">
-                <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">{t('drm.total')}</div>
-                <div className="font-black text-slate-700 dark:text-white">{d.total}</div>
+                <div className="text-xs uppercase font-bold text-slate-500 dark:text-slate-400">{t('drm.total')}</div>
+                <div className="text-base font-black text-slate-700 dark:text-white">{d.total}</div>
               </div>
               <div className={`p-2 rounded-xl border ${d.crit > 0 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400' : 'bg-white/50 dark:bg-black/20 border-white/40 dark:border-white/10 text-slate-700 dark:text-white'}`}>
-                <div className="text-[10px] uppercase font-bold">{t('drm.critical')}</div>
-                <div className="font-black">{d.crit}</div>
+                <div className="text-xs uppercase font-bold">{t('drm.critical')}</div>
+                <div className="text-base font-black">{d.crit}</div>
               </div>
             </div>
           </div>
