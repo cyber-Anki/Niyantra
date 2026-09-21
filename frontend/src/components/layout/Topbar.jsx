@@ -134,78 +134,33 @@ function NotificationPanel({ onClose, onNavigate, onMarkAllRead, isMarkedRead })
         <div className="my-1.5 border-t border-slate-100 dark:border-slate-800/80" />
 
         {/* Category 3: SLA Breach Warnings */}
-        <div className="pt-0.5">
-          <button
-            onClick={() => {
-              onNavigate('priority')
-              onClose()
-            }}
-            className="focus-ring group flex w-full items-center justify-between rounded-xl p-2.5 text-left transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/60 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-700/50"
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 dark:bg-red-950/50 border border-red-200/70 dark:border-red-800/60 text-red-600 dark:text-red-400">
-                <AlertTriangle size={18} />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                  SLA breach warnings
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  Overdue critical track defects
-                </p>
-              </div>
+        <button
+          onClick={() => {
+            onNavigate('priority')
+            onClose()
+          }}
+          className="focus-ring group flex w-full items-center justify-between rounded-xl p-2.5 text-left transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/60 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-700/50"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 dark:bg-red-950/50 border border-red-200/70 dark:border-red-800/60 text-red-600 dark:text-red-400">
+              <AlertTriangle size={18} />
             </div>
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700/50 px-2.5 py-0.5 text-xs font-bold text-red-700 dark:text-red-300">
-                {critical.length}
-              </span>
-              <ChevronRight size={15} className="text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors" />
+            <div>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                SLA breach warnings
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Overdue critical track defects
+              </p>
             </div>
-          </button>
-
-          {/* SLA Critical Items list or Empty State */}
-          {critical.length === 0 ? (
-            <div className="mx-1 my-2 flex items-center gap-3 rounded-xl border border-emerald-200/70 bg-emerald-50/50 dark:border-emerald-800/50 dark:bg-emerald-950/20 p-3 text-left">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
-                <CheckCircle2 size={16} />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">You're all caught up</p>
-                <p className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400">No critical severity items right now.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="mt-1 space-y-1.5 pl-2 pr-1">
-              {critical.map((t) => (
-                <button
-                  key={t.task_id}
-                  onClick={() => {
-                    onNavigate('priority')
-                    onClose()
-                  }}
-                  className="group w-full rounded-xl border border-slate-200/60 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40 p-2.5 text-left transition-colors duration-150 hover:bg-slate-100/90 dark:hover:bg-slate-800/70 hover:border-red-200/60 dark:hover:border-red-900/40"
-                >
-                  <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700">
-                      {t.task_id}
-                    </span>
-                    <span className="rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 px-2 py-0.5 text-[10px] font-bold text-red-700 dark:text-red-300 uppercase tracking-wider">
-                      critical
-                    </span>
-                  </div>
-                  <p className="mt-1.5 text-xs font-bold capitalize text-slate-800 dark:text-slate-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                    {t.defect_type.replaceAll('_', ' ')}
-                  </p>
-                  <p className="mt-0.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                    <span>{t.section}</span>
-                    <span>·</span>
-                    <span className="text-red-600 dark:text-red-400 font-semibold">{t.overdue_days}d overdue</span>
-                  </p>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700/50 px-2.5 py-0.5 text-xs font-bold text-red-700 dark:text-red-300">
+              {critical.length}
+            </span>
+            <ChevronRight size={15} className="text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors" />
+          </div>
+        </button>
       </div>
 
       {/* Footer */}
