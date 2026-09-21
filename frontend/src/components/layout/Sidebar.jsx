@@ -38,7 +38,7 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
         {!collapsed && (
           <div className="overflow-hidden whitespace-nowrap">
             <h1 className="font-serif text-lg font-bold tracking-wide text-white">Niyantran</h1>
-            <p className="text-[10px] uppercase tracking-wider text-slate-400">Indian Railways</p>
+            <p className="text-xs uppercase tracking-wider text-slate-400">Indian Railways</p>
           </div>
         )}
       </div>

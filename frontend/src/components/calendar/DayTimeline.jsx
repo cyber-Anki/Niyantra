@@ -180,7 +180,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                           </div>
                           <div className="flex-1 overflow-y-auto p-5">
                             <div className="mb-6">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Status</span>
+                              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Status</span>
                               <div className="mt-1">
                                 <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${b.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : b.status === 'rejected' ? 'bg-slate-200 text-slate-600' : b.status === 'flagged' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
                                   {b.status}
@@ -189,17 +189,17 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                             </div>
                             
                             <div className="mb-6">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Timing</span>
+                              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Timing</span>
                               <p className="mt-1 font-mono text-sm font-semibold text-slate-700">
                                 {formatTimeOfDay(b.start_minute)} - {formatTimeOfDay(b.end_minute)}
                               </p>
                             </div>
 
                             <div className="mb-6">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Departments</span>
+                              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Departments</span>
                               <div className="mt-1 flex gap-2">
                                 {b.departments.map(d => (
-                                  <span key={d} className="rounded-md px-2 py-1 text-[10px] font-bold text-white shadow-sm" style={{ backgroundColor: DEPT_COLOR[d] || '#8B5CF6' }}>
+                                  <span key={d} className="rounded-md px-2.5 py-1 text-xs font-bold text-white shadow-sm" style={{ backgroundColor: DEPT_COLOR[d] || '#8B5CF6' }}>
                                     {d}
                                   </span>
                                 ))}
@@ -207,7 +207,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                             </div>
 
                             <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">AI Reasoning</span>
+                              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">AI Reasoning</span>
                               <p className="mt-2 text-sm text-slate-600 font-medium leading-relaxed">
                                 {b.is_merged 
                                   ? `Merged ${b.task_ids.length} tasks across ${b.departments.join(' and ')} to optimize track possession and minimize overall traffic downtime by 40 minutes.`
@@ -216,7 +216,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                             </div>
 
                             <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Linked Tasks</span>
+                              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Linked Tasks</span>
                               <div className="mt-2 space-y-2">
                                 {b.task_ids.map(tid => (
                                   <div key={tid} className="border-l-2 border-slate-300 pl-3">

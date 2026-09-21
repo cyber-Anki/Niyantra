@@ -19,7 +19,7 @@ function StatDelta({ label, before, after, invert = false, suffix = '' }) {
   const color = diff === 0 ? 'text-slate-400' : good ? 'text-forest' : 'text-severity-critical'
   return (
     <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</p>
+      <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{label}</p>
       <div className="mt-2 flex items-baseline gap-2">
         <span className="text-sm font-medium text-slate-400 line-through">{before}{suffix}</span>
         <span className="text-xl font-black text-[#1a2f24]">{after}{suffix}</span>

@@ -51,7 +51,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
         <td className="py-4 px-2">
           <div className="flex flex-col">
             <span className="font-bold text-slate-900">{task.task_id}</span>
-            <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">{task.section}</span>
+            <span className="text-xs font-medium uppercase tracking-wider text-slate-400">{task.section}</span>
           </div>
         </td>
         <td className="py-4 px-2">
@@ -62,7 +62,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
         <td className="py-4 px-2">
           <div className="flex flex-col">
             <span className="font-bold text-slate-900 capitalize">{task.defect_type.replaceAll('_', ' ')}</span>
-            <span className="text-[10px] font-medium text-slate-500">{task.duration_minutes || 60} mins • traffic block</span>
+            <span className="text-xs font-medium text-slate-500">{task.duration_minutes || 60} mins • traffic block</span>
           </div>
         </td>
         <td className="py-4 px-2 text-sm text-slate-500">{task.severity === 'critical' ? 40 : task.severity === 'major' ? 35 : 30}</td>
@@ -90,18 +90,18 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
               <Flag size={14} className={flagged ? 'fill-current' : ''} />
             </button>
             {flagged ? (
-              <span className="flex items-center gap-1.5 rounded-lg border border-[#F1C453] bg-[#F1C453]/10 px-3 py-1.5 text-[11px] font-bold text-amber-600">
+              <span className="flex items-center gap-1.5 rounded-lg border border-[#F1C453] bg-[#F1C453]/10 px-3 py-1.5 text-xs font-bold text-amber-600">
                 <Flag size={12} className="fill-current" /> Flagged for Review
               </span>
             ) : block?.status === 'approved' ? (
-              <span className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-600">
+              <span className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-600">
                 <CheckCircle2 size={12} /> Sent to Scheduler
               </span>
             ) : (
               <button
                 onClick={() => onApprove(task, block)}
                 disabled={!block}
-                className="focus-ring rounded-lg bg-[#1a2f24] px-3 py-1.5 text-[11px] font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-50"
+                className="focus-ring rounded-lg bg-[#1a2f24] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-50"
               >
                 Approve Slot
               </button>
@@ -114,7 +114,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
           <td colSpan={10} className="p-6">
             <div className="flex gap-12 max-w-4xl">
               <div className="flex-1">
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Priority Score Breakdown</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Priority Score Breakdown</h4>
                 <div className="flex flex-col gap-4">
                   <div>
                     <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
@@ -146,13 +146,13 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
                 </div>
               </div>
               <div className="flex-1 border-l border-slate-200 pl-8">
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">AI Recommendation Context</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">AI Recommendation Context</h4>
                 <p className="text-sm text-slate-700 font-medium leading-relaxed mb-4">
                   The recommended slot of <span className="font-bold text-slate-900">11/15/2024, 2:30:00 PM</span> targets a low-traffic window.
                 </p>
                 <div className="flex gap-2">
-                  <span className="rounded bg-slate-200/60 px-2 py-1 text-[10px] font-bold text-slate-600">Asset Criticality: high</span>
-                  <span className="rounded bg-slate-200/60 px-2 py-1 text-[10px] font-bold text-slate-600">Severity: {task.severity}</span>
+                  <span className="rounded bg-slate-200/60 px-2 py-1 text-xs font-bold text-slate-600">Asset Criticality: high</span>
+                  <span className="rounded bg-slate-200/60 px-2 py-1 text-xs font-bold text-slate-600">Severity: {task.severity}</span>
                 </div>
               </div>
             </div>
@@ -166,8 +166,8 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
 function Metric({ label, value }) {
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-wide text-slate-500">{label}</p>
-      <p className="mt-0.5 text-xs font-medium text-slate-900 capitalize">{value}</p>
+      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-0.5 text-sm font-medium text-slate-900 capitalize">{value}</p>
     </div>
   )
 }

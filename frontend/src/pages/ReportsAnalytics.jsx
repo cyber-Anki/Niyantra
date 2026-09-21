@@ -129,17 +129,17 @@ export default function ReportsAnalytics() {
 
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{t('rep.efficiency')}</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{t('rep.efficiency')}</p>
             <p className="mt-2 text-3xl font-black text-[#1a2f24]">{utilization.pct}%</p>
             <p className="mt-1 text-xs font-semibold text-slate-400">{utilization.actual}m {t('rep.used_of')} {utilization.planned}m {t('rep.available')}</p>
           </div>
           <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{t('rep.rolled_forward')}</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{t('rep.rolled_forward')}</p>
             <p className="mt-2 text-3xl font-black text-[#1a2f24]">{unscheduledTaskIds.length}</p>
             <p className="mt-1 text-xs font-semibold text-slate-400">{t('rep.of')} {allTasks.length} {t('rep.total_backlog')}</p>
           </div>
           <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{t('rep.merges')}</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{t('rep.merges')}</p>
             <p className="mt-2 text-3xl font-black text-[#1a2f24]">{blocks.filter((b) => b.is_merged).length}</p>
             <p className="mt-1 text-xs font-semibold text-slate-400">{t('rep.of')} {blocks.length} {t('rep.scheduled_blocks')}</p>
           </div>

@@ -95,7 +95,7 @@ export default function Landing({ onNavigateLogin }) {
           />
           <div className="flex flex-col">
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-tight">{t('landing.title')}</h1>
-            <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 uppercase tracking-widest">{t('landing.subtitle')}</p>
+            <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-500 uppercase tracking-widest">{t('landing.subtitle')}</p>
           </div>
         </div>
         

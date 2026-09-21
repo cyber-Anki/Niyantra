@@ -73,7 +73,7 @@ export default function ConflictResolution({ setPage }) {
                         <div key={tid} className="flex items-center justify-between border-b border-slate-200/50 dark:border-white/10 pb-3 last:border-0 last:pb-0">
                           <div>
                             <p className="font-mono text-xs text-slate-900 dark:text-white font-bold">{tid}</p>
-                            <p className="text-[11px] capitalize text-slate-500 dark:text-slate-400 font-semibold">
+                            <p className="text-xs capitalize text-slate-500 dark:text-slate-400 font-semibold">
                               {t.department} · {t.defect_type.replaceAll('_', ' ')}
                             </p>
                           </div>
@@ -83,9 +83,9 @@ export default function ConflictResolution({ setPage }) {
                               <button
                                 onClick={() => decideBlock(b.block_id, 'remove_task', { task_id: tid })}
                                 title="Split this task out into its own review"
-                                className="focus-ring flex items-center gap-1 border border-slate-200/50 dark:border-white/20 rounded-lg px-2 py-1 text-[10px] uppercase font-bold tracking-wider text-slate-600 dark:text-slate-300 hover:bg-white/50 dark:hover:bg-white/10 transition-colors"
+                                className="focus-ring flex items-center gap-1 border border-slate-200/50 dark:border-white/20 rounded-lg px-2 py-1 text-xs uppercase font-bold tracking-wider text-slate-600 dark:text-slate-300 hover:bg-white/50 dark:hover:bg-white/10 transition-colors"
                               >
-                                <Scissors size={10} /> {t('cr.split_out')}
+                                <Scissors size={12} /> {t('cr.split_out')}
                               </button>
                             )}
                           </div>
@@ -138,30 +138,30 @@ export default function ConflictResolution({ setPage }) {
                   {/* Side-by-side comparison table */}
                   <div className="grid grid-cols-2 divide-x divide-slate-200/50 dark:divide-white/10">
                     <div className="p-4 bg-red-50/50 dark:bg-red-900/10">
-                      <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-red-700 dark:text-red-400 border-b border-red-200/50 dark:border-red-500/20 pb-1">{t('cr.bumped')}</p>
+                      <p className="mb-3 text-xs font-bold uppercase tracking-wider text-red-700 dark:text-red-400 border-b border-red-200/50 dark:border-red-500/20 pb-1">{t('cr.bumped')}</p>
                       <div className="space-y-2">
                         {group.losers.map((t) => (
                           <div key={t.task_id} className="flex flex-col gap-1 rounded-xl border border-red-200/50 dark:border-red-500/30 bg-white/60 dark:bg-black/40 backdrop-blur p-3 shadow-sm">
                             <div className="flex justify-between items-center">
                               <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{t.task_id}</span>
-                              <span className="text-[10px] bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
+                              <span className="text-xs bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
                             </div>
-                            <span className="text-[11px] text-slate-600 dark:text-slate-400 font-semibold capitalize">{t.department} · {t.defect_type.replaceAll('_', ' ')}</span>
+                            <span className="text-xs text-slate-600 dark:text-slate-400 font-semibold capitalize">{t.department} · {t.defect_type.replaceAll('_', ' ')}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                     <div className="p-4 bg-emerald-50/50 dark:bg-emerald-900/10">
-                      <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 border-b border-emerald-200/50 dark:border-emerald-500/20 pb-1">{t('cr.won')}</p>
+                      <p className="mb-3 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 border-b border-emerald-200/50 dark:border-emerald-500/20 pb-1">{t('cr.won')}</p>
                       <div className="space-y-2">
                         {group.winners.length === 0 && <p className="text-xs font-medium text-slate-500 dark:text-slate-400">No blocks scheduled here yet.</p>}
                         {group.winners.map((t) => (
                           <div key={t.task_id} className="flex flex-col gap-1 rounded-xl border border-emerald-200/50 dark:border-emerald-500/30 bg-white/60 dark:bg-black/40 backdrop-blur p-3 shadow-sm">
                             <div className="flex justify-between items-center">
                               <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{t.task_id}</span>
-                              <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
+                              <span className="text-xs bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
                             </div>
-                            <span className="text-[11px] text-slate-600 dark:text-slate-400 font-semibold capitalize">{t.department} · {t.defect_type.replaceAll('_', ' ')}</span>
+                            <span className="text-xs text-slate-600 dark:text-slate-400 font-semibold capitalize">{t.department} · {t.defect_type.replaceAll('_', ' ')}</span>
                           </div>
                         ))}
                       </div>
