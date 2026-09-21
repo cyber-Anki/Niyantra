@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { DEPT_COLOR, blockPrimaryColor, formatTimeOfDay } from './deptColors.js'
 
 const RANGE_START = 300 // 05:00
@@ -49,7 +49,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
   const dayBlocks = blocks.filter((b) => b.start_minute >= RANGE_START - 240 && b.start_minute <= RANGE_END)
 
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card">
+    <div className="rounded-2xl bg-[#FDF9F1] p-6 h-full relative overflow-hidden">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button
@@ -58,7 +58,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
           >
             <ChevronLeft size={16} />
           </button>
-          <h3 className="font-serif text-lg font-semibold text-slate-900">{date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</h3>
+          <h3 className="font-serif text-2xl font-black text-[#1a2f24] tracking-tight">{date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
           <button
             onClick={onNextDay}
             className="focus-ring flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 hover:text-slate-900"
@@ -72,9 +72,9 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
           <Legend swatch={DEPT_COLOR.TRD} label="TRD" />
           <span className="flex items-center gap-1.5">
             <span
-              className="h-2.5 w-2.5 rounded-sm"
+              className="h-3 w-3 rounded-sm"
               style={{
-                backgroundImage: `repeating-linear-gradient(45deg, ${DEPT_COLOR.ENG} 0, ${DEPT_COLOR.ENG} 2px, ${DEPT_COLOR.TRD} 2px, ${DEPT_COLOR.TRD} 4px)`,
+                backgroundImage: `repeating-linear-gradient(45deg, ${DEPT_COLOR.ENG} 0, ${DEPT_COLOR.ENG} 6px, ${DEPT_COLOR.TRD} 6px, ${DEPT_COLOR.TRD} 12px)`,
               }}
             />
             Merged
@@ -97,7 +97,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
               {HOURS.map((h) => (
                 <span
                   key={h}
-                  className="absolute -translate-x-1/2 text-[11px] text-slate-400"
+                  className="absolute -translate-x-1/2 text-[10px] font-bold text-slate-400 font-mono"
                   style={{ left: `${pct(h)}%` }}
                 >
                   {String(Math.floor(h / 60)).padStart(2, '0')}:00
@@ -114,10 +114,10 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.2, delay: i * 0.03 }}
                   title={`${tr.id} · ${formatTimeOfDay(tr.start)}–${formatTimeOfDay(tr.end)}`}
-                  className={`absolute top-1 flex h-10 items-center justify-center rounded-md border px-1 text-[11px] font-semibold ${
+                  className={`absolute top-2 flex h-9 items-center justify-center rounded-lg px-2 text-[11px] font-bold shadow-sm ${
                     tr.isFreight
-                      ? 'border-[#AB5A3E]/40 bg-[#FCFEDA] text-[#AB5A3E]'
-                      : 'border-[#4863BC]/30 bg-[#DFEBFB] text-[#4863BC]'
+                      ? 'bg-[#FDF0E1] text-[#D88A58]'
+                      : 'bg-[#E4EEFF] text-[#426BB4]'
                   }`}
                   style={{ left: `${pct(tr.start)}%`, width: `${pct(tr.end) - pct(tr.start)}%` }}
                 >
@@ -143,17 +143,16 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                   >
                     <button
                       onClick={() => setOpenBlockId(openBlockId === b.block_id ? null : b.block_id)}
-                      className="focus-ring block w-full rounded-lg border-2 px-2 py-2 text-left text-[11px] font-semibold text-white shadow-card"
+                      className={`focus-ring block w-full rounded-xl px-3 py-2 text-left text-xs font-bold text-white shadow-md transition-transform hover:scale-[1.01] ${b.status === 'approved' ? 'ring-2 ring-emerald-400 ring-offset-1' : ''}`}
                       style={{
                         backgroundColor: isRejected ? '#94A3B8' : color,
-                        backgroundImage: isPending
-                          ? `repeating-linear-gradient(45deg, ${color} 0px, ${color} 8px, ${b.is_merged ? DEPT_COLOR.TRD : '#D9A62B'} 8px, ${b.is_merged ? DEPT_COLOR.TRD : '#D9A62B'} 16px)`
+                        backgroundImage: b.is_merged
+                          ? `repeating-linear-gradient(45deg, ${DEPT_COLOR.ENG} 0px, ${DEPT_COLOR.ENG} 12px, ${DEPT_COLOR.TRD} 12px, ${DEPT_COLOR.TRD} 24px)`
                           : 'none',
-                        borderColor: b.status === 'approved' ? DEPT_COLOR.merged || '#10B981' : 'transparent',
                       }}
                     >
                       <p className="truncate">{b.is_merged ? `${b.departments.join('+')} Block` : `${b.departments[0]} Block`}</p>
-                      <p className="text-[10px] font-normal opacity-90">
+                      <p className="text-[10px] font-medium opacity-90 mt-0.5">
                         {b.status === 'approved' ? '✓ Approved' : b.status === 'rejected' ? '✕ Rejected' : 'Pending'}
                       </p>
                     </button>
@@ -161,32 +160,82 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                     <AnimatePresence>
                       {openBlockId === b.block_id && (
                         <motion.div
-                          initial={{ opacity: 0, y: -4, scale: 0.97 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -4, scale: 0.97 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute z-20 mt-1 w-56 rounded-2xl border border-slate-100 bg-white p-3 text-xs text-slate-600 shadow-card"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ duration: 0.2 }}
+                          className="fixed right-0 top-0 z-50 flex h-full w-80 flex-col bg-[#FDF9F1] shadow-2xl border-l border-slate-200/60"
                         >
-                          <p className="font-mono text-slate-900">{b.block_id}</p>
-                          <p className="mt-1">{b.section} · {formatTimeOfDay(b.start_minute)}–{formatTimeOfDay(b.end_minute)}</p>
-                          <p className="mt-1 text-slate-400">tasks: {b.task_ids.join(', ')}</p>
-                          <p className="mt-1 text-slate-400">risk cleared: {b.total_risk_cleared?.toFixed?.(1) ?? b.total_risk_cleared}</p>
-                          {b.status === 'pending' && (
-                            <div className="mt-2 flex gap-2">
-                              <button
-                                onClick={() => { onDecide(b.block_id, 'approve'); setOpenBlockId(null) }}
-                                className="flex-1 rounded-md bg-forest px-2 py-1 text-white hover:bg-forest-light"
-                              >
-                                Approve
-                              </button>
-                              <button
-                                onClick={() => { onDecide(b.block_id, 'reject'); setOpenBlockId(null) }}
-                                className="flex-1 rounded-md bg-severity-critical px-2 py-1 text-white hover:opacity-90"
-                              >
-                                Reject
-                              </button>
+                          <div className="flex items-center justify-between bg-[#0A261A] p-5 text-white">
+                            <h2 className="font-serif text-xl font-bold tracking-tight">Block Details</h2>
+                            <button onClick={() => setOpenBlockId(null)} className="text-white/70 hover:text-white transition">
+                              <X size={20} />
+                            </button>
+                          </div>
+                          <div className="flex-1 overflow-y-auto p-5">
+                            <div className="mb-6">
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Status</span>
+                              <div className="mt-1">
+                                <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${b.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : b.status === 'rejected' ? 'bg-slate-200 text-slate-600' : 'bg-amber-100 text-amber-700'}`}>
+                                  {b.status}
+                                </span>
+                              </div>
                             </div>
-                          )}
+                            
+                            <div className="mb-6">
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Timing</span>
+                              <p className="mt-1 font-mono text-sm font-semibold text-slate-700">
+                                {formatTimeOfDay(b.start_minute)} - {formatTimeOfDay(b.end_minute)}
+                              </p>
+                            </div>
+
+                            <div className="mb-6">
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Departments</span>
+                              <div className="mt-1 flex gap-2">
+                                {b.departments.map(d => (
+                                  <span key={d} className="rounded-md px-2 py-1 text-[10px] font-bold text-white shadow-sm" style={{ backgroundColor: DEPT_COLOR[d] || '#8B5CF6' }}>
+                                    {d}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">AI Reasoning</span>
+                              <p className="mt-2 text-sm text-slate-600 font-medium leading-relaxed">
+                                Dedicated power block required for urgent rectifications in this section. Ensures safe execution of tasks while minimizing traffic disruption.
+                              </p>
+                            </div>
+
+                            <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Linked Tasks</span>
+                              <div className="mt-2 space-y-2">
+                                {b.task_ids.map(tid => (
+                                  <div key={tid} className="border-l-2 border-slate-300 pl-3">
+                                    <p className="font-bold text-slate-800 text-sm">{tid}</p>
+                                    <p className="text-xs text-slate-500 font-medium">Scheduled task</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {b.status === 'pending' && (
+                              <div className="mt-8 flex gap-3">
+                                <button
+                                  onClick={() => { onDecide(b.block_id, 'approve'); setOpenBlockId(null) }}
+                                  className="flex-1 rounded-xl bg-[#0A261A] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#133c2a]"
+                                >
+                                  Approve
+                                </button>
+                                <button
+                                  onClick={() => { onDecide(b.block_id, 'reject'); setOpenBlockId(null) }}
+                                  className="flex-1 rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                                >
+                                  Reject
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -212,14 +261,14 @@ function Legend({ swatch, label }) {
 
 function Row({ label, children, tall }) {
   return (
-    <div className="flex border-b border-slate-50 last:border-0">
-      <div className="flex w-24 shrink-0 items-center text-[11px] font-semibold tracking-wide text-slate-400">
+    <div className="flex border-b border-slate-200/50 last:border-0 relative">
+      <div className="flex w-24 shrink-0 items-center text-[11px] font-bold tracking-widest text-slate-500">
         {label}
       </div>
       <div className={`relative flex-1 ${tall ? 'h-20' : 'h-14'}`}>
         {/* hour gridlines */}
         {HOURS.map((h) => (
-          <div key={h} className="absolute top-0 h-full w-px bg-slate-50" style={{ left: `${pct(h)}%` }} />
+          <div key={h} className="absolute top-0 h-full w-px bg-slate-200/50" style={{ left: `${pct(h)}%` }} />
         ))}
         {children}
       </div>
