@@ -41,9 +41,36 @@ class OfficerDecisionDB(Base):
 class UserDB(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    role = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(255), nullable=False)
+    full_name = Column(String(100), nullable=False)
+    
+    # RBAC Claims
+    role = Column(String(50), nullable=False, default="TRACK_ENGINEER")  
+    department = Column(String(20), nullable=False, default="ENG")       
+    section_zone = Column(String(50), nullable=False, default="SEC-1")
+    division = Column(String(50), nullable=False, default="Delhi (DLI)")
+    
+    # Security & Audit
+    failed_attempts = Column(Integer, default=0, nullable=False)
+    lockout_until = Column(DateTime, nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    last_login_at = Column(DateTime, nullable=True)
+
+    @property
+    def name(self) -> str:
+        return self.full_name
+
+    @name.setter
+    def name(self, val: str):
+        self.full_name = val
+
+    @property
+    def password(self) -> str:
+        return self.hashed_password
+
+    @password.setter
+    def password(self, val: str):
+        self.hashed_password = val
