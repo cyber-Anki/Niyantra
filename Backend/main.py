@@ -10,8 +10,8 @@ from pydantic import BaseModel
 from typing import Optional, Literal
 import random
 import xgboost as xgb
-
-from schemas import MaintenanceTask, Corridor, RegisterRequest, LoginRequest, VerifyOTPRequest
+from sqlalchemy.exc import SQLAlchemyError
+from schemas import MaintenanceTask, Corridor
 from mock_data_loader import bootstrap
 from system1_priority_engine import score_all_tasks
 from physics_fatigue import compute_damage_signal
@@ -21,11 +21,13 @@ import system3_horizon_engine as s3
 from database import Base, engine, get_db
 from models import ScheduledBlockDB, OfficerDecisionDB, UserDB
 
+from auth import auth_router, get_current_user
+
 Base.metadata.create_all(bind=engine)
 
-OTP_STORE = {} # In-memory store for OTPs
-
 app = FastAPI(title="AI Block Planning Backend")
+
+app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 
 app.add_middleware(
     CORSMiddleware,
@@ -70,63 +72,6 @@ class DecideRequest(BaseModel):
 @app.get("/api/data/bootstrap")
 def get_bootstrap():
     return bootstrap()
-
-
-@app.post("/api/auth/register")
-def register_user(req: RegisterRequest, db: Session = Depends(get_db)):
-    existing = db.query(UserDB).filter(UserDB.email == req.email).first()
-    if existing:
-        raise HTTPException(400, "Email already registered")
-    
-    new_user = UserDB(
-        name=req.name,
-        email=req.email,
-        password=req.password,
-        role=req.role
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    otp = str(random.randint(1000, 9999))
-    OTP_STORE[req.email] = otp
-    print(f"\n{'='*50}\n🔐 SIMULATED EMAIL TO {req.email}:\nYour Niyantran verification OTP is: {otp}\n{'='*50}\n")
-    return {"status": "success", "message": "Registered successfully. OTP sent.", "dev_otp": otp}
-
-
-@app.post("/api/auth/login")
-def login_user(req: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(UserDB).filter(UserDB.email == req.email).first()
-    if not user or user.password != req.password:
-        raise HTTPException(401, "Invalid email or password")
-        
-    otp = str(random.randint(1000, 9999))
-    OTP_STORE[req.email] = otp
-    print(f"\n{'='*50}\n🔐 SIMULATED EMAIL TO {req.email}:\nYour Niyantran login OTP is: {otp}\n{'='*50}\n")
-    return {"status": "success", "message": "OTP sent to email.", "dev_otp": otp}
-
-
-@app.post("/api/auth/verify-otp")
-def verify_otp(req: VerifyOTPRequest, db: Session = Depends(get_db)):
-    if req.email not in OTP_STORE or OTP_STORE[req.email] != req.otp:
-        raise HTTPException(401, "Invalid or expired OTP")
-        
-    del OTP_STORE[req.email]
-    user = db.query(UserDB).filter(UserDB.email == req.email).first()
-    if not user:
-        raise HTTPException(401, "User not found")
-        
-    return {
-        "status": "success", 
-        "token": "fake-jwt-token-12345",
-        "user": {
-            "name": user.name,
-            "email": user.email,
-            "role": user.role,
-            "division": "Delhi (DLI)",
-            "corridor": "NDLS-GZB"
-        }
-    }
 
 
 @app.post("/api/system1/prioritize")
@@ -220,7 +165,7 @@ def get_blocks(status: Optional[str] = None, week_start: Optional[str] = None,
 
 
 @app.post("/api/blocks/decide")
-def decide_block(req: DecideRequest, db: Session = Depends(get_db)):
+def decide_block(req: DecideRequest, db: Session = Depends(get_db), current_user: UserDB = Depends(get_current_user)):
     """
     Applies an officer decision to a persisted block and logs it.
     approve/reject: sets block status directly.
@@ -259,10 +204,11 @@ def decide_block(req: DecideRequest, db: Session = Depends(get_db)):
         block.start_minute = req.new_start_minute
         block.end_minute = req.new_end_minute
 
+    officer_name = current_user.full_name or req.decided_by or "unauthenticated"
     db.add(OfficerDecisionDB(
         block_id=req.block_id, action=req.action, task_id=req.task_id,
         new_start_minute=req.new_start_minute, new_end_minute=req.new_end_minute,
-        decided_by=req.decided_by,
+        decided_by=officer_name,
     ))
     db.commit()
     db.refresh(block)

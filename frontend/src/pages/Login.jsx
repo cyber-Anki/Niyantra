@@ -2,6 +2,7 @@ import { useState } from 'react'
 import logoMark from '../assets/logo-mark.png'
 import bgImage from '../assets/railway_background.jpg'
 import { useTranslation } from '../store/TranslationContext.jsx'
+import { api } from '../api.js'
 
 export default function Login({ onLoginSuccess, onBackToLanding }) {
   const { t } = useTranslation()
@@ -15,17 +16,69 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
   const [password, setPassword] = useState('')
   const [otp, setOtp] = useState('')
   
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [infoMessage, setInfoMessage] = useState(null)
+  const [devOtp, setDevOtp] = useState(null)
+  
   const division = 'Delhi (DLI)'
   const corridor = 'NDLS-GZB'
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault()
-    setStep('verification')
+    setError(null)
+    setInfoMessage(null)
+    setLoading(true)
+
+    try {
+      if (authMode === 'login') {
+        const res = await api.login({ email, password })
+        if (res.dev_otp) setDevOtp(res.dev_otp)
+        setInfoMessage(res.message || 'OTP dispatched to your official email.')
+        setStep('verification')
+      } else {
+        const res = await api.register({
+          name: name || 'Railway Officer',
+          email,
+          password,
+          role,
+          department: role === 'DRM' ? 'ALL' : department,
+          division,
+        })
+        if (res.dev_otp) setDevOtp(res.dev_otp)
+        setInfoMessage(res.message || 'Registration successful. OTP sent to your email.')
+        setStep('verification')
+      }
+    } catch (err) {
+      setError(err.detail || err.message || 'Authentication failed. Please verify credentials.')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleVerifySubmit = (e) => {
+  const handleVerifySubmit = async (e) => {
     e.preventDefault()
-    onLoginSuccess({ role, department: role === 'DRM' ? 'ALL' : department, division, corridor, name })
+    setError(null)
+    setLoading(true)
+
+    try {
+      const res = await api.verifyOtp({ email, otp })
+      if (res.access_token) {
+        localStorage.setItem('access_token', res.access_token)
+      }
+      onLoginSuccess(res.user || {
+        role,
+        department: role === 'DRM' ? 'ALL' : department,
+        division,
+        corridor,
+        name: name || email,
+        email,
+      })
+    } catch (err) {
+      setError(err.detail || err.message || 'Invalid or expired OTP. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleForgotSubmit = (e) => {
@@ -73,14 +126,14 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
               <div className="flex border-b border-white/10 bg-black/20">
                 <button
                   type="button"
-                  onClick={() => setAuthMode('login')}
+                  onClick={() => { setAuthMode('login'); setError(null); }}
                   className={`w-1/2 py-4 text-sm font-bold uppercase tracking-wider transition-all duration-300 ${authMode === 'login' ? 'bg-white/10 text-amber-400 shadow-sm' : 'text-white/50 hover:text-white hover:bg-white/5'}`}
                 >
                   {t('auth.tab_login')}
                 </button>
                 <button
                   type="button"
-                  onClick={() => setAuthMode('register')}
+                  onClick={() => { setAuthMode('register'); setError(null); }}
                   className={`w-1/2 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300 ${authMode === 'register' ? 'bg-white/10 border-t-2 border-amber-400 text-amber-400' : 'text-white/50 hover:text-white hover:bg-white/5'}`}
                 >
                   {t('auth.tab_register')}
@@ -88,6 +141,17 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
               </div>
 
               <form onSubmit={handleFormSubmit} className="px-8 pb-8 pt-6">
+                {error && (
+                  <div className="mb-4 rounded-xl border border-red-500/50 bg-red-950/70 p-3 text-xs font-semibold text-red-200 shadow-sm">
+                    {error}
+                  </div>
+                )}
+                {infoMessage && (
+                  <div className="mb-4 rounded-xl border border-emerald-500/50 bg-emerald-950/70 p-3 text-xs font-semibold text-emerald-200 shadow-sm">
+                    {infoMessage}
+                  </div>
+                )}
+
                 <div className="space-y-4">
                   {authMode === 'register' && (
                     <div>
@@ -108,6 +172,7 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
                     <input
                       id="authEmail"
                       type="email"
+                      placeholder="officer@indianrailways.gov.in"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -171,9 +236,10 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
 
                   <button
                     type="submit"
-                    className="focus-ring mt-6 w-full bg-amber-500 py-3 text-sm font-black uppercase tracking-widest text-slate-900 transition hover:bg-amber-400 border-2 border-amber-400 hover:border-white rounded-2xl shadow-[0_0_15px_rgba(245,158,11,0.4)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)]"
+                    disabled={loading}
+                    className="focus-ring mt-6 w-full bg-amber-500 py-3 text-sm font-black uppercase tracking-widest text-slate-900 transition hover:bg-amber-400 border-2 border-amber-400 hover:border-white rounded-2xl shadow-[0_0_15px_rgba(245,158,11,0.4)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {authMode === 'login' ? t('auth.proceed_verification') : t('auth.register_btn')}
+                    {loading ? 'Processing...' : (authMode === 'login' ? t('auth.proceed_verification') : t('auth.register_btn'))}
                   </button>
                 </div>
                 
@@ -196,6 +262,19 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
                 </p>
                 <p className="text-xs text-white/50 mt-2">{t('auth.enter_4_digit')}</p>
               </div>
+
+              {devOtp && (
+                <div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-950/50 p-2.5 text-center text-xs text-amber-300">
+                  Live OTP generated: <span className="font-mono font-black text-amber-200 ml-1 tracking-widest">{devOtp}</span>
+                </div>
+              )}
+
+              {error && (
+                <div className="mb-4 rounded-xl border border-red-500/50 bg-red-950/70 p-3 text-xs font-semibold text-red-200 shadow-sm">
+                  {error}
+                </div>
+              )}
+
               <div className="space-y-4">
                 <div>
                   <label htmlFor="verifyOtp" className="mb-1 block text-center text-xs font-bold uppercase tracking-wider text-white/90">{t('auth.4_digit_otp')}</label>
@@ -212,12 +291,13 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
                 </div>
                 <button
                   type="submit"
-                  className="focus-ring mt-6 w-full bg-amber-500 py-3 text-sm font-black uppercase tracking-widest text-slate-900 transition hover:bg-amber-400 border-2 border-amber-400 hover:border-white rounded-2xl shadow-[0_0_15px_rgba(245,158,11,0.4)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)]"
+                  disabled={loading}
+                  className="focus-ring mt-6 w-full bg-amber-500 py-3 text-sm font-black uppercase tracking-widest text-slate-900 transition hover:bg-amber-400 border-2 border-amber-400 hover:border-white rounded-2xl shadow-[0_0_15px_rgba(245,158,11,0.4)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {authMode === 'login' ? t('auth.verify_login') : t('auth.verify_register')}
+                  {loading ? 'Verifying...' : (authMode === 'login' ? t('auth.verify_login') : t('auth.verify_register'))}
                 </button>
                 <div className="text-center pt-2">
-                  <button type="button" onClick={() => { setStep('form'); setOtp(''); }} className="text-xs font-bold uppercase text-white/50 hover:text-white transition-colors">
+                  <button type="button" onClick={() => { setStep('form'); setOtp(''); setError(null); }} className="text-xs font-bold uppercase text-white/50 hover:text-white transition-colors">
                     {t('auth.cancel_return')}
                   </button>
                 </div>
@@ -238,6 +318,7 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
                   <input
                     id="forgotEmail"
                     type="email"
+                    placeholder="officer@indianrailways.gov.in"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}

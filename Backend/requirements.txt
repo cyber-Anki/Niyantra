@@ -7,3 +7,6 @@ xgboost
 shap
 ortools
 sqlalchemy
+passlib[bcrypt]
+pyjwt
+email-validator

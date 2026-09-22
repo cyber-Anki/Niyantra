@@ -1,9 +1,10 @@
 """
 Shared Pydantic v2 schemas. All other modules import from here.
 """
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr, field_validator
 from typing import Optional, Literal
 from datetime import datetime
+import re
 
 Department = Literal["ENG", "SNT", "TRD"]
 DefectType = Literal[
@@ -105,15 +106,67 @@ class Conflict(BaseModel):
 
 
 class RegisterRequest(BaseModel):
-    name: str
-    email: str
-    password: str
-    role: str
+    name: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr = Field(..., description="Officer email address")
+    password: str = Field(..., min_length=8, max_length=64, description="Minimum 8 characters")
+    role: str = Field(default="Section Engineer")
+    department: Optional[str] = Field(default="ENG")
+    division: Optional[str] = Field(default="Delhi (DLI)")
+
+    @field_validator('email', 'password')
+    @classmethod
+    def sanitize_inputs(cls, v: str) -> str:
+        # Strip trailing/leading whitespace and block null bytes
+        clean_v = str(v).strip()
+        if "\x00" in clean_v:
+            raise ValueError("Invalid characters detected")
+        return clean_v
+
 
 class LoginRequest(BaseModel):
-    email: str
-    password: str
+    email: EmailStr = Field(..., description="Officer email address")
+    password: str = Field(..., min_length=8, max_length=64, description="Minimum 8 characters")
+
+    @field_validator('email', 'password')
+    @classmethod
+    def sanitize_inputs(cls, v: str) -> str:
+        # Strip trailing/leading whitespace and block null bytes
+        clean_v = str(v).strip()
+        if "\x00" in clean_v:
+            raise ValueError("Invalid characters detected")
+        return clean_v
+
 
 class VerifyOTPRequest(BaseModel):
-    email: str
-    otp: str
+    email: EmailStr = Field(..., description="Officer email address")
+    otp: str = Field(..., min_length=4, max_length=6, description="Verification OTP code")
+
+    @field_validator('email', 'otp')
+    @classmethod
+    def sanitize_inputs(cls, v: str) -> str:
+        # Strip trailing/leading whitespace and block null bytes
+        clean_v = str(v).strip()
+        if "\x00" in clean_v:
+            raise ValueError("Invalid characters detected")
+        return clean_v
+
+
+# Aliases for compatibility
+UserLoginRequest = LoginRequest
+UserRegisterRequest = RegisterRequest
+
+
+class UserProfile(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+    role: str
+    department: Optional[str] = "ENG"
+    division: Optional[str] = "Delhi (DLI)"
+    corridor: Optional[str] = "NDLS-GZB"
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: dict
