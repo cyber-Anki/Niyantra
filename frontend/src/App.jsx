@@ -28,27 +28,27 @@ function Shell({ userContext, onLogout }) {
     <div className="flex h-screen bg-slate-50 dark:bg-[#0B1120] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100/50 via-slate-50 to-white dark:from-indigo-900/20 dark:via-[#0B1120] dark:to-black overflow-hidden font-sans transition-colors">
       {/* Mobile Sidebar Overlay */}
       {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-30 md:hidden" 
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar - responsive */}
       <div className={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 md:relative md:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:flex`}>
-        <Sidebar 
-          page={page} 
-          setPage={(p) => { setPage(p); setMobileMenuOpen(false); }} 
-          collapsed={collapsed} 
-          setCollapsed={setCollapsed} 
+        <Sidebar
+          page={page}
+          setPage={(p) => { setPage(p); setMobileMenuOpen(false); }}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
           userContext={userContext}
         />
       </div>
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Topbar 
-          setPage={setPage} 
-          onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)} 
+        <Topbar
+          setPage={setPage}
+          onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
           onLogout={onLogout}
         />
         <main className="flex-1 overflow-y-auto p-4 md:p-6 transition-colors">
@@ -90,9 +90,9 @@ export default function App() {
         <Landing onNavigateLogin={() => setViewState('login')} />
       )}
       {viewState === 'login' && (
-        <Login 
-          onLoginSuccess={handleLoginSuccess} 
-          onBackToLanding={() => setViewState('landing')} 
+        <Login
+          onLoginSuccess={handleLoginSuccess}
+          onBackToLanding={() => setViewState('landing')}
         />
       )}
       {viewState === 'app' && userContext && (

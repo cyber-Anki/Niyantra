@@ -250,7 +250,6 @@ def register_user(req: RegisterRequest, db: Session = Depends(get_db)):
     return {
         "status": "success",
         "message": f"Registered successfully. OTP sent to {req.email}.",
-        "dev_otp": otp,
     }
 
 
@@ -265,7 +264,6 @@ def login_user(req: LoginRequest, db: Session = Depends(get_db)):
     return {
         "status": "success",
         "message": f"Credentials verified. OTP sent to {user.email}.",
-        "dev_otp": otp,
     }
 
 
