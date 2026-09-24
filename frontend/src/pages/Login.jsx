@@ -19,7 +19,6 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [infoMessage, setInfoMessage] = useState(null)
-  const [devOtp, setDevOtp] = useState(null)
   
   const division = 'Delhi (DLI)'
   const corridor = 'NDLS-GZB'
@@ -33,7 +32,6 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
     try {
       if (authMode === 'login') {
         const res = await api.login({ email, password })
-        if (res.dev_otp) setDevOtp(res.dev_otp)
         setInfoMessage(res.message || 'OTP dispatched to your official email.')
         setStep('verification')
       } else {
@@ -45,7 +43,6 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
           department: role === 'DRM' ? 'ALL' : department,
           division,
         })
-        if (res.dev_otp) setDevOtp(res.dev_otp)
         setInfoMessage(res.message || 'Registration successful. OTP sent to your email.')
         setStep('verification')
       }
@@ -64,7 +61,7 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
     try {
       const res = await api.verifyOtp({ email, otp })
       if (res.access_token) {
-        localStorage.setItem('access_token', res.access_token)
+        localStorage.setItem('token', res.access_token)
       }
       onLoginSuccess(res.user || {
         role,
@@ -262,12 +259,6 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
                 </p>
                 <p className="text-xs text-white/50 mt-2">{t('auth.enter_4_digit')}</p>
               </div>
-
-              {devOtp && (
-                <div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-950/50 p-2.5 text-center text-xs text-amber-300">
-                  Live OTP generated: <span className="font-mono font-black text-amber-200 ml-1 tracking-widest">{devOtp}</span>
-                </div>
-              )}
 
               {error && (
                 <div className="mb-4 rounded-xl border border-red-500/50 bg-red-950/70 p-3 text-xs font-semibold text-red-200 shadow-sm">

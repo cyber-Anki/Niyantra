@@ -1,7 +1,7 @@
 const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 async function request(path, options = {}) {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("token");
   const headers = {
     "Content-Type": "application/json",
     "Bypass-Tunnel-Reminder": "true",
