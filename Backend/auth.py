@@ -5,6 +5,7 @@ live 2FA/OTP email delivery via SMTP with graceful fallback, row-level locking,
 timing-attack protection, and secure brute-force lockout protections.
 """
 import os
+import requests
 import random
 import smtplib
 from email.mime.text import MIMEText
@@ -81,38 +82,47 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     to_encode.update({"exp": expire, "iat": datetime.now(timezone.utc)})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
+def send_otp_email(to_email: str, otp: str):
+    """Sends OTP via HTTPS API (Port 443) to bypass Render's SMTP Port 587 firewall."""
+    api_key = os.getenv("BREVO_API_KEY")
+    
+    # Fallback to terminal logs if API key is missing (prevents server crash)
+    if not api_key:
+        print(f"\n{'='*50}\n[API KEY MISSING] Fallback OTP for {to_email} is: {otp}\n{'='*50}\n")
+        return
 
-def send_otp_email(to_email: str, otp: str) -> bool:
-    """
-    Sends a 2FA OTP email via SMTP (smtp.gmail.com:587 with starttls) if credentials exist.
-    Falls back gracefully to terminal printing if no credentials or if delivery fails.
-    """
-    smtp_username = os.getenv("SMTP_USERNAME")
-    smtp_password = os.getenv("SMTP_PASSWORD")
-    subject = "Niyantra Command Center Access OTP"
-    body = f"Your Niyantra Command Center access OTP is: {otp}"
+    url = "https://api.brevo.com/v3/smtp/email"
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
+    
+    payload = {
+        "sender": {"name": "Niyantra Security", "email": "officialhelp7@gmail.com"},
+        "to": [{"email": to_email}],
+        "subject": "Your Niyantra Command Center Security Code",
+        "htmlContent": f"""
+        <div style="font-family: Arial, sans-serif; padding: 20px; text-align: center;">
+            <h2>Niyantra Authentication</h2>
+            <p>Your one-time password for access is:</p>
+            <h1 style="color: #d97706; letter-spacing: 5px;">{otp}</h1>
+            <p>This code is valid for a single use. Do not share it.</p>
+        </div>
+        """
+    }
 
-    if smtp_username and smtp_password:
-        try:
-            msg = MIMEText(body, "plain")
-            msg["Subject"] = subject
-            msg["From"] = smtp_username
-            msg["To"] = to_email
-
-            with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as server:
-                server.starttls()
-                server.login(smtp_username, smtp_password)
-                server.sendmail(smtp_username, [to_email], msg.as_string())
-            print(f"[SMTP] Live OTP email successfully delivered to {to_email}")
-            return True
-        except Exception as e:
-            print(f"[SMTP WARNING] Failed to send email via SMTP to {to_email}: {e}")
-            print(f"\n{'='*50}\n[FALLBACK OTP] TERMINAL DELIVERY TO {to_email}:\n{body}\n{'='*50}\n")
-            return False
-    else:
-        print(f"\n{'='*50}\n[OTP] TERMINAL FALLBACK TO {to_email} (SMTP credentials not configured):\n{body}\n{'='*50}\n")
-        return False
-
+    try:
+        # HTTPS request completely bypasses the SMTP firewall
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        
+        if response.status_code not in (200, 201, 202):
+            print(f"[BREVO ERROR] Failed to send: {response.text}")
+        else:
+            print(f"[SUCCESS] OTP successfully routed via HTTPS API to {to_email}")
+            
+    except requests.exceptions.RequestException as e:
+        print(f"[NETWORK ERROR] Could not reach Brevo API: {e}")
 
 # --- Authentication Dependency & Verification Logic ---
 
