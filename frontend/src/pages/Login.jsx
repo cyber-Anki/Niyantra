@@ -47,7 +47,22 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
         setStep('verification')
       }
     } catch (err) {
-      setError(err.detail || err.message || 'Authentication failed. Please verify credentials.')
+      // Safely extract a displayable error string
+      let msg = ''
+      const detail = err?.detail || err?.message || ''
+      if (typeof detail === 'string') {
+        msg = detail
+      } else if (Array.isArray(detail)) {
+        msg = detail.map((d) => d?.msg || JSON.stringify(d)).join('; ')
+      } else if (typeof detail === 'object') {
+        msg = JSON.stringify(detail)
+      }
+      // Friendly fallback messages
+      if (!msg) msg = 'Authentication failed. Please verify your credentials.'
+      if (msg.toLowerCase().includes('invalid email') || msg.toLowerCase().includes('not found')) {
+        msg = 'This email is not registered. Please register first or check your email address.'
+      }
+      setError(msg)
     } finally {
       setLoading(false)
     }
@@ -72,7 +87,9 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
         email,
       })
     } catch (err) {
-      setError(err.detail || err.message || 'Invalid or expired OTP. Please try again.')
+      const detail = err?.detail || err?.message || ''
+      const msg = typeof detail === 'string' ? detail : JSON.stringify(detail)
+      setError(msg || 'Invalid or expired OTP. Please try again.')
     } finally {
       setLoading(false)
     }
