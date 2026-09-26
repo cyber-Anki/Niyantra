@@ -19,8 +19,6 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
 
   return (
     <aside
-      onMouseEnter={() => setCollapsed(false)}
-      onMouseLeave={() => setCollapsed(true)}
       className={`relative shrink-0 bg-slate-900 border-r border-slate-800 text-slate-300 transition-[width] duration-200 h-full ${
         collapsed ? 'w-20' : 'w-72'
       }`}
