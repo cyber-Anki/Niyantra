@@ -71,7 +71,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
         </td>
         <td className="py-4 px-2 text-sm text-slate-500">{networkImpact(task)}</td>
         <td className="py-4 px-2">
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#F1C453] text-xs font-black text-[#1a2f24]">
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#F1C453] text-xs font-black text-[#1e3a8a]">
             {task.risk_score}
           </span>
         </td>
@@ -101,7 +101,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
               <button
                 onClick={() => onApprove(task, block)}
                 disabled={!block}
-                className="focus-ring rounded-lg bg-[#1a2f24] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-50"
+                className="focus-ring rounded-lg bg-[#1e3a8a] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#1e40af] disabled:opacity-50"
               >
                 Approve Slot
               </button>
@@ -122,7 +122,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
                       <span>40/50</span>
                     </div>
                     <div className="h-1.5 w-full rounded-full bg-slate-200">
-                      <div className="h-1.5 rounded-full bg-[#1a2f24]" style={{ width: '80%' }}></div>
+                      <div className="h-1.5 rounded-full bg-[#1e3a8a]" style={{ width: '80%' }}></div>
                     </div>
                   </div>
                   <div>
@@ -226,7 +226,7 @@ export default function PriorityQueue() {
     <div className="bg-[#FDF9F1] rounded-3xl min-h-full overflow-hidden">
       <div className="p-6 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-serif font-black text-[#1a2f24] tracking-tight">AI Priority Queue</h2>
+          <h2 className="text-3xl font-serif font-black text-[#1e3a8a] tracking-tight">AI Priority Queue</h2>
           <p className="mt-1 text-sm font-semibold text-slate-500">Unified backlog prioritized by asset criticality and network impact.</p>
         </div>
         
@@ -238,7 +238,7 @@ export default function PriorityQueue() {
               placeholder="Search ID or defect..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-4 py-2 w-64 rounded-xl border border-slate-200 bg-white text-sm font-medium focus:outline-none focus:border-[#1a2f24] focus:ring-1 focus:ring-[#1a2f24] transition-all"
+              className="pl-9 pr-4 py-2 w-64 rounded-xl border border-slate-200 bg-white text-sm font-medium focus:outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a] transition-all"
             />
           </div>
           
@@ -266,7 +266,7 @@ export default function PriorityQueue() {
 
       <div className="overflow-x-auto no-scrollbar mx-6 rounded-2xl border border-slate-200 bg-white shadow-sm mb-6">
         <table className="w-full text-left whitespace-nowrap">
-          <thead className="bg-[#1a2f24] text-white">
+          <thead className="bg-[#1e3a8a] text-white">
             <tr>
               <th className="py-3 pl-4 pr-2 w-8"></th>
               <th className="py-3 px-2"><SortHeader label="Asset / Section" sortKey="section" sortBy={sortBy} sortDir={sortDir} onSort={handleSort} className="!text-white hover:!text-white/80" /></th>

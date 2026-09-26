@@ -105,7 +105,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
           >
             <ChevronLeft size={16} />
           </button>
-          <h3 className="font-serif text-2xl font-black text-[#1a2f24] tracking-tight">{date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
+          <h3 className="font-serif text-2xl font-black text-[#1e3a8a] tracking-tight">{date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
           <button
             onClick={onNextDay}
             className="focus-ring flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 hover:text-slate-900"

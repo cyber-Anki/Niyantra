@@ -22,7 +22,7 @@ function StatDelta({ label, before, after, invert = false, suffix = '' }) {
       <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{label}</p>
       <div className="mt-2 flex items-baseline gap-2">
         <span className="text-sm font-medium text-slate-400 line-through">{before}{suffix}</span>
-        <span className="text-xl font-black text-[#1a2f24]">{after}{suffix}</span>
+        <span className="text-xl font-black text-[#1e3a8a]">{after}{suffix}</span>
       </div>
       <p className={`mt-1 flex items-center gap-1 text-xs font-medium ${color}`}>
         <Icon size={12} /> {diff > 0 ? '+' : ''}{diff}{suffix}
@@ -132,8 +132,8 @@ export default function WhatIfSimulator() {
     <div className="bg-[#FDF9F1] rounded-3xl min-h-full overflow-hidden pb-6">
       <div className="mb-6 p-6 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-serif font-black text-[#1a2f24] tracking-tight flex items-center gap-3">
-            <FlaskConical size={32} className="text-[#1a2f24]" /> {t('sim.title')}
+          <h2 className="text-3xl font-serif font-black text-[#1e3a8a] tracking-tight flex items-center gap-3">
+            <FlaskConical size={32} className="text-[#1e3a8a]" /> {t('sim.title')}
           </h2>
         </div>
         <div className="flex items-center gap-3">
@@ -147,7 +147,7 @@ export default function WhatIfSimulator() {
           <button
             onClick={runSimulation}
             disabled={running || (!stagedDefects.length && !surges.length)}
-            className="focus-ring flex items-center gap-2 rounded-xl bg-[#1a2f24] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-50 shadow-sm"
+            className="focus-ring flex items-center gap-2 rounded-xl bg-[#1e3a8a] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#1e40af] disabled:opacity-50 shadow-sm"
           >
             <Play size={16} className={running ? 'animate-pulse text-[#F1C453]' : ''} />
             {running ? t('sim.running') : t('sim.run_sim')}
@@ -158,7 +158,7 @@ export default function WhatIfSimulator() {
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2 px-6">
         <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm transition-transform hover:-translate-y-1 flex flex-col h-full">
           <h3 className="mb-5 text-lg font-bold text-slate-900 tracking-tight pb-3 flex items-center gap-2">
-            <Plus size={18} className="text-[#1a2f24]" /> {t('sim.add_defect')}
+            <Plus size={18} className="text-[#1e3a8a]" /> {t('sim.add_defect')}
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Department">
@@ -233,7 +233,7 @@ export default function WhatIfSimulator() {
 
         <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm transition-transform hover:-translate-y-1 flex flex-col h-full">
           <h3 className="mb-5 text-lg font-bold text-slate-900 tracking-tight pb-3 flex items-center gap-2">
-            <TrendingDown size={18} className="text-[#1a2f24]" /> {t('sim.add_surge')}
+            <TrendingDown size={18} className="text-[#1e3a8a]" /> {t('sim.add_surge')}
           </h3>
           <p className="mb-4 text-sm font-medium text-slate-500">
             {t('sim.surge_desc')}
@@ -253,7 +253,7 @@ export default function WhatIfSimulator() {
               <input
                 type="range" min="10" max="60" step="5" value={surgePct}
                 onChange={(e) => setSurgePct(Number(e.target.value))}
-                className="w-full accent-[#1a2f24] mt-2"
+                className="w-full accent-[#1e3a8a] mt-2"
               />
             </Field>
           </div>
@@ -290,7 +290,7 @@ export default function WhatIfSimulator() {
               <div className="mt-2 flex items-baseline gap-2">
                 <span className="text-2xl font-black text-slate-400 line-through">{blocks.length}</span>
                 <ArrowRight size={16} className="text-slate-400" />
-                <span className="text-2xl font-black text-[#1a2f24]">{simResult.scheduled_blocks.length}</span>
+                <span className="text-2xl font-black text-[#1e3a8a]">{simResult.scheduled_blocks.length}</span>
               </div>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 flex flex-col justify-center items-center shadow-sm">
@@ -298,7 +298,7 @@ export default function WhatIfSimulator() {
               <div className="mt-2 flex items-baseline gap-2">
                 <span className="text-2xl font-black text-slate-400 line-through">{unscheduledTaskIds.length}</span>
                 <ArrowRight size={16} className="text-slate-400" />
-                <span className="text-2xl font-black text-[#1a2f24]">{simResult.unscheduled_task_ids.length}</span>
+                <span className="text-2xl font-black text-[#1e3a8a]">{simResult.unscheduled_task_ids.length}</span>
               </div>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 flex flex-col justify-center items-center shadow-sm">
@@ -306,7 +306,7 @@ export default function WhatIfSimulator() {
               <div className="mt-2 flex items-baseline gap-2">
                 <span className="text-2xl font-black text-slate-400 line-through">{Math.round(blocks.reduce((s, b) => s + b.total_risk_cleared, 0))}</span>
                 <ArrowRight size={16} className="text-slate-400" />
-                <span className="text-2xl font-black text-[#1a2f24]">{Math.round(simResult.total_risk_cleared)}</span>
+                <span className="text-2xl font-black text-[#1e3a8a]">{Math.round(simResult.total_risk_cleared)}</span>
               </div>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 flex flex-col justify-center items-center shadow-sm">
@@ -314,14 +314,14 @@ export default function WhatIfSimulator() {
               <div className="mt-2 flex items-baseline gap-2">
                 <span className="text-2xl font-black text-slate-400 line-through">{beforeAvgDowntime}m</span>
                 <ArrowRight size={16} className="text-slate-400" />
-                <span className="text-2xl font-black text-[#1a2f24]">{afterAvgDowntime}m</span>
+                <span className="text-2xl font-black text-[#1e3a8a]">{afterAvgDowntime}m</span>
               </div>
             </div>
           </div>
 
           {sectionsImpacted.length > 0 && (
             <p className="mt-5 text-sm font-semibold text-slate-500">
-              Sections impacted: <span className="font-bold text-[#1a2f24]">{sectionsImpacted.join(', ')}</span>
+              Sections impacted: <span className="font-bold text-[#1e3a8a]">{sectionsImpacted.join(', ')}</span>
             </p>
           )}
 
@@ -331,7 +331,7 @@ export default function WhatIfSimulator() {
               {shiftedTasks.newlyScheduled.length === 0 && <p className="text-sm font-medium text-slate-400">None</p>}
               <div className="space-y-2">
                 {shiftedTasks.newlyScheduled.map((tid) => (
-                  <div key={tid} className="rounded-xl border border-[#1a2f24]/20 bg-white px-3 py-2 font-mono text-sm font-bold text-[#1a2f24]">{tid}</div>
+                  <div key={tid} className="rounded-xl border border-[#1e3a8a]/20 bg-white px-3 py-2 font-mono text-sm font-bold text-[#1e3a8a]">{tid}</div>
                 ))}
               </div>
             </div>
@@ -347,12 +347,12 @@ export default function WhatIfSimulator() {
           </div>
 
           <div className="mt-8 flex items-center justify-end gap-3 p-6 bg-[#FDF9F1] rounded-3xl border border-slate-200">
-            <span className="mr-auto text-sm font-bold text-[#1a2f24]">
+            <span className="mr-auto text-sm font-bold text-[#1e3a8a]">
               {t('sim.note')}
             </span>
             <button
               onClick={commit}
-              className="focus-ring rounded-xl bg-[#1a2f24] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#2c4731] shadow-sm"
+              className="focus-ring rounded-xl bg-[#1e3a8a] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#1e40af] shadow-sm"
             >
               {t('sim.commit')}
             </button>

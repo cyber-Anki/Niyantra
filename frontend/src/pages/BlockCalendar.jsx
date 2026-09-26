@@ -55,7 +55,7 @@ export default function BlockCalendar({ userContext }) {
     <div className="bg-[#FDF9F1] rounded-3xl border border-slate-200/60 shadow-xl min-h-full transition-colors overflow-hidden">
       <div className="border-b border-slate-200/60 p-6 flex flex-wrap items-center justify-between gap-3 bg-[#FDF9F1]">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-serif font-black text-[#1a2f24]">{t('bc.title')}</h2>
+          <h2 className="text-2xl sm:text-3xl font-serif font-black text-[#1e3a8a]">{t('bc.title')}</h2>
           <p className="mt-1 text-sm font-semibold text-slate-500">Timeline & possessions for {section}</p>
         </div>
         <div className="flex items-center gap-3">
@@ -63,7 +63,7 @@ export default function BlockCalendar({ userContext }) {
             <button
               onClick={() => setView('day')}
               className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                view === 'day' ? 'bg-[#1a2f24] text-white shadow-md' : 'text-slate-600 hover:text-[#1a2f24]'
+                view === 'day' ? 'bg-[#1e3a8a] text-white shadow-md' : 'text-slate-600 hover:text-[#1e3a8a]'
               }`}
             >
               {t('bc.day')}
@@ -71,7 +71,7 @@ export default function BlockCalendar({ userContext }) {
             <button
               onClick={() => setView('month')}
               className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                view === 'month' ? 'bg-[#1a2f24] text-white shadow-md' : 'text-slate-600 hover:text-[#1a2f24]'
+                view === 'month' ? 'bg-[#1e3a8a] text-white shadow-md' : 'text-slate-600 hover:text-[#1e3a8a]'
               }`}
             >
               {t('bc.month_rollup')}

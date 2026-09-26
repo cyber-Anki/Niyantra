@@ -70,7 +70,7 @@ export default function MonthRollup({ plan, monthLabel = '2025-04' }) {
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_320px]">
       <div className="flex flex-col gap-4">
         <div className="rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm">
-        <h3 className="font-serif text-2xl font-bold text-[#1a2f24]">
+        <h3 className="font-serif text-2xl font-bold text-[#1e3a8a]">
           Blocks Planned vs Backlog ({monthName})
         </h3>
         {weeklyData.length ? (
@@ -82,7 +82,7 @@ export default function MonthRollup({ plan, monthLabel = '2025-04' }) {
                 <YAxis yAxisId="left" stroke="#94A3B8" tickLine={false} axisLine={false} />
                 <YAxis yAxisId="right" orientation="right" stroke="#64748B" tickLine={false} axisLine={false} />
                 <Tooltip contentStyle={{ background: '#0A261A', border: 'none', borderRadius: 8, color: '#FDF9F1' }} />
-                <Bar yAxisId="left" dataKey="planned" fill="#1F3323" radius={[0, 0, 0, 0]} name="Planned blocks" />
+                <Bar yAxisId="left" dataKey="planned" fill="#1e3a8a" radius={[0, 0, 0, 0]} name="Planned blocks" />
                 <Bar yAxisId="right" dataKey="backlog" fill="#F1C453" radius={[0, 0, 0, 0]} name="Backlog rolled forward" />
               </ComposedChart>
             </ResponsiveContainer>
@@ -94,7 +94,7 @@ export default function MonthRollup({ plan, monthLabel = '2025-04' }) {
         )}
         </div>
         <div className="rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm">
-          <h4 className="font-serif text-xl font-bold text-[#1F3323]">Calendar Grid</h4>
+          <h4 className="font-serif text-xl font-bold text-[#1e3a8a]">Calendar Grid</h4>
           <div className="mt-6 grid grid-cols-7 gap-2 text-center text-sm font-bold text-[#5F738C]">
             {WEEKDAYS.map((d) => (
               <span key={d}>{d}</span>
@@ -113,13 +113,13 @@ export default function MonthRollup({ plan, monthLabel = '2025-04' }) {
                       key={di}
                       className={`flex h-20 flex-col items-center justify-center rounded-xl transition ${
                         hasBlocks
-                          ? 'bg-[#FDF9F1] font-bold text-[#1F3323] shadow-sm relative'
-                          : 'text-[#1F3323] hover:bg-slate-50 font-medium'
+                          ? 'bg-[#FDF9F1] font-bold text-[#1e3a8a] shadow-sm relative'
+                          : 'text-[#1e3a8a] hover:bg-slate-50 font-medium'
                       }`}
                     >
                       <span>{d}</span>
                       {hasBlocks && (
-                        <div className="absolute bottom-3 h-1.5 w-1.5 rounded-full bg-[#1F3323]" />
+                        <div className="absolute bottom-3 h-1.5 w-1.5 rounded-full bg-[#1e3a8a]" />
                       )}
                     </div>
                   )
@@ -133,18 +133,18 @@ export default function MonthRollup({ plan, monthLabel = '2025-04' }) {
       <div className="flex flex-col gap-4">
         {totals && (
           <div className="rounded-2xl border border-[#F1C453] bg-[#F9E28C] p-6 shadow-sm">
-            <h4 className="font-serif text-xl font-bold text-[#1F3323]">Month Summary</h4>
+            <h4 className="font-serif text-xl font-bold text-[#1e3a8a]">Month Summary</h4>
             <div className="mt-6 flex flex-col gap-6">
               <div>
-                <p className="text-xs font-medium text-[#1F3323]/80 mb-1">Total Blocks Scheduled</p>
-                <p className="font-serif text-4xl font-black text-[#1F3323]">{totals.totalScheduled}</p>
+                <p className="text-xs font-medium text-[#1e3a8a]/80 mb-1">Total Blocks Scheduled</p>
+                <p className="font-serif text-4xl font-black text-[#1e3a8a]">{totals.totalScheduled}</p>
               </div>
               <div>
-                <p className="text-xs font-medium text-[#1F3323]/80 mb-1">Merged Efficiency</p>
-                <p className="font-serif text-4xl font-black text-[#1F3323]">{totals.mergedEfficiency}%</p>
+                <p className="text-xs font-medium text-[#1e3a8a]/80 mb-1">Merged Efficiency</p>
+                <p className="font-serif text-4xl font-black text-[#1e3a8a]">{totals.mergedEfficiency}%</p>
               </div>
             </div>
-            <button className="focus-ring mt-8 w-full rounded-lg bg-[#1F3323] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#2c4731]">
+            <button className="focus-ring mt-8 w-full rounded-lg bg-[#1e3a8a] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#1e40af]">
               Generate Official Plan PDF
             </button>
           </div>
