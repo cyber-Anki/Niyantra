@@ -240,13 +240,8 @@ export default function Login({ onLoginSuccess, onBackToLanding }) {
                   </button>
                 </div>
                 
-                {authMode === 'login' && (
-                  <div className="mt-6 text-center border-t border-white/10 pt-4">
-                    <button type="button" className="inline-block border border-white/20 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white/80 hover:bg-white/10 rounded-2xl transition-colors">
-                      {t('auth.hrms_login')}
-                    </button>
-                  </div>
-                )}
+
+
               </form>
             </div>
           )}
