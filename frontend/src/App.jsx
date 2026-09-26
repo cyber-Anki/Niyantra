@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Component } from 'react'
 import { DataProvider, useNiyantraData } from './store/DataContext.jsx'
 import { TranslationProvider } from './store/TranslationContext.jsx'
 import Sidebar from './components/layout/Sidebar.jsx'
@@ -11,6 +11,32 @@ import WhatIfSimulator from './pages/WhatIfSimulator.jsx'
 import ReportsAnalytics from './pages/ReportsAnalytics.jsx'
 import Login from './pages/Login.jsx'
 import Landing from './pages/Landing.jsx'
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false, error: null }
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error }
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 text-red-600 font-mono text-sm bg-red-50 rounded-2xl border border-red-200">
+          <p className="font-bold text-base mb-2">⚠️ Page Error</p>
+          <p>{String(this.state.error)}</p>
+          <p className="mt-2 text-xs text-red-400">{this.state.error?.stack}</p>
+          <button
+            onClick={() => this.setState({ hasError: false, error: null })}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700"
+          >Retry</button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 function Shell({ userContext, onLogout }) {
   const [page, setPage] = useState('overview')
@@ -59,7 +85,11 @@ function Shell({ userContext, onLogout }) {
               {page === 'overview' && <Overview setPage={setPage} userContext={userContext} />}
               {page === 'priority' && <PriorityQueue />}
               {page === 'calendar' && <BlockCalendar userContext={userContext} />}
-              {page === 'conflicts' && userContext?.role === 'DRM' && <ConflictResolution />}
+              {page === 'conflicts' && userContext?.role === 'DRM' && (
+                <ErrorBoundary key="conflict-resolution">
+                  <ConflictResolution setPage={setPage} />
+                </ErrorBoundary>
+              )}
               {page === 'simulator' && <WhatIfSimulator />}
               {page === 'reports' && <ReportsAnalytics />}
             </>
