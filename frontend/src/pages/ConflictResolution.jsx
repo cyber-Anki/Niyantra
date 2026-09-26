@@ -17,18 +17,18 @@ export default function ConflictResolution({ setPage }) {
     return map
   }, [rankedTasks, tasks])
 
-  const mergedBlocks = useMemo(() => blocks.filter((b) => b.is_merged && b.task_ids?.length > 1), [blocks])
+  const mergedBlocks = useMemo(() => (blocks || []).filter((b) => b.is_merged && b.task_ids?.length > 1), [blocks])
 
   const capacityConflicts = useMemo(() => {
     const bySection = {}
-    unscheduledTaskIds.forEach((tid) => {
+    ;(unscheduledTaskIds || []).forEach((tid) => {
       const task = taskById[tid]
       if (!task) return
       bySection[task.section] = bySection[task.section] || { section: task.section, losers: [] }
       bySection[task.section].losers.push(task)
     })
     return Object.values(bySection).map((group) => {
-      const winners = blocks
+      const winners = (blocks || [])
         .filter((b) => b.section === group.section)
         .flatMap((b) => b.task_ids?.map((tid) => taskById[tid]).filter(Boolean) || [])
         .sort((a, b) => (b.risk_score || 0) - (a.risk_score || 0))
