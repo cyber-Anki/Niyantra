@@ -203,26 +203,26 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
       unscheduledTaskIds.length
 
   return (
-    <header className="flex h-12 shrink-0 items-center justify-between bg-white/70 dark:bg-[#0F172A]/75 backdrop-blur-2xl backdrop-saturate-150 border-b border-white/60 dark:border-white/10 px-4 md:px-6 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.3)] sticky top-0 z-30">
+    <header className="flex h-12 shrink-0 items-center justify-between bg-gradient-to-r from-[#1a2744] via-[#1e3060] to-[#1e3a6e] border-b border-white/10 px-4 md:px-6 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] sticky top-0 z-30">
       <div className="flex items-center gap-3">
-        <button className="md:hidden p-2 -ml-2 rounded-xl text-slate-700 dark:text-white hover:bg-white/50 dark:hover:bg-white/10 transition" onClick={onToggleMobileMenu}>
+        <button className="md:hidden p-2 -ml-2 rounded-xl text-white/80 hover:bg-white/10 transition" onClick={onToggleMobileMenu}>
           <Menu size={24} />
         </button>
-        <h1 className="font-serif text-2xl font-black text-indigo-900 dark:text-amber-400 tracking-widest hidden sm:block drop-shadow-sm">{t('topbar.title')}</h1>
+        <h1 className="font-serif text-xl font-black text-white tracking-widest hidden sm:block drop-shadow-sm">{t('topbar.title')}</h1>
       </div>
 
       <div className="flex items-center gap-2 md:gap-3">
         <button
           onClick={() => setIsDark(!isDark)}
           title="Toggle Theme"
-          className="focus-ring rounded-xl p-2.5 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/15 backdrop-blur-md border border-white/60 dark:border-white/10 text-slate-700 dark:text-white shadow-sm transition-all duration-200"
+          className="focus-ring rounded-xl p-2 bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 shadow-sm transition-all duration-200"
         >
-          {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
         </button>
         <button
           onClick={toggleLanguage}
           title="Translate"
-          className="focus-ring rounded-xl px-3 py-2 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/15 backdrop-blur-md border border-white/60 dark:border-white/10 text-slate-800 dark:text-white shadow-sm transition-all duration-200 font-bold text-sm"
+          className="focus-ring rounded-xl px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 shadow-sm transition-all duration-200 font-bold text-sm"
         >
           A/अ
         </button>
@@ -231,15 +231,15 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
           <button
             onClick={() => setNotifOpen(!notifOpen)}
             title="Notifications"
-            className={`focus-ring relative rounded-xl p-2.5 transition-all duration-200 ${
+            className={`focus-ring relative rounded-xl p-2 transition-all duration-200 ${
               notifOpen
-                ? 'bg-amber-500/15 dark:bg-amber-400/20 text-indigo-950 dark:text-amber-300 border border-amber-500/40 shadow-sm'
-                : 'bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/15 backdrop-blur-md border border-white/60 dark:border-white/10 text-slate-700 dark:text-white shadow-sm'
+                ? 'bg-amber-400/25 text-amber-300 border border-amber-400/40 shadow-sm'
+                : 'bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 shadow-sm'
             }`}
           >
-            <Bell size={18} />
+            <Bell size={16} />
             {alertCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-red-600 text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900">
+              <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white shadow-md ring-2 ring-[#1a2744]">
                 {alertCount}
               </span>
             )}
@@ -256,14 +256,14 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
           </AnimatePresence>
         </div>
         
-        <div className="h-6 w-px bg-slate-300/60 dark:bg-white/20 hidden sm:block"></div>
+        <div className="h-5 w-px bg-white/20 hidden sm:block"></div>
         
         <button
           onClick={onLogout}
           title="Logout"
-          className="focus-ring flex items-center gap-2 rounded-xl px-3.5 py-2 bg-white/50 dark:bg-white/5 hover:bg-red-500/10 dark:hover:bg-red-500/20 backdrop-blur-md border border-white/60 dark:border-white/10 text-slate-700 hover:text-red-600 dark:text-white/90 dark:hover:text-red-400 shadow-sm transition-all duration-200 font-semibold"
+          className="focus-ring flex items-center gap-2 rounded-xl px-3 py-1.5 bg-white/10 hover:bg-red-500/30 border border-white/15 text-white/90 hover:text-red-300 shadow-sm transition-all duration-200 font-semibold"
         >
-          <LogOut size={18} />
+          <LogOut size={16} />
           <span className="hidden sm:inline-block text-sm font-bold">Logout</span>
         </button>
       </div>
