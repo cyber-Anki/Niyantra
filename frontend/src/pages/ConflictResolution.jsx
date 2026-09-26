@@ -13,7 +13,7 @@ export default function ConflictResolution({ setPage }) {
 
   const taskById = useMemo(() => {
     const map = {}
-    ;(rankedTasks.length ? rankedTasks : tasks).forEach((t) => { map[t.task_id] = t })
+    ;((rankedTasks && rankedTasks.length) ? rankedTasks : (tasks || [])).forEach((t) => { map[t.task_id] = t })
     return map
   }, [rankedTasks, tasks])
 
@@ -74,7 +74,7 @@ export default function ConflictResolution({ setPage }) {
                           <div>
                             <p className="font-mono text-xs text-slate-900 font-bold">{tid}</p>
                             <p className="text-[11px] capitalize text-slate-500 font-semibold">
-                              {t.department} · {t.defect_type?.replaceAll('_', ' ')}
+                              {t.department} · {String(t.defect_type || '').replaceAll('_', ' ')}
                             </p>
                           </div>
                           <div className="flex items-center gap-3">
@@ -146,7 +146,7 @@ export default function ConflictResolution({ setPage }) {
                               <span className="font-mono text-xs font-bold text-slate-900">{t.task_id}</span>
                               <span className="text-[10px] bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
                             </div>
-                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{t.department} · {t.defect_type?.replaceAll('_', ' ')}</span>
+                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{t.department} · {String(t.defect_type || '').replaceAll('_', ' ')}</span>
                           </div>
                         ))}
                       </div>
@@ -161,7 +161,7 @@ export default function ConflictResolution({ setPage }) {
                               <span className="font-mono text-xs font-bold text-slate-900">{t.task_id}</span>
                               <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
                             </div>
-                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{t.department} · {t.defect_type?.replaceAll('_', ' ')}</span>
+                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{t.department} · {String(t.defect_type || '').replaceAll('_', ' ')}</span>
                           </div>
                         ))}
                       </div>
