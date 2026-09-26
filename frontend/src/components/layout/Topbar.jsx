@@ -203,7 +203,7 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
       unscheduledTaskIds.length
 
   return (
-    <header className="flex h-12 shrink-0 items-center justify-between bg-gradient-to-r from-[#1a2744] via-[#1e3060] to-[#1e3a6e] border-b border-white/10 px-4 md:px-6 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] sticky top-0 z-30">
+    <header className="flex h-12 shrink-0 items-center justify-between bg-slate-900 border-b border-slate-800 px-4 md:px-6 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] sticky top-0 z-30">
       <div className="flex items-center gap-3">
         <button className="md:hidden p-2 -ml-2 rounded-xl text-white/80 hover:bg-white/10 transition" onClick={onToggleMobileMenu}>
           <Menu size={24} />
