@@ -27,14 +27,14 @@ function StatBox({ label, value, unit, highlight = false, alert = false, icon: I
   if (highlight) appliedColor = colorMap.indigo
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${appliedColor}`}>
+    <div className={`relative overflow-hidden rounded-2xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${appliedColor}`}>
       <div className="relative z-10">
-        <div className="text-[18px] uppercase font-bold tracking-wide mb-3 opacity-90 leading-snug break-words">{label}</div>
-        <div className="text-4xl font-black">{value} {unit && <span className="text-sm font-bold opacity-90">{unit}</span>}</div>
+        <div className="text-[11px] uppercase font-bold tracking-wide mb-2 opacity-90 leading-snug break-words">{label}</div>
+        <div className="text-3xl font-black">{value} {unit && <span className="text-xs font-bold opacity-90">{unit}</span>}</div>
       </div>
       {Icon && (
         <div className="absolute -right-2 -bottom-2 opacity-20 transform rotate-[-15deg] group-hover:scale-110 transition-transform duration-500">
-          <Icon size={120} />
+          <Icon size={90} />
         </div>
       )}
     </div>
@@ -43,25 +43,25 @@ function StatBox({ label, value, unit, highlight = false, alert = false, icon: I
 
 function HeroBanner({ title, subtitle, icon: Icon, nominalText }) {
   return (
-    <div className="relative mb-8 rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-[#1e293b] to-indigo-600 shadow-card p-8">
+    <div className="relative mb-5 rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 via-[#1e293b] to-indigo-600 shadow-card p-5">
       <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-amber-500 via-transparent to-transparent"></div>
-      <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="flex items-center gap-5 text-white">
-          <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-md border border-white/10 shadow-inner">
-            {Icon && <Icon size={32} className="text-amber-500 drop-shadow-glow" />}
+      <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+        <div className="flex items-center gap-4 text-white">
+          <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-md border border-white/10 shadow-inner">
+            {Icon && <Icon size={24} className="text-amber-500 drop-shadow-glow" />}
           </div>
           <div>
-            <h2 className="text-3xl font-serif font-black tracking-wide text-white drop-shadow-sm">{title}</h2>
-            <p className="mt-1 flex items-center gap-2 text-sm text-slate-300 font-semibold uppercase tracking-widest">
+            <h2 className="text-xl font-serif font-black tracking-wide text-white drop-shadow-sm">{title}</h2>
+            <p className="mt-0.5 flex items-center gap-2 text-xs text-slate-300 font-semibold uppercase tracking-widest">
               {subtitle}
             </p>
           </div>
         </div>
         {nominalText && (
-          <div className="bg-white/10 backdrop-blur-md text-white px-5 py-2.5 rounded-full border border-white/20 font-bold uppercase tracking-widest text-xs flex items-center gap-3 shadow-soft">
-            <div className="relative flex h-3 w-3">
+          <div className="bg-white/10 backdrop-blur-md text-white px-4 py-1.5 rounded-full border border-white/20 font-bold uppercase tracking-widest text-xs flex items-center gap-2 shadow-soft">
+            <div className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
             </div>
             {nominalText}
           </div>
@@ -73,18 +73,18 @@ function HeroBanner({ title, subtitle, icon: Icon, nominalText }) {
 
 function ActionButton({ title, subtitle, icon: Icon, onClick, primary = false }) {
   return (
-    <button onClick={onClick} className={`focus-ring group relative overflow-hidden rounded-2xl p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${!primary ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-glow-emerald border-none' : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-glow-blue border-none'}`}>
+    <button onClick={onClick} className={`focus-ring group relative overflow-hidden rounded-2xl p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${!primary ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-glow-emerald border-none' : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-glow-blue border-none'}`}>
       <div className="flex justify-between items-center relative z-10">
         <div>
-          <h3 className="font-bold text-xl sm:text-2xl font-serif leading-tight">{title}</h3>
-          <p className="text-sm sm:text-base mt-1.5 flex items-center gap-1 font-medium text-white/95 leading-normal">{subtitle} <span className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">&rarr;</span></p>
+          <h3 className="font-bold text-base sm:text-lg font-serif leading-tight">{title}</h3>
+          <p className="text-xs sm:text-sm mt-1 flex items-center gap-1 font-medium text-white/95 leading-normal">{subtitle} <span className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">&rarr;</span></p>
         </div>
-        <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-          <Icon size={24} className="text-white" />
+        <div className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+          <Icon size={20} className="text-white" />
         </div>
       </div>
       <div className="absolute -right-6 -bottom-6 opacity-10 transform rotate-[-15deg] transition-transform duration-500 group-hover:scale-110">
-        <Icon size={100} />
+        <Icon size={80} />
       </div>
     </button>
   )
