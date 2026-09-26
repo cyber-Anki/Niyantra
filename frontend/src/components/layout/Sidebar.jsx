@@ -25,23 +25,23 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
     >
       <button
         onClick={() => setCollapsed((c) => !c)}
-        className="focus-ring absolute -right-3 top-9 z-10 hidden h-6 w-6 items-center justify-center rounded-full bg-gold text-slate-900 shadow-card hover:bg-gold-dark md:flex"
+        className="focus-ring absolute -right-3 top-7 z-10 hidden h-6 w-6 items-center justify-center rounded-full bg-gold text-slate-900 shadow-card hover:bg-gold-dark md:flex"
         aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
 
-      <div className="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
-        <img src={logoMark} alt="Niyantran" className="h-9 w-9 object-contain shrink-0" />
+      <div className="flex h-12 items-center gap-3 border-b border-slate-800 px-4">
+        <img src={logoMark} alt="Niyantran" className="h-7 w-7 object-contain shrink-0" />
         {!collapsed && (
           <div className="overflow-hidden whitespace-nowrap">
-            <h1 className="font-serif text-xl font-bold tracking-wide text-white">Niyantran</h1>
-            <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold">Indian Railways</p>
+            <h1 className="font-serif text-base font-bold tracking-wide text-white">Niyantran</h1>
+            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Indian Railways</p>
           </div>
         )}
       </div>
 
-      <nav className="space-y-1.5 p-3.5">
+      <nav className="space-y-0.5 p-2">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
           const active = page === item.id
@@ -49,13 +49,13 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
             <button
               key={item.id}
               onClick={() => setPage(item.id)}
-              className={`focus-ring flex w-full items-center gap-3.5 rounded-xl px-4 py-3.5 text-base sm:text-lg font-semibold transition ${
+              className={`focus-ring flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
                 active
                   ? 'bg-gold text-slate-900 shadow-md font-bold'
                   : 'text-slate-200 hover:bg-slate-800 hover:text-white'
               }`}
             >
-              <Icon size={22} className="shrink-0" />
+              <Icon size={18} className="shrink-0" />
               {!collapsed && <span className="truncate">{item.label}</span>}
             </button>
           )

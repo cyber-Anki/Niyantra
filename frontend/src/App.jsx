@@ -77,7 +77,7 @@ function Shell({ userContext, onLogout }) {
           onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
           onLogout={onLogout}
         />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 transition-colors">
+        <main className="flex-1 overflow-y-auto p-3 md:p-4 transition-colors">
           {bootLoading && <p className="text-sm font-bold text-slate-500 animate-pulse">Loading command center…</p>}
           {error && <p className="mb-3 text-sm font-bold text-red-600 dark:text-red-400">{error}</p>}
           {!bootLoading && (
