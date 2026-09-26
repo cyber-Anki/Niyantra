@@ -67,18 +67,18 @@ export default function ConflictResolution({ setPage }) {
                   </div>
                   <div className="p-5 space-y-3 flex-1">
                     {b.task_ids?.map((tid) => {
-                      const t = taskById[tid]
-                      if (!t) return null
+                      const task = taskById[tid]
+                      if (!task) return null
                       return (
                         <div key={tid} className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0">
                           <div>
                             <p className="font-mono text-xs text-slate-900 font-bold">{tid}</p>
                             <p className="text-[11px] capitalize text-slate-500 font-semibold">
-                              {t.department} · {String(t.defect_type || '').replaceAll('_', ' ')}
+                              {task.department} · {String(task.defect_type || '').replaceAll('_', ' ')}
                             </p>
                           </div>
                           <div className="flex items-center gap-3">
-                            <SeverityBadge severity={t.severity} />
+                            <SeverityBadge severity={task.severity} />
                             {b.task_ids?.length > 1 && (
                               <button
                                 onClick={() => decideBlock(b.block_id, 'remove_task', { task_id: tid })}
@@ -140,13 +140,13 @@ export default function ConflictResolution({ setPage }) {
                     <div className="p-4 bg-red-50/50">
                       <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-red-700 border-b border-red-200/50 pb-1">{t('cr.bumped')}</p>
                       <div className="space-y-2">
-                        {group.losers.map((t) => (
-                          <div key={t.task_id} className="flex flex-col gap-1 rounded-xl border border-red-200 bg-white p-3 shadow-sm">
+                        {group.losers.map((task) => (
+                          <div key={task.task_id} className="flex flex-col gap-1 rounded-xl border border-red-200 bg-white p-3 shadow-sm">
                             <div className="flex justify-between items-center">
-                              <span className="font-mono text-xs font-bold text-slate-900">{t.task_id}</span>
-                              <span className="text-[10px] bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
+                              <span className="font-mono text-xs font-bold text-slate-900">{task.task_id}</span>
+                              <span className="text-[10px] bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {task.risk_score}</span>
                             </div>
-                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{t.department} · {String(t.defect_type || '').replaceAll('_', ' ')}</span>
+                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{task.department} · {String(task.defect_type || '').replaceAll('_', ' ')}</span>
                           </div>
                         ))}
                       </div>
@@ -155,13 +155,13 @@ export default function ConflictResolution({ setPage }) {
                       <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-emerald-700 border-b border-emerald-200/50 pb-1">{t('cr.won')}</p>
                       <div className="space-y-2">
                         {group.winners.length === 0 && <p className="text-xs font-medium text-slate-500">No blocks scheduled here yet.</p>}
-                        {group.winners.map((t) => (
-                          <div key={t.task_id} className="flex flex-col gap-1 rounded-xl border border-emerald-200 bg-white p-3 shadow-sm">
+                        {group.winners.map((task) => (
+                          <div key={task.task_id} className="flex flex-col gap-1 rounded-xl border border-emerald-200 bg-white p-3 shadow-sm">
                             <div className="flex justify-between items-center">
-                              <span className="font-mono text-xs font-bold text-slate-900">{t.task_id}</span>
-                              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {t.risk_score}</span>
+                              <span className="font-mono text-xs font-bold text-slate-900">{task.task_id}</span>
+                              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">{t('cr.score')}: {task.risk_score}</span>
                             </div>
-                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{t.department} · {String(t.defect_type || '').replaceAll('_', ' ')}</span>
+                            <span className="text-[11px] text-slate-600 font-semibold capitalize">{task.department} · {String(task.defect_type || '').replaceAll('_', ' ')}</span>
                           </div>
                         ))}
                       </div>
