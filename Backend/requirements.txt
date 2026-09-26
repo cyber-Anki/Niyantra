@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic
+pandas
+numpy
+xgboost
+shap
+ortools
+sqlalchemy
+passlib[bcrypt]
+pyjwt
+email-validator
+requests
