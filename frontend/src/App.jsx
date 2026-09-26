@@ -71,17 +71,26 @@ function Shell({ userContext, onLogout }) {
 }
 
 export default function App() {
-  const [viewState, setViewState] = useState('landing') // 'landing' | 'login' | 'app'
-  const [userContext, setUserContext] = useState(null) // { role, department, name }
+  const [viewState, setViewState] = useState(() => {
+    return localStorage.getItem('viewState') || 'landing'
+  })
+  const [userContext, setUserContext] = useState(() => {
+    const saved = localStorage.getItem('userContext')
+    return saved ? JSON.parse(saved) : null
+  })
 
   const handleLoginSuccess = (user) => {
     setUserContext(user)
     setViewState('app')
+    localStorage.setItem('userContext', JSON.stringify(user))
+    localStorage.setItem('viewState', 'app')
   }
 
   const handleLogout = () => {
     setUserContext(null)
     setViewState('landing')
+    localStorage.removeItem('userContext')
+    localStorage.setItem('viewState', 'landing')
   }
 
   return (
