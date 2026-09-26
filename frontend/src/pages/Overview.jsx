@@ -15,25 +15,25 @@ function formatTimeOfDay(minute) {
 function StatBox({ label, value, unit, highlight = false, alert = false, icon: Icon, color = 'blue' }) {
   // Determine color classes
   const colorMap = {
-    blue: 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-glow-blue',
-    emerald: 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-glow-emerald',
-    amber: 'bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-glow-amber',
-    red: 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-glow-red',
-    indigo: 'bg-gradient-to-br from-indigo-500 to-indigo-600 text-white shadow-glow-indigo',
+    blue:    { card: 'bg-blue-50 border border-blue-200',    label: 'text-blue-600',    value: 'text-blue-800',    icon: 'text-blue-400' },
+    emerald: { card: 'bg-emerald-50 border border-emerald-200', label: 'text-emerald-600', value: 'text-emerald-800', icon: 'text-emerald-400' },
+    amber:   { card: 'bg-amber-50 border border-amber-200',  label: 'text-amber-600',   value: 'text-amber-800',   icon: 'text-amber-400' },
+    red:     { card: 'bg-red-50 border border-red-200',      label: 'text-red-600',     value: 'text-red-800',     icon: 'text-red-400' },
+    indigo:  { card: 'bg-indigo-50 border border-indigo-200', label: 'text-indigo-600',  value: 'text-indigo-800',  icon: 'text-indigo-400' },
   }
-  
-  let appliedColor = colorMap[color] || colorMap.blue
-  if (alert) appliedColor = colorMap.red
-  if (highlight) appliedColor = colorMap.indigo
+
+  let scheme = colorMap[color] || colorMap.blue
+  if (alert) scheme = colorMap.red
+  if (highlight) scheme = colorMap.indigo
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${appliedColor}`}>
+    <div className={`relative overflow-hidden rounded-2xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${scheme.card}`}>
       <div className="relative z-10">
-        <div className="text-[11px] uppercase font-bold tracking-wide mb-2 opacity-90 leading-snug break-words">{label}</div>
-        <div className="text-3xl font-black">{value} {unit && <span className="text-xs font-bold opacity-90">{unit}</span>}</div>
+        <div className={`text-[11px] uppercase font-bold tracking-wide mb-2 leading-snug break-words ${scheme.label}`}>{label}</div>
+        <div className={`text-3xl font-black ${scheme.value}`}>{value} {unit && <span className="text-xs font-bold opacity-80">{unit}</span>}</div>
       </div>
       {Icon && (
-        <div className="absolute -right-2 -bottom-2 opacity-20 transform rotate-[-15deg] group-hover:scale-110 transition-transform duration-500">
+        <div className={`absolute -right-2 -bottom-2 opacity-25 transform rotate-[-15deg] transition-transform duration-500 ${scheme.icon}`}>
           <Icon size={90} />
         </div>
       )}
