@@ -101,16 +101,20 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
         <div className="flex items-center gap-3">
           <button
             onClick={onPrevDay}
-            className="focus-ring flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 hover:text-slate-900"
+            title="Previous Day"
+            className="focus-ring flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={18} />
           </button>
-          <h3 className="font-serif text-2xl font-black text-indigo-600 dark:text-amber-500 tracking-tight">{date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
+          <h3 className="font-serif text-2xl font-black text-indigo-600 dark:text-amber-500 tracking-tight">
+            {date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
+          </h3>
           <button
             onClick={onNextDay}
-            className="focus-ring flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 hover:text-slate-900"
+            title="Next Day"
+            className="focus-ring flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={18} />
           </button>
         </div>
         <div className="flex items-center gap-4 text-xs text-slate-500">
