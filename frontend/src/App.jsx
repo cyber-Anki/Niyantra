@@ -1,4 +1,5 @@
-import { useState, useEffect, Component } from 'react'
+import { useState, Component } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { DataProvider, useNiyantraData } from './store/DataContext.jsx'
 import { TranslationProvider } from './store/TranslationContext.jsx'
 import Sidebar from './components/layout/Sidebar.jsx'
@@ -11,6 +12,7 @@ import WhatIfSimulator from './pages/WhatIfSimulator.jsx'
 import ReportsAnalytics from './pages/ReportsAnalytics.jsx'
 import Login from './pages/Login.jsx'
 import Landing from './pages/Landing.jsx'
+import { DRMRouteGuard } from './routes/ProtectedRoute.jsx'
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -39,16 +41,36 @@ class ErrorBoundary extends Component {
 }
 
 function Shell({ userContext, onLogout }) {
-  const [page, setPage] = useState('overview')
   const [collapsed, setCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { bootLoading, error } = useNiyantraData()
+  
+  const location = useLocation()
+  const navigate = useNavigate()
+  
+  const path = location.pathname.split('/')[1] || 'dashboard'
+  const pageMap = {
+    'dashboard': 'overview',
+    'priority': 'priority',
+    'calendar': 'calendar',
+    'drm-console': 'conflicts',
+    'simulator': 'simulator',
+    'reports': 'reports'
+  }
+  const page = pageMap[path] || 'overview'
 
-  useEffect(() => {
-    if (page === 'conflicts' && userContext.role !== 'DRM') {
-      setPage('overview')
+  const setPage = (newPage) => {
+    const revMap = {
+      'overview': 'dashboard',
+      'priority': 'priority',
+      'calendar': 'calendar',
+      'conflicts': 'drm-console',
+      'simulator': 'simulator',
+      'reports': 'reports'
     }
-  }, [page, userContext.role, setPage])
+    navigate('/' + (revMap[newPage] || 'dashboard'))
+    setMobileMenuOpen(false)
+  }
 
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-[#0B1120] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100/50 via-slate-50 to-white dark:from-indigo-900/20 dark:via-[#0B1120] dark:to-black overflow-hidden font-sans transition-colors">
@@ -64,7 +86,7 @@ function Shell({ userContext, onLogout }) {
       <div className={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 md:relative md:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:flex`}>
         <Sidebar
           page={page}
-          setPage={(p) => { setPage(p); setMobileMenuOpen(false); }}
+          setPage={setPage}
           collapsed={collapsed}
           setCollapsed={setCollapsed}
           userContext={userContext}
@@ -81,18 +103,22 @@ function Shell({ userContext, onLogout }) {
           {bootLoading && <p className="text-sm font-bold text-slate-500 animate-pulse">Loading command center…</p>}
           {error && <p className="mb-3 text-sm font-bold text-red-600 dark:text-red-400">{error}</p>}
           {!bootLoading && (
-            <>
-              {page === 'overview' && <Overview setPage={setPage} userContext={userContext} />}
-              {page === 'priority' && <PriorityQueue />}
-              {page === 'calendar' && <BlockCalendar userContext={userContext} />}
-              {page === 'conflicts' && userContext?.role === 'DRM' && (
-                <ErrorBoundary key="conflict-resolution">
-                  <ConflictResolution setPage={setPage} />
-                </ErrorBoundary>
-              )}
-              {page === 'simulator' && <WhatIfSimulator />}
-              {page === 'reports' && <ReportsAnalytics />}
-            </>
+            <Routes>
+              <Route path="/" element={<Navigate replace to="/dashboard" />} />
+              <Route path="/dashboard" element={<Overview setPage={setPage} userContext={userContext} />} />
+              <Route path="/priority" element={<PriorityQueue />} />
+              <Route path="/calendar" element={<BlockCalendar userContext={userContext} />} />
+              <Route path="/drm-console" element={
+                <DRMRouteGuard user={userContext}>
+                  <ErrorBoundary key="conflict-resolution">
+                    <ConflictResolution setPage={setPage} />
+                  </ErrorBoundary>
+                </DRMRouteGuard>
+              } />
+              <Route path="/simulator" element={<WhatIfSimulator />} />
+              <Route path="/reports" element={<ReportsAnalytics />} />
+              <Route path="*" element={<Navigate replace to="/dashboard" />} />
+            </Routes>
           )}
         </main>
       </div>
@@ -136,7 +162,9 @@ export default function App() {
       )}
       {viewState === 'app' && userContext && (
         <DataProvider userContext={userContext}>
-          <Shell userContext={userContext} onLogout={handleLogout} />
+          <BrowserRouter>
+            <Shell userContext={userContext} onLogout={handleLogout} />
+          </BrowserRouter>
         </DataProvider>
       )}
     </TranslationProvider>

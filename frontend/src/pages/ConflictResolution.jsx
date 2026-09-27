@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { GitMerge, Users, AlertOctagon, Check, X, Scissors, ShieldAlert, Flag, Pencil, Clock, ArrowUpDown, SplitSquareVertical, MessageSquare } from 'lucide-react'
+import { api } from '../api.js'
 import { useNiyantraData } from '../store/DataContext.jsx'
 import SeverityBadge from '../components/ui/SeverityBadge.jsx'
 import { formatTimeOfDay } from '../components/calendar/deptColors.js'
@@ -242,6 +243,133 @@ function ManualOverrideModal({ block, taskById, onClose, decideBlock, t }) {
   )
 }
 
+/* ── Dynamic Impact Matrix Component ── */
+function ImpactMatrix({ blockId, onOverride, decideBlock }) {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [approving, setApproving] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+    setLoading(true)
+    api.getEvaluation(blockId)
+      .then((res) => {
+        if (mounted) {
+          setData(res)
+          setLoading(false)
+        }
+      })
+      .catch((err) => {
+        if (mounted) {
+          setError(err.message)
+          setLoading(false)
+        }
+      })
+    return () => {
+      mounted = false
+    }
+  }, [blockId])
+
+  const handleApprove = async () => {
+    setApproving(true)
+    try {
+      await api.approveBlock(blockId)
+      decideBlock(blockId, 'approve')
+    } catch (err) {
+      alert("Approval failed: " + err.message)
+    } finally {
+      setApproving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="bg-slate-50 px-5 py-4 border-t border-slate-200">
+        <div className="animate-pulse space-y-3">
+          <div className="h-4 bg-slate-200 rounded w-1/4"></div>
+          <div className="h-10 bg-slate-200 rounded w-full"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 px-5 py-4 border-t border-red-200 text-xs font-bold text-red-600">
+        Error loading evaluation: {error}
+      </div>
+    )
+  }
+
+  if (!data) return null
+
+  return (
+    <div className="bg-slate-50 border-t border-slate-200">
+      <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Punctuality Penalty Card */}
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">Punctuality Penalty</p>
+          <div className="flex items-end gap-2">
+            <span className="text-3xl font-black text-slate-800">{data.total_penalty_score}</span>
+            <span className="text-xs font-semibold text-slate-400 mb-1">pts</span>
+          </div>
+          <div className="mt-3">
+            <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md ${
+              data.recommendation === 'APPROVE' 
+                ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' 
+                : 'bg-amber-100 text-amber-700 border border-amber-200'
+            }`}>
+              {data.recommendation}
+            </span>
+          </div>
+        </div>
+
+        {/* Conflicting Trains List */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col max-h-32 overflow-y-auto">
+          <div className="px-3 py-2 border-b border-slate-100 bg-slate-50 sticky top-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Affected Trains</p>
+          </div>
+          {data.affected_trains?.length === 0 ? (
+            <p className="text-xs text-slate-400 font-semibold p-3">No conflicting trains.</p>
+          ) : (
+            <ul className="divide-y divide-slate-100 p-2">
+              {data.affected_trains?.map((train, idx) => (
+                <li key={idx} className="flex justify-between items-center py-1.5 px-1">
+                  <div className="flex flex-col">
+                    <span className="font-mono text-xs font-bold text-slate-700">{train.train_number}</span>
+                    <span className="text-[9px] font-semibold text-slate-400">{train.category}</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">
+                    +{train.estimated_delay_minutes}m delay
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {/* Action Footer */}
+      <div className="px-5 py-4 border-t border-slate-200 flex flex-wrap gap-2">
+        <button
+          onClick={handleApprove}
+          disabled={approving}
+          className="focus-ring flex items-center gap-1.5 bg-indigo-600 dark:bg-amber-600 rounded-lg px-4 py-2 text-xs font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-700 disabled:opacity-40 shadow-sm"
+        >
+          <Check size={14} /> {approving ? 'Committing...' : 'Commit DRM Decision'}
+        </button>
+
+        <button
+          onClick={onOverride}
+          className="focus-ring flex items-center gap-1.5 rounded-lg border border-amber-200 bg-white px-4 py-2 text-xs font-bold text-amber-700 hover:bg-amber-50 hover:border-amber-300 transition-colors shadow-sm"
+        >
+          <Pencil size={14} /> Manual Override
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default function ConflictResolution({ setPage }) {
   const { rankedTasks, tasks, blocks, unscheduledTaskIds, decideBlock, flaggedTaskIds, toggleFlag } = useNiyantraData()
@@ -345,41 +473,12 @@ export default function ConflictResolution({ setPage }) {
                     })}
                   </div>
 
-                  {/* ── 3-Button Footer ── */}
-                  <div className="bg-slate-50 px-5 py-4 border-t border-slate-200 flex flex-wrap gap-2">
-                    {/* 1. Accept AI Merge */}
-                    <button
-                      onClick={() => decideBlock(b.block_id, 'approve')}
-                      disabled={b.status !== 'pending'}
-                      className="focus-ring flex items-center gap-1.5 bg-indigo-600 dark:bg-amber-600 rounded-lg px-4 py-2 text-xs font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-700 disabled:opacity-40 shadow-sm"
-                    >
-                      <Check size={14} /> {b.status === 'approved' ? t('cr.approved') : t('cr.accept_ai')}
-                    </button>
-
-                    {/* 2. Reject AI Merge */}
-                    <button
-                      onClick={() => {
-                        setRejected((prev) => new Set(prev).add(b.block_id))
-                        decideBlock?.(b.block_id, 'reject')
-                      }}
-                      disabled={rejected.has(b.block_id)}
-                      className={`focus-ring flex items-center gap-1.5 rounded-lg border px-4 py-2 text-xs font-bold transition-colors shadow-sm ${
-                        rejected.has(b.block_id)
-                          ? 'border-red-300 bg-red-50 text-red-700 cursor-default'
-                          : 'border-red-200 bg-white text-red-600 hover:bg-red-50 hover:border-red-300'
-                      }`}
-                    >
-                      <X size={14} /> {rejected.has(b.block_id) ? 'Rejected' : 'Reject AI Merge'}
-                    </button>
-
-                    {/* 3. Manual Override */}
-                    <button
-                      onClick={() => setOverrideBlock(b)}
-                      className="focus-ring flex items-center gap-1.5 rounded-lg border border-amber-200 bg-white px-4 py-2 text-xs font-bold text-amber-700 hover:bg-amber-50 hover:border-amber-300 transition-colors shadow-sm"
-                    >
-                      <Pencil size={14} /> Manual Override
-                    </button>
-                  </div>
+                  {/* ── Dynamic Impact Matrix Footer ── */}
+                  <ImpactMatrix
+                    blockId={b.block_id}
+                    onOverride={() => setOverrideBlock(b)}
+                    decideBlock={decideBlock}
+                  />
                 </div>
               ))}
             </div>

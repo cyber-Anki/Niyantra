@@ -55,4 +55,9 @@ export const api = {
   getBlocks: (status) => request(`/api/blocks${status ? `?status=${status}` : ""}`),
   decideBlock: (payload) =>
     request("/api/blocks/decide", { method: "POST", body: JSON.stringify(payload) }),
+
+  // DRM API
+  getEvaluation: (block_id) => request(`/api/drm/evaluation/${block_id}`),
+  approveBlock: (block_id) =>
+    request(`/api/drm/approve-block/${block_id}`, { method: "POST" }),
 };
