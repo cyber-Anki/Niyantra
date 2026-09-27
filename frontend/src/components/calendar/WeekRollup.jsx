@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-export default function WeekRollup({ section, date, sectionCorridors, blocks, onDaySelect }) {
+export default function WeekRollup({ section, date, sectionCorridors, blocks, onDaySelect, onPrevWeek, onNextWeek }) {
   // Generate 7 days starting from `date` (or the nearest Monday)
   const days = useMemo(() => {
     const list = []
@@ -76,9 +77,28 @@ export default function WeekRollup({ section, date, sectionCorridors, blocks, on
 
   return (
     <div className="rounded-2xl border border-slate-200/60 dark:border-white/10 bg-white/40 dark:bg-black/20 p-8 backdrop-blur-md shadow-sm min-h-full">
-      <h3 className="font-serif text-3xl font-bold text-indigo-600 dark:text-amber-500 mb-2">
-        Weekly plan
-      </h3>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-serif text-3xl font-bold text-indigo-600 dark:text-amber-500">
+          Weekly plan
+        </h3>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onPrevWeek}
+            className="focus-ring flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+            {days[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {days[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </span>
+          <button
+            onClick={onNextWeek}
+            className="focus-ring flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </div>
       <div className="flex items-center gap-2 mb-8 border-l-4 border-indigo-600 dark:border-amber-500 pl-4">
         <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
           What maintenance should happen this week?

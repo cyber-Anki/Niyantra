@@ -69,30 +69,7 @@ export default function MonthRollup({ plan, monthLabel = '2025-04' }) {
   return (
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_320px]">
       <div className="flex flex-col gap-4">
-        <div className="rounded-2xl border border-slate-200/60 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6 shadow-sm">
-        <h3 className="font-serif text-2xl font-bold text-indigo-600 dark:text-amber-500">
-          Blocks Planned vs Backlog ({monthName})
-        </h3>
-        {weeklyData.length ? (
-          <div className="mt-4 h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={weeklyData} barGap={8}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#F1EEE4" vertical={false} />
-                <XAxis dataKey="label" stroke="#94A3B8" tickLine={false} axisLine={false} />
-                <YAxis yAxisId="left" stroke="#94A3B8" tickLine={false} axisLine={false} />
-                <YAxis yAxisId="right" orientation="right" stroke="#64748B" tickLine={false} axisLine={false} />
-                <Tooltip contentStyle={{ background: '#0A261A', border: 'none', borderRadius: 8, color: '#FDF9F1' }} />
-                <Bar yAxisId="left" dataKey="planned" fill="#1F3323" radius={[0, 0, 0, 0]} name="Planned blocks" />
-                <Bar yAxisId="right" dataKey="backlog" fill="#F1C453" radius={[0, 0, 0, 0]} name="Backlog rolled forward" />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-        ) : (
-          <div className="flex h-80 items-center justify-center text-sm text-slate-400">
-            No forecast data.
-          </div>
-        )}
-        </div>
+      <div className="flex flex-col gap-4">
         <div className="rounded-2xl border border-slate-200/60 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6 shadow-sm">
           <h4 className="font-serif text-xl font-bold text-indigo-600 dark:text-amber-500">Calendar Grid</h4>
           <div className="mt-6 grid grid-cols-7 gap-2 text-center text-sm font-bold text-[#5F738C]">

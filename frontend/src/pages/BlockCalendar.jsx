@@ -25,7 +25,7 @@ export default function BlockCalendar({ userContext }) {
   }, [view])
 
   const sectionCorridors = useMemo(
-    () => corridors.filter((c) => c.section === section),
+    () => section === 'All' ? corridors : corridors.filter((c) => c.section === section),
     [corridors, section]
   )
 
@@ -57,7 +57,7 @@ export default function BlockCalendar({ userContext }) {
       <div className="border-b border-slate-200/60 dark:border-white/10 p-6 flex flex-wrap items-center justify-between gap-3 bg-transparent">
         <div>
           <h2 className="text-2xl sm:text-3xl font-serif font-black text-indigo-600 dark:text-amber-500">{t('bc.title')}</h2>
-          <p className="mt-1 text-sm font-semibold text-slate-500">Timeline & possessions for {section}</p>
+          <p className="mt-1 text-sm font-semibold text-slate-500">Timeline & possessions for {section === 'All' ? 'All Sections' : section}</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex rounded-xl border border-slate-200 bg-white/50 p-1 backdrop-blur-sm shadow-inner">
@@ -67,7 +67,7 @@ export default function BlockCalendar({ userContext }) {
                 view === 'day' ? 'bg-indigo-600 dark:bg-amber-500 text-white shadow-md' : 'text-slate-600 hover:text-indigo-600 dark:hover:text-amber-500'
               }`}
             >
-              {t('bc.day')}
+              Day
             </button>
             <button
               onClick={() => setView('week')}
@@ -75,7 +75,7 @@ export default function BlockCalendar({ userContext }) {
                 view === 'week' ? 'bg-indigo-600 dark:bg-amber-500 text-white shadow-md' : 'text-slate-600 hover:text-indigo-600 dark:hover:text-amber-500'
               }`}
             >
-              {t('bc.week')}
+              Week
             </button>
             <button
               onClick={() => setView('month')}
@@ -83,10 +83,11 @@ export default function BlockCalendar({ userContext }) {
                 view === 'month' ? 'bg-indigo-600 dark:bg-amber-500 text-white shadow-md' : 'text-slate-600 hover:text-indigo-600 dark:hover:text-amber-500'
               }`}
             >
-              {t('bc.month_rollup')}
+              Month
             </button>
           </div>
-          {view === 'day' && sections.length > 0 && (
+          </div>
+          {sections.length > 0 && (
             <select
               value={section || ''}
               onChange={(e) => {
@@ -95,6 +96,7 @@ export default function BlockCalendar({ userContext }) {
               }}
               className="focus-ring rounded-xl border border-slate-200 bg-white/50 px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm"
             >
+              <option value="All">All Sections</option>
               {sections.map((s) => (
                 <option key={s} value={s}>
                   {s}
@@ -124,11 +126,13 @@ export default function BlockCalendar({ userContext }) {
           section={section}
           date={dayDate}
           sectionCorridors={sectionCorridors}
-          blocks={blocks.filter(b => b.section === section)}
+          blocks={blocks.filter(b => section === 'All' ? sectionCorridors.some(c => c.corridor_id === b.corridor_id) : b.section === section)}
           onDecide={decideBlock}
           submitBlockFlag={submitBlockFlag}
           userContext={userContext}
           onDaySelect={(d) => setView('day')}
+          onPrevWeek={() => setDayOffset(d => d - 7)}
+          onNextWeek={() => setDayOffset(d => d + 7)}
         />
       ) : (
         <MonthRollup plan={monthlyPlan} loading={monthlyLoading} onRefresh={runSimulateMonthly} />
