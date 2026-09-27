@@ -131,6 +131,23 @@ export default function MonthRollup({ plan, monthLabel = '2025-04' }) {
       </div>
 
       <div className="flex flex-col gap-4">
+        <div className="rounded-2xl border border-slate-200/60 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6 shadow-sm">
+          <h3 className="font-serif text-2xl font-bold text-indigo-600 dark:text-amber-500 mb-2">Monthly plan</h3>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-6 border-l-4 border-indigo-600 dark:border-amber-500 pl-3">
+            What maintenance should happen over the whole month?
+          </p>
+          <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3">
+            This helps railway officials plan:
+          </p>
+          <ul className="list-disc pl-5 text-sm text-slate-700 dark:text-slate-300 space-y-2 font-medium">
+            <li>Major maintenance</li>
+            <li>Overdue work</li>
+            <li>Critical defects</li>
+            <li>Future blocks</li>
+            <li>Department coordination</li>
+          </ul>
+        </div>
+
         {totals && (
           <div className="rounded-2xl border border-indigo-200 dark:border-amber-500/30 bg-indigo-50/80 dark:bg-amber-500/10 p-6 shadow-sm backdrop-blur-md">
             <h4 className="font-serif text-xl font-bold text-indigo-900 dark:text-amber-400">Month Summary</h4>

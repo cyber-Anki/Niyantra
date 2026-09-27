@@ -114,33 +114,54 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
           <td colSpan={10} className="p-6">
             <div className="flex gap-12 max-w-4xl">
               <div className="flex-1">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Priority Score Breakdown</h4>
-                <div className="flex flex-col gap-4">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-amber-500 mb-4">Risk = PoF × CoF Model Breakdown</h4>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                      <span>Criticality (Asset condition)</span>
-                      <span>40/50</span>
+                    <div className="flex justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      <span>Severity (Defect seriousness)</span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-slate-200">
-                      <div className="h-1.5 rounded-full bg-[#1a2f24]" style={{ width: '80%' }}></div>
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-white/10">
+                      <div className="h-1.5 rounded-full bg-indigo-600 dark:bg-amber-500" style={{ width: '85%' }}></div>
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                      <span>Urgency (Overdue penalty)</span>
-                      <span>30/30</span>
+                    <div className="flex justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      <span>Traffic (Trains per day)</span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-slate-200">
-                      <div className="h-1.5 rounded-full bg-[#F1C453]" style={{ width: '100%' }}></div>
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-white/10">
+                      <div className="h-1.5 rounded-full bg-indigo-500 dark:bg-amber-400" style={{ width: '70%' }}></div>
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                      <span>Network Impact (Traffic delay risk)</span>
-                      <span>25/20</span>
+                    <div className="flex justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      <span>Urgency (Overdue factor)</span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-slate-200">
-                      <div className="h-1.5 rounded-full bg-orange-400" style={{ width: '100%' }}></div>
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-white/10">
+                      <div className="h-1.5 rounded-full bg-rose-500 dark:bg-rose-400" style={{ width: '90%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      <span>Impact (Consequence of failure)</span>
+                    </div>
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-white/10">
+                      <div className="h-1.5 rounded-full bg-indigo-600 dark:bg-amber-500" style={{ width: '80%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      <span>Failure probability</span>
+                    </div>
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-white/10">
+                      <div className="h-1.5 rounded-full bg-orange-500 dark:bg-orange-400" style={{ width: '60%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      <span>Other departments (Overlap)</span>
+                    </div>
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-white/10">
+                      <div className="h-1.5 rounded-full bg-teal-500 dark:bg-teal-400" style={{ width: '75%' }}></div>
                     </div>
                   </div>
                 </div>
