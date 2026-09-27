@@ -86,7 +86,6 @@ export default function BlockCalendar({ userContext }) {
               Month
             </button>
           </div>
-          </div>
           {sections.length > 0 && (
             <select
               value={section || ''}
