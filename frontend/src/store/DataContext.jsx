@@ -126,10 +126,47 @@ export function DataProvider({ children, userContext }) {
     api
       .bootstrap()
       .then(async (data) => {
-        setTasks(data.tasks)
-        setCorridors(data.corridors)
         const ranked = await runPrioritize(data.tasks)
-        await runOptimizeWeekly(ranked.length ? ranked : data.tasks, data.corridors, DEFAULT_WEEK_START)
+        const taskList = ranked.length ? ranked : data.tasks
+        
+        // Fetch monthly plan to get 4 weeks of data
+        const monthData = await runSimulateMonthly(taskList, data.corridors, DEFAULT_MONTH_LABEL)
+        
+        let allCorridors = data.corridors
+        if (monthData && monthData.weekly_plans) {
+           const expandedCorridors = []
+           for (let i = 0; i < 4; i++) {
+               data.corridors.forEach(c => {
+                   const [cBase, offset] = String(c.day).split('+')
+                   const cd = new Date(cBase)
+                   cd.setDate(cd.getDate() + (i * 7))
+                   expandedCorridors.push({
+                       ...c,
+                       corridor_id: `${c.corridor_id}-W${i}`,
+                       day: `${cd.toISOString().split('T')[0]}+${offset}`
+                   })
+               })
+           }
+           allCorridors = expandedCorridors
+           setCorridors(allCorridors)
+           
+           const allBlocks = []
+           monthData.weekly_plans.forEach((wp, w_idx) => {
+               wp.scheduled_blocks.forEach(b => {
+                   allBlocks.push({ 
+                       ...b, 
+                       week_offset: w_idx, 
+                       corridor_id: `${b.corridor_id}-W${w_idx}`,
+                       status: b.status || 'pending' 
+                   })
+               })
+           })
+           setBlocks(allBlocks)
+        } else {
+           setCorridors(data.corridors)
+           await runOptimizeWeekly(taskList, data.corridors, DEFAULT_WEEK_START)
+        }
+        setTasks(data.tasks)
       })
       .catch((e) => setError(e.message))
       .finally(() => setBootLoading(false))

@@ -2,24 +2,7 @@ import { useMemo } from 'react'
 
 const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
 
-// Static mock data for blocks to match reference image exactly
-const MOCK_BLOCKS = {
-  1: [{ name: 'Track inspection', type: 'orange' }],
-  3: [{ name: 'Signal testing', type: 'green' }],
-  7: [{ name: 'Rail grinding', type: 'orange' }],
-  9: [{ name: 'OHE inspection', type: 'yellow' }],
-  11: [{ name: 'Track + S&T', type: 'purple' }],
-  14: [{ name: 'Track + S&T', type: 'purple' }],
-  15: [{ name: 'Signal upgrade', type: 'green' }],
-  16: [{ name: 'Track renewal', type: 'orange' }],
-  17: [{ name: 'OHE work', type: 'yellow' }],
-  18: [{ name: 'Track + TRD', type: 'purple' }],
-  21: [{ name: 'Bridge inspection', type: 'orange' }],
-  22: [{ name: 'Cable testing', type: 'green' }],
-  24: [{ name: 'S&T + TRD', type: 'purple' }],
-  28: [{ name: 'Power equipment', type: 'yellow' }],
-  30: [{ name: 'Monthly catch-up', type: 'purple' }],
-}
+// We will dynamically map real blocks now
 
 function getTagClass(type) {
   switch (type) {
@@ -36,11 +19,42 @@ function getTagClass(type) {
   }
 }
 
-export default function MonthRollup({ plan, monthLabel = '2026-09' }) {
+export default function MonthRollup({ plan, blocks = [], corridors = [], monthLabel = '2026-09' }) {
   const [yearStr, monthStr] = monthLabel.split('-')
   const dateObj = new Date(Number(yearStr), Number(monthStr) - 1, 1)
   const monthName = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const monthNameOnly = dateObj.toLocaleDateString('en-US', { month: 'long' })
+
+  const blockMap = useMemo(() => {
+    const map = {}
+    blocks.forEach(b => {
+      const c = corridors.find(c => c.corridor_id === b.corridor_id)
+      if (c && c.day) {
+        const [base, offset] = c.day.split('+')
+        const d = new Date(base)
+        d.setDate(d.getDate() + Number(offset || 0))
+        if (d.getMonth() === dateObj.getMonth()) {
+           const dayNum = d.getDate()
+           if (!map[dayNum]) map[dayNum] = []
+           
+           const hasEng = b.departments.includes('ENG')
+           const hasSnt = b.departments.includes('SNT')
+           const hasTrd = b.departments.includes('TRD')
+           let type = 'slate'
+           if (b.departments.length > 1) type = 'purple'
+           else if (hasEng) type = 'orange'
+           else if (hasSnt) type = 'green'
+           else if (hasTrd) type = 'yellow'
+
+           map[dayNum].push({ 
+             name: `${b.departments.join('+')} Work`,
+             type 
+           })
+        }
+      }
+    })
+    return map
+  }, [blocks, corridors, dateObj])
 
   // Calculate calendar grid cells
   const cells = useMemo(() => {
@@ -127,14 +141,14 @@ export default function MonthRollup({ plan, monthLabel = '2026-09' }) {
           {cells.map((week, wi) => (
             <div key={wi} className="grid grid-cols-7 gap-[1px]">
               {week.map((cell, ci) => {
-                const blocks = cell.isCurrentMonth ? MOCK_BLOCKS[cell.day] : null
+                const dayBlocks = cell.isCurrentMonth ? blockMap[cell.day] : null
                 return (
                   <div key={ci} className="bg-white min-h-[110px] p-2 flex flex-col group transition-colors hover:bg-slate-50">
                     <span className={`text-[13px] font-bold mb-1 ${cell.isCurrentMonth ? 'text-slate-900' : 'text-slate-400'}`}>
                       {cell.day}
                     </span>
                     <div className="flex flex-col gap-1.5 mt-1">
-                      {blocks && blocks.map((b, i) => (
+                      {dayBlocks && dayBlocks.map((b, i) => (
                         <div
                           key={i}
                           className={`rounded-r-md px-2 py-1 text-[11px] font-bold truncate ${getTagClass(b.type)}`}

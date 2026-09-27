@@ -134,7 +134,7 @@ export default function BlockCalendar({ userContext }) {
           onNextWeek={() => setDayOffset(d => d + 7)}
         />
       ) : (
-        <MonthRollup plan={monthlyPlan} loading={monthlyLoading} onRefresh={runSimulateMonthly} />
+        <MonthRollup plan={monthlyPlan} blocks={blocks} corridors={corridors} loading={monthlyLoading} onRefresh={runSimulateMonthly} />
       )}
       </div>
     </div>
