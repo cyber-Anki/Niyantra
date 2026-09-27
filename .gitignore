@@ -10,3 +10,7 @@ Backend/venv/
 Backend/.env
 
 .DS_Store
+# Exclude heavy dataset folders from Git
+Backend/Datas/
+Backend/data/
+*.zip

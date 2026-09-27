@@ -17,23 +17,31 @@ from system1_priority_engine import score_all_tasks
 from physics_fatigue import compute_damage_signal
 import system2_optimizer as s2
 import system3_horizon_engine as s3
+import os
 
 from database import Base, engine, get_db
 from models import ScheduledBlockDB, OfficerDecisionDB, UserDB
-
+from system3_analytics import execute_post_maintenance_audit
 from auth import auth_router, get_current_user
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AI Block Planning Backend")
+app = FastAPI(title="Niyantra Command Center API")
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 
+origins = [
+    "http://localhost:5173",
+    "https://niyantra.vercel.app",
+    os.getenv("FRONTEND_URL", "*")
+]
+
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],              # Must allow POST for Auth/OTP
+    allow_headers=["*"],              # Must allow 'Authorization: Bearer <token>'
 )
 
 # --- load System 1 model once at startup ---
@@ -68,6 +76,16 @@ class DecideRequest(BaseModel):
     new_end_minute: Optional[int] = None
     decided_by: str = "unauthenticated"
 
+# Assume RBAC requires a "HQ_ANALYST" or "BOARD_MEMBER" role
+@app.post("/api/audit/close-block/{block_id}")
+def close_block_and_audit(block_id: int, payload: dict, db: Session = Depends(get_db)):
+    return execute_post_maintenance_audit(
+        block_id=block_id,
+        actual_start=payload["actual_start"],
+        actual_end=payload["actual_end"],
+        cost=payload["cost"],
+        db=db
+    )
 
 @app.get("/api/data/bootstrap")
 def get_bootstrap():
