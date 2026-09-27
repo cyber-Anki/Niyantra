@@ -96,7 +96,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
   )
 
   return (
-    <div className="rounded-2xl bg-[#FDF9F1] p-6 h-full relative overflow-hidden">
+    <div className="rounded-2xl bg-transparent p-6 h-full relative overflow-hidden">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button
@@ -105,7 +105,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
           >
             <ChevronLeft size={16} />
           </button>
-          <h3 className="font-serif text-2xl font-black text-[#1a2f24] tracking-tight">{date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
+          <h3 className="font-serif text-2xl font-black text-indigo-600 dark:text-amber-500 tracking-tight">{date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
           <button
             onClick={onNextDay}
             className="focus-ring flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 hover:text-slate-900"
@@ -236,9 +236,9 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: 20 }}
                           transition={{ duration: 0.2 }}
-                          className="fixed right-0 top-0 z-50 flex h-full w-80 flex-col bg-[#FDF9F1] shadow-2xl border-l border-slate-200/60"
+                          className="fixed right-0 top-0 z-50 flex h-full w-80 flex-col bg-white/90 dark:bg-[#0B1120]/90 backdrop-blur-xl shadow-2xl border-l border-white/20 dark:border-white/10"
                         >
-                          <div className="flex items-center justify-between bg-[#0A261A] p-5 text-white">
+                          <div className="flex items-center justify-between bg-indigo-600/90 dark:bg-amber-600/90 p-5 text-white">
                             <h2 className="font-serif text-xl font-bold tracking-tight">Block Details</h2>
                             <button onClick={() => setOpenBlockId(null)} className="text-white/70 hover:text-white transition">
                               <X size={20} />
@@ -272,7 +272,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                               </div>
                             </div>
 
-                            <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+                            <div className="mb-6 rounded-2xl bg-white/50 dark:bg-black/20 p-4 shadow-sm border border-slate-100 dark:border-white/10">
                               <span className="text-xs font-bold uppercase tracking-widest text-slate-500">AI Reasoning</span>
                               <p className="mt-2 text-sm text-slate-600 font-medium leading-relaxed">
                                 {b.is_merged 
@@ -281,7 +281,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
                               </p>
                             </div>
 
-                            <div className="mb-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+                            <div className="mb-6 rounded-2xl bg-white/50 dark:bg-black/20 p-4 shadow-sm border border-slate-100 dark:border-white/10">
                               <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Linked Tasks</span>
                               <div className="mt-2 space-y-2">
                                 {b.task_ids.map(tid => (
@@ -389,7 +389,7 @@ function Legend({ swatch, label }) {
 function Row({ label, children, heightStyle }) {
   return (
     <div className="flex border-b border-slate-200/50 last:border-0 relative items-stretch py-1">
-      <div className="flex w-24 shrink-0 items-center text-xs font-bold tracking-widest text-slate-600 pr-4 z-10 bg-[#FDF9F1]">
+      <div className="flex w-24 shrink-0 items-center text-xs font-bold tracking-widest text-slate-600 dark:text-slate-400 pr-4 z-10 bg-transparent">
         {label}
       </div>
       <div className="relative flex-1" style={heightStyle}>

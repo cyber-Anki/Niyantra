@@ -278,7 +278,7 @@ export default function ConflictResolution({ setPage }) {
   }, [unscheduledTaskIds, taskById, blocks])
 
   return (
-    <div className="bg-[#FDF9F1] rounded-3xl min-h-full overflow-hidden pb-6">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden pb-6">
       {/* Manual Override Modal */}
       {overrideBlock && (
         <ManualOverrideModal
@@ -291,7 +291,7 @@ export default function ConflictResolution({ setPage }) {
       )}
 
       <div className="p-6">
-        <h2 className="text-3xl font-serif font-black text-[#1a2f24] tracking-tight">{t('cr.title')}</h2>
+        <h2 className="text-3xl font-serif font-black text-indigo-600 dark:text-amber-500 tracking-tight">{t('cr.title')}</h2>
         <p className="mt-1 text-sm font-semibold text-slate-500">
           {t('cr.subtitle')}
         </p>
@@ -300,7 +300,7 @@ export default function ConflictResolution({ setPage }) {
       <div className="px-6">
         <section className="mb-10">
           <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-slate-900 tracking-tight pb-3">
-            <GitMerge size={18} className="text-[#1a2f24]" /> {t('cr.merged_blocks')}
+            <GitMerge size={18} className="text-indigo-600 dark:text-amber-500" /> {t('cr.merged_blocks')}
           </h3>
           {mergedBlocks.length === 0 ? (
             <div className="p-8 text-center text-sm font-medium text-slate-500 border border-slate-200 bg-white rounded-2xl shadow-sm">
@@ -312,7 +312,7 @@ export default function ConflictResolution({ setPage }) {
                 <div key={b.block_id} className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm transition-transform hover:-translate-y-1 flex flex-col">
                   <div className="flex items-center justify-between bg-slate-50 px-5 py-3 border-b border-slate-200">
                     <span className="font-mono text-xs font-bold text-slate-700">{b.block_id}</span>
-                    <span className="bg-[#FDF9F1] border border-slate-200 px-2 py-0.5 rounded text-xs font-bold text-[#1a2f24]">
+                    <span className="bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 px-2 py-0.5 rounded text-xs font-bold text-indigo-600 dark:text-amber-500">
                       {b.section} · {formatTimeOfDay(b.start_minute)}–{formatTimeOfDay(b.end_minute)}
                     </span>
                   </div>
@@ -351,7 +351,7 @@ export default function ConflictResolution({ setPage }) {
                     <button
                       onClick={() => decideBlock(b.block_id, 'approve')}
                       disabled={b.status !== 'pending'}
-                      className="focus-ring flex items-center gap-1.5 bg-[#1a2f24] rounded-lg px-4 py-2 text-xs font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-40 shadow-sm"
+                      className="focus-ring flex items-center gap-1.5 bg-indigo-600 dark:bg-amber-600 rounded-lg px-4 py-2 text-xs font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-700 disabled:opacity-40 shadow-sm"
                     >
                       <Check size={14} /> {b.status === 'approved' ? t('cr.approved') : t('cr.accept_ai')}
                     </button>
@@ -388,7 +388,7 @@ export default function ConflictResolution({ setPage }) {
 
         <section>
           <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-slate-900 tracking-tight pb-3">
-            <Users size={18} className="text-[#1a2f24]" /> {t('cr.capacity_conflicts')}
+            <Users size={18} className="text-indigo-600 dark:text-amber-500" /> {t('cr.capacity_conflicts')}
           </h3>
           {capacityConflicts.length === 0 ? (
             <div className="p-8 text-center text-sm font-medium text-slate-500 border border-slate-200 bg-white rounded-2xl shadow-sm">
@@ -399,7 +399,7 @@ export default function ConflictResolution({ setPage }) {
               {capacityConflicts.map((group) => (
                 <div key={group.section} className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
                   <div className="bg-slate-50 px-5 py-3 border-b border-slate-200 flex items-center gap-2 text-sm font-bold text-slate-900">
-                    <AlertOctagon size={16} className="text-[#1a2f24]" /> {group.section}
+                    <AlertOctagon size={16} className="text-indigo-600 dark:text-amber-500" /> {group.section}
                     <span className="font-semibold text-slate-500 text-xs ml-2">
                       ({group.losers.length} rolled forward to next week)
                     </span>
@@ -457,7 +457,7 @@ export default function ConflictResolution({ setPage }) {
                     </button>
                     <button
                       onClick={() => setPage?.('priority')}
-                      className="focus-ring ml-auto text-[11px] font-bold text-[#1a2f24] uppercase tracking-wider hover:underline"
+                      className="focus-ring ml-auto text-[11px] font-bold text-indigo-600 dark:text-amber-500 uppercase tracking-wider hover:underline"
                     >
                       {t('cr.view_queue')} &rarr;
                     </button>

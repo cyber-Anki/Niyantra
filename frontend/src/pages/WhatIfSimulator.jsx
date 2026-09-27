@@ -129,11 +129,11 @@ export default function WhatIfSimulator() {
   }, [simResult, blocks])
 
   return (
-    <div className="bg-[#FDF9F1] rounded-3xl min-h-full overflow-hidden pb-6">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden pb-6">
       <div className="mb-6 p-6 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-serif font-black text-[#1a2f24] tracking-tight flex items-center gap-3">
-            <FlaskConical size={32} className="text-[#1a2f24]" /> {t('sim.title')}
+          <h2 className="text-3xl font-serif font-black text-indigo-600 dark:text-amber-500 tracking-tight flex items-center gap-3">
+            <FlaskConical size={32} className="text-indigo-600 dark:text-amber-500" /> {t('sim.title')}
           </h2>
         </div>
         <div className="flex items-center gap-3">
@@ -147,7 +147,7 @@ export default function WhatIfSimulator() {
           <button
             onClick={runSimulation}
             disabled={running || (!stagedDefects.length && !surges.length)}
-            className="focus-ring flex items-center gap-2 rounded-xl bg-[#1a2f24] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-50 shadow-sm"
+            className="focus-ring flex items-center gap-2 rounded-xl bg-indigo-600 dark:bg-amber-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-700 disabled:opacity-50 shadow-sm"
           >
             <Play size={16} className={running ? 'animate-pulse text-[#F1C453]' : ''} />
             {running ? t('sim.running') : t('sim.run_sim')}
@@ -158,7 +158,7 @@ export default function WhatIfSimulator() {
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2 px-6">
         <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm transition-transform hover:-translate-y-1 flex flex-col h-full">
           <h3 className="mb-5 text-lg font-bold text-slate-900 tracking-tight pb-3 flex items-center gap-2">
-            <Plus size={18} className="text-[#1a2f24]" /> {t('sim.add_defect')}
+            <Plus size={18} className="text-indigo-600 dark:text-amber-500" /> {t('sim.add_defect')}
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Department">
@@ -233,7 +233,7 @@ export default function WhatIfSimulator() {
 
         <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm transition-transform hover:-translate-y-1 flex flex-col h-full">
           <h3 className="mb-5 text-lg font-bold text-slate-900 tracking-tight pb-3 flex items-center gap-2">
-            <TrendingDown size={18} className="text-[#1a2f24]" /> {t('sim.add_surge')}
+            <TrendingDown size={18} className="text-indigo-600 dark:text-amber-500" /> {t('sim.add_surge')}
           </h3>
           <p className="mb-4 text-sm font-medium text-slate-500">
             {t('sim.surge_desc')}
@@ -346,13 +346,13 @@ export default function WhatIfSimulator() {
             </div>
           </div>
 
-          <div className="mt-8 flex items-center justify-end gap-3 p-6 bg-[#FDF9F1] rounded-3xl border border-slate-200">
+          <div className="mt-8 flex items-center justify-end gap-3 p-6 bg-slate-50/50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10">
             <span className="mr-auto text-sm font-bold text-[#1a2f24]">
               {t('sim.note')}
             </span>
             <button
               onClick={commit}
-              className="focus-ring rounded-xl bg-[#1a2f24] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#2c4731] shadow-sm"
+              className="focus-ring rounded-xl bg-indigo-600 dark:bg-amber-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-700 shadow-sm"
             >
               {t('sim.commit')}
             </button>

@@ -99,10 +99,10 @@ export default function ReportsAnalytics() {
   }
 
   return (
-    <div className="bg-[#FDF9F1] rounded-3xl min-h-full overflow-hidden">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden">
       <div className="p-6 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-serif font-black text-[#1a2f24] tracking-tight">
+          <h2 className="text-3xl font-serif font-black text-indigo-600 dark:text-amber-500 tracking-tight">
             {t('rep.title')}
           </h2>
         </div>
@@ -116,7 +116,7 @@ export default function ReportsAnalytics() {
           <button
             onClick={() => runSimulateMonthly()}
             disabled={monthlyLoading}
-            className="focus-ring flex items-center gap-2 rounded-xl bg-[#1a2f24] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-50 shadow-sm"
+            className="focus-ring flex items-center gap-2 rounded-xl bg-indigo-600 dark:bg-amber-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-700 disabled:opacity-50 shadow-sm"
           >
             <RefreshCw size={14} className={monthlyLoading ? 'animate-spin' : ''} />
             {monthlyLoading ? t('rep.simulating') : t('rep.run_forecast')}
@@ -130,17 +130,17 @@ export default function ReportsAnalytics() {
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1">
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{t('rep.efficiency')}</p>
-            <p className="mt-2 text-3xl font-black text-[#1a2f24]">{utilization.pct}%</p>
+            <p className="mt-2 text-3xl font-black text-indigo-600 dark:text-amber-500">{utilization.pct}%</p>
             <p className="mt-1 text-xs font-semibold text-slate-400">{utilization.actual}m {t('rep.used_of')} {utilization.planned}m {t('rep.available')}</p>
           </div>
           <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1">
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{t('rep.rolled_forward')}</p>
-            <p className="mt-2 text-3xl font-black text-[#1a2f24]">{unscheduledTaskIds.length}</p>
+            <p className="mt-2 text-3xl font-black text-indigo-600 dark:text-amber-500">{unscheduledTaskIds.length}</p>
             <p className="mt-1 text-xs font-semibold text-slate-400">{t('rep.of')} {allTasks.length} {t('rep.total_backlog')}</p>
           </div>
           <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm transition-transform hover:-translate-y-1">
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{t('rep.merges')}</p>
-            <p className="mt-2 text-3xl font-black text-[#1a2f24]">{blocks.filter((b) => b.is_merged).length}</p>
+            <p className="mt-2 text-3xl font-black text-indigo-600 dark:text-amber-500">{blocks.filter((b) => b.is_merged).length}</p>
             <p className="mt-1 text-xs font-semibold text-slate-400">{t('rep.of')} {blocks.length} {t('rep.scheduled_blocks')}</p>
           </div>
         </div>
@@ -176,7 +176,7 @@ export default function ReportsAnalytics() {
                   <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px' }} />
                   <Legend wrapperStyle={{ paddingTop: '20px' }} />
                   <Line type="monotone" dataKey="Status Quo Risk" stroke="#EF4444" strokeWidth={3} dot={{ r: 4 }} />
-                  <Line type="monotone" dataKey="AI Optimized Risk" stroke="#1a2f24" strokeWidth={3} dot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="AI Optimized Risk" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -216,7 +216,7 @@ export default function ReportsAnalytics() {
                     <td className="p-4">{d.raised}</td>
                     <td className="p-4">{d.resolved}</td>
                     <td className="p-4">{d.pending}</td>
-                    <td className="p-4 font-bold text-[#1a2f24]">{d.sla}%</td>
+                    <td className="p-4 font-bold text-indigo-600 dark:text-amber-500">{d.sla}%</td>
                   </tr>
                 ))}
               </tbody>

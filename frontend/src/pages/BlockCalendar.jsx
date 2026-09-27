@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNiyantraData } from '../store/DataContext.jsx'
 import DayTimeline from '../components/calendar/DayTimeline.jsx'
+import WeekRollup from '../components/calendar/WeekRollup.jsx'
 import MonthRollup from '../components/calendar/MonthRollup.jsx'
 import { dayFromCorridorDay } from '../components/calendar/deptColors.js'
 import { useTranslation } from '../store/TranslationContext.jsx'
@@ -52,10 +53,10 @@ export default function BlockCalendar({ userContext }) {
   )
 
   return (
-    <div className="bg-[#FDF9F1] rounded-3xl border border-slate-200/60 shadow-xl min-h-full transition-colors overflow-hidden">
-      <div className="border-b border-slate-200/60 p-6 flex flex-wrap items-center justify-between gap-3 bg-[#FDF9F1]">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden">
+      <div className="border-b border-slate-200/60 dark:border-white/10 p-6 flex flex-wrap items-center justify-between gap-3 bg-transparent">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-serif font-black text-[#1a2f24]">{t('bc.title')}</h2>
+          <h2 className="text-2xl sm:text-3xl font-serif font-black text-indigo-600 dark:text-amber-500">{t('bc.title')}</h2>
           <p className="mt-1 text-sm font-semibold text-slate-500">Timeline & possessions for {section}</p>
         </div>
         <div className="flex items-center gap-3">
@@ -63,15 +64,23 @@ export default function BlockCalendar({ userContext }) {
             <button
               onClick={() => setView('day')}
               className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                view === 'day' ? 'bg-[#1a2f24] text-white shadow-md' : 'text-slate-600 hover:text-[#1a2f24]'
+                view === 'day' ? 'bg-indigo-600 dark:bg-amber-500 text-white shadow-md' : 'text-slate-600 hover:text-indigo-600 dark:hover:text-amber-500'
               }`}
             >
               {t('bc.day')}
             </button>
             <button
+              onClick={() => setView('week')}
+              className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+                view === 'week' ? 'bg-indigo-600 dark:bg-amber-500 text-white shadow-md' : 'text-slate-600 hover:text-indigo-600 dark:hover:text-amber-500'
+              }`}
+            >
+              {t('bc.week')}
+            </button>
+            <button
               onClick={() => setView('month')}
               className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                view === 'month' ? 'bg-[#1a2f24] text-white shadow-md' : 'text-slate-600 hover:text-[#1a2f24]'
+                view === 'month' ? 'bg-indigo-600 dark:bg-amber-500 text-white shadow-md' : 'text-slate-600 hover:text-indigo-600 dark:hover:text-amber-500'
               }`}
             >
               {t('bc.month_rollup')}
@@ -109,6 +118,17 @@ export default function BlockCalendar({ userContext }) {
           userContext={userContext}
           onPrevDay={() => setDayOffset((d) => d - 1)}
           onNextDay={() => setDayOffset((d) => d + 1)}
+        />
+      ) : view === 'week' ? (
+        <WeekRollup
+          section={section}
+          date={dayDate}
+          sectionCorridors={sectionCorridors}
+          blocks={blocks.filter(b => b.section === section)}
+          onDecide={decideBlock}
+          submitBlockFlag={submitBlockFlag}
+          userContext={userContext}
+          onDaySelect={(d) => setView('day')}
         />
       ) : (
         <MonthRollup plan={monthlyPlan} loading={monthlyLoading} onRefresh={runSimulateMonthly} />

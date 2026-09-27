@@ -101,7 +101,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
               <button
                 onClick={() => onApprove(task, block)}
                 disabled={!block}
-                className="focus-ring rounded-lg bg-[#1a2f24] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#2c4731] disabled:opacity-50"
+                className="focus-ring rounded-lg bg-indigo-600 dark:bg-amber-500 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-600 disabled:opacity-50"
               >
                 Approve Slot
               </button>
@@ -110,7 +110,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
         </td>
       </tr>
       {open && (
-        <tr className="bg-[#FDF9F1] border-b border-slate-200 shadow-inner">
+        <tr className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 shadow-inner">
           <td colSpan={10} className="p-6">
             <div className="flex gap-12 max-w-4xl">
               <div className="flex-1">
@@ -223,10 +223,10 @@ export default function PriorityQueue() {
   }
 
   return (
-    <div className="bg-[#FDF9F1] rounded-3xl min-h-full overflow-hidden">
+    <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden">
       <div className="p-6 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-serif font-black text-[#1a2f24] tracking-tight">AI Priority Queue</h2>
+          <h2 className="text-3xl font-serif font-black text-indigo-600 dark:text-amber-500 tracking-tight">AI Priority Queue</h2>
           <p className="mt-1 text-sm font-semibold text-slate-500">Unified backlog prioritized by asset criticality and network impact.</p>
         </div>
         
@@ -266,7 +266,7 @@ export default function PriorityQueue() {
 
       <div className="overflow-x-auto no-scrollbar mx-6 rounded-2xl border border-slate-200 bg-white shadow-sm mb-6">
         <table className="w-full text-left whitespace-nowrap">
-          <thead className="bg-[#1a2f24] text-white">
+          <thead className="bg-indigo-600 dark:bg-amber-600 text-white">
             <tr>
               <th className="py-3 pl-4 pr-2 w-8"></th>
               <th className="py-3 px-2"><SortHeader label="Asset / Section" sortKey="section" sortBy={sortBy} sortDir={sortDir} onSort={handleSort} className="!text-white hover:!text-white/80" /></th>
