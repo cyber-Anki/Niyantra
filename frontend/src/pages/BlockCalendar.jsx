@@ -111,7 +111,7 @@ export default function BlockCalendar({ userContext }) {
     <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden">
       <div className="border-b border-slate-200/60 dark:border-white/10 p-6 flex flex-wrap items-center justify-between gap-4 bg-transparent">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-serif font-black text-indigo-600 dark:text-amber-500">{t('bc.title')}</h2>
+          <h2 className="text-2xl sm:text-3xl font-serif font-black text-black dark:text-amber-500">{t('bc.title')}</h2>
           <p className="mt-1 text-sm font-semibold text-slate-500">Timeline & possessions for {section === 'All' ? 'All Sections' : section}</p>
         </div>
 

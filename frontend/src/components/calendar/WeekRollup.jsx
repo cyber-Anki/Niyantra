@@ -76,7 +76,7 @@ export default function WeekRollup({ section, date, sectionCorridors, blocks = [
     <div className="rounded-2xl border border-slate-200/60 dark:border-white/10 bg-white/40 dark:bg-black/20 p-8 backdrop-blur-md shadow-sm min-h-full">
       <div className="flex flex-wrap items-center justify-between mb-4 gap-3">
         <div>
-          <h3 className="font-serif text-3xl font-bold text-indigo-600 dark:text-amber-500">
+          <h3 className="font-serif text-3xl font-bold text-black dark:text-amber-500">
             Weekly Plan
           </h3>
           <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5">

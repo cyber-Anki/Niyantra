@@ -102,7 +102,7 @@ export default function ReportsAnalytics() {
     <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden">
       <div className="p-6 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-serif font-black text-indigo-600 dark:text-amber-500 tracking-tight">
+          <h2 className="text-3xl font-serif font-black text-black dark:text-amber-500 tracking-tight">
             {t('rep.title')}
           </h2>
         </div>

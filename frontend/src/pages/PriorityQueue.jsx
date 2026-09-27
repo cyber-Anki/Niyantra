@@ -114,7 +114,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
           <td colSpan={10} className="p-6">
             <div className="flex gap-12 max-w-4xl">
               <div className="flex-1">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-amber-500 mb-4">Risk = PoF × CoF Model Breakdown</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-black dark:text-amber-500 mb-4">Risk = PoF × CoF Model Breakdown</h4>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                   <div>
                     <div className="flex justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1">
@@ -247,7 +247,7 @@ export default function PriorityQueue() {
     <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl shadow-xl min-h-full transition-colors overflow-hidden">
       <div className="p-6 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-serif font-black text-indigo-600 dark:text-amber-500 tracking-tight">AI Priority Queue</h2>
+          <h2 className="text-3xl font-serif font-black text-black dark:text-amber-500 tracking-tight">AI Priority Queue</h2>
           <p className="mt-1 text-sm font-semibold text-slate-500">Unified backlog prioritized by asset criticality and network impact.</p>
         </div>
         

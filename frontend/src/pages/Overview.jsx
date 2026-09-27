@@ -116,7 +116,7 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl flex flex-col items-center justify-center transition-colors">
-          <h3 className="font-bold text-indigo-600 dark:text-amber-500 uppercase mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2 w-full text-center">{t('eng.health')}</h3>
+          <h3 className="font-bold text-black dark:text-amber-500 uppercase mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2 w-full text-center">{t('eng.health')}</h3>
           <div className="relative">
             <DonutRing percentage={healthyPct} size={200} strokeWidth={24} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -276,7 +276,7 @@ function DRMDashboard({ userContext, tasks, blocks, corridors, setPage }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {deptData.map((d, i) => (
           <div key={i} className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl flex flex-col items-center transition-colors">
-            <h3 className="font-bold text-indigo-600 dark:text-amber-500 uppercase mb-4 w-full text-center border-b border-slate-200/50 dark:border-white/10 pb-2">{d.dept} {t('eng.departments')}</h3>
+            <h3 className="font-bold text-black dark:text-amber-500 uppercase mb-4 w-full text-center border-b border-slate-200/50 dark:border-white/10 pb-2">{d.dept} {t('eng.departments')}</h3>
             <div className="relative mb-4">
               <DonutRing percentage={d.healthyPct} size={140} strokeWidth={16} />
               <div className="absolute inset-0 flex flex-col items-center justify-center">

@@ -419,7 +419,7 @@ export default function ConflictResolution({ setPage }) {
       )}
 
       <div className="p-6">
-        <h2 className="text-3xl font-serif font-black text-indigo-600 dark:text-amber-500 tracking-tight">{t('cr.title')}</h2>
+        <h2 className="text-3xl font-serif font-black text-black dark:text-amber-500 tracking-tight">{t('cr.title')}</h2>
         <p className="mt-1 text-sm font-semibold text-slate-500">
           {t('cr.subtitle')}
         </p>

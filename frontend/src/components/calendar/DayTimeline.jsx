@@ -106,7 +106,7 @@ export default function DayTimeline({ date, onPrevDay, onNextDay, blocks, sectio
           >
             <ChevronLeft size={18} />
           </button>
-          <h3 className="font-serif text-2xl font-black text-indigo-600 dark:text-amber-500 tracking-tight">
+          <h3 className="font-serif text-2xl font-black text-black dark:text-amber-500 tracking-tight">
             {date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
           </h3>
           <button
