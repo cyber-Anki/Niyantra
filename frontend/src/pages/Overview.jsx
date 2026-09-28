@@ -71,20 +71,20 @@ function HeroBanner({ title, subtitle, icon: Icon, nominalText }) {
   )
 }
 
-function ActionButton({ title, subtitle, icon: Icon, onClick, primary = false }) {
+function ActionButton({ title, subtitle, icon: Icon, onClick, primary = false, className = '' }) {
   return (
-    <button onClick={onClick} className={`focus-ring group relative overflow-hidden rounded-2xl p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${!primary ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-glow-emerald border-none' : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-glow-blue border-none'}`}>
-      <div className="flex justify-between items-center relative z-10">
+    <button onClick={onClick} className={`focus-ring group relative overflow-hidden rounded-3xl p-6 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${!primary ? 'bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-glow-emerald border-none' : 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-glow-blue border-none'} ${className}`}>
+      <div className="flex flex-col h-full justify-between relative z-10">
         <div>
-          <h3 className="font-bold text-base sm:text-lg font-serif leading-tight">{title}</h3>
-          <p className="text-xs sm:text-sm mt-1 flex items-center gap-1 font-medium text-white/95 leading-normal">{subtitle} <span className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">&rarr;</span></p>
+          <h3 className="font-bold text-xl sm:text-2xl font-serif leading-tight mb-2">{title}</h3>
+          <p className="text-sm sm:text-base flex items-center gap-2 font-medium text-white/90 leading-normal">{subtitle} <span className="ml-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-2">&rarr;</span></p>
         </div>
-        <div className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-          <Icon size={20} className="text-white" />
+        <div className="mt-4 self-start p-3 rounded-2xl bg-white/20 backdrop-blur-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+          <Icon size={28} className="text-white" />
         </div>
       </div>
-      <div className="absolute -right-6 -bottom-6 opacity-10 transform rotate-[-15deg] transition-transform duration-500 group-hover:scale-110">
-        <Icon size={80} />
+      <div className="absolute -right-8 -bottom-8 opacity-10 transform rotate-[-15deg] transition-transform duration-700 group-hover:scale-125">
+        <Icon size={140} />
       </div>
     </button>
   )
@@ -99,7 +99,7 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
   const healthyPct = myTasks.length ? Math.round(((myTasks.length - criticalTasks.length) / myTasks.length) * 100) : 0
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="flex flex-col h-full gap-6 font-sans pb-4">
       <HeroBanner 
         title={t('eng.portal')} 
         subtitle={`${t('dash.corridor')}: ${userContext.corridor} | ${t('dash.division')}: ${userContext.division}`} 
@@ -107,49 +107,49 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
         nominalText={t('dash.status_online')}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 shrink-0">
         <StatBox label={t('eng.open_defects')} value={myTasks.length} icon={Activity} color="amber" />
         <StatBox label={t('eng.critical')} value={criticalTasks.length} alert icon={AlertTriangle} />
         <StatBox label={t('eng.pending_blocks')} value={pendingCount} icon={Clock} color="blue" />
         <StatBox label={t('eng.approved_blocks')} value={myBlocks.filter(b => b.status === 'approved').length} icon={CheckCircle} color="emerald" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-[300px]">
         <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl flex flex-col items-center justify-center transition-colors">
           <h3 className="font-bold text-black dark:text-amber-500 uppercase mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2 w-full text-center">{t('eng.health')}</h3>
           <div className="relative">
-            <DonutRing percentage={healthyPct} size={200} strokeWidth={24} />
+            <DonutRing percentage={healthyPct} size={220} strokeWidth={26} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-4xl font-black text-slate-800 dark:text-white">{healthyPct}%</span>
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">{t('eng.nominal')}</span>
+              <span className="text-5xl font-black text-slate-800 dark:text-white">{healthyPct}%</span>
+              <span className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-2">{t('eng.nominal')}</span>
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-2 bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl transition-colors">
-          <div className="flex justify-between items-center mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2">
-            <h3 className="font-bold text-slate-800 dark:text-white uppercase flex items-center gap-2"><CalendarRange size={20}/> {t('eng.upcoming_schedule')}</h3>
+        <div className="lg:col-span-2 bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl transition-colors flex flex-col">
+          <div className="flex justify-between items-center mb-6 border-b border-slate-200/50 dark:border-white/10 pb-3 shrink-0">
+            <h3 className="font-bold text-slate-800 dark:text-white uppercase flex items-center gap-2 text-lg"><CalendarRange size={24}/> {t('eng.upcoming_schedule')}</h3>
           </div>
           
           {myBlocks.length > 0 ? (
-            <div className="overflow-x-auto no-scrollbar">
+            <div className="overflow-auto no-scrollbar flex-1 -mx-2 px-2">
               <table className="w-full text-sm text-left">
                 <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-black dark:text-amber-500 text-xs uppercase tracking-wider rounded-t-xl">
                   <tr>
-                    <th className="p-3 rounded-tl-xl">{t('eng.start_time')}</th>
-                    <th className="p-3">{t('eng.end_time')}</th>
-                    <th className="p-3">{t('eng.departments')}</th>
-                    <th className="p-3 rounded-tr-xl">{t('eng.status')}</th>
+                    <th className="p-4 rounded-tl-xl">{t('eng.start_time')}</th>
+                    <th className="p-4">{t('eng.end_time')}</th>
+                    <th className="p-4">{t('eng.departments')}</th>
+                    <th className="p-4 rounded-tr-xl">{t('eng.status')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
                   {myBlocks.sort((a,b) => a.start_minute - b.start_minute).slice(0, 5).map((b, i) => (
                     <tr key={i} className="hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
-                      <td className="p-3 font-bold text-slate-800 dark:text-white">{formatTimeOfDay(b.start_minute)}</td>
-                      <td className="p-3 text-slate-600 dark:text-slate-300">{formatTimeOfDay(b.end_minute)}</td>
-                      <td className="p-3 text-slate-600 dark:text-slate-300">{b.departments?.join(', ') || 'Various'}</td>
-                      <td className="p-3 font-bold text-xs uppercase tracking-wide">
-                        <span className={`px-2 py-1 ${b.status === 'pending' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400' : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'}`}>{b.status}</span>
+                      <td className="p-4 font-bold text-slate-800 dark:text-white text-base">{formatTimeOfDay(b.start_minute)}</td>
+                      <td className="p-4 text-slate-600 dark:text-slate-300 text-base">{formatTimeOfDay(b.end_minute)}</td>
+                      <td className="p-4 text-slate-600 dark:text-slate-300">{b.departments?.join(', ') || 'Various'}</td>
+                      <td className="p-4 font-bold text-xs uppercase tracking-wide">
+                        <span className={`px-3 py-1.5 rounded-lg ${b.status === 'pending' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400' : 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-400'}`}>{b.status}</span>
                       </td>
                     </tr>
                   ))}
@@ -157,17 +157,17 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
               </table>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center text-slate-400 py-12 bg-white/20 dark:bg-black/20 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
-              <CalendarRange size={48} className="mb-4 opacity-30" />
-              <p className="font-bold uppercase tracking-widest">{t('eng.no_blocks')}</p>
+            <div className="flex flex-1 flex-col items-center justify-center text-slate-400 py-12 bg-white/20 dark:bg-black/20 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 min-h-[200px]">
+              <CalendarRange size={56} className="mb-4 opacity-30" />
+              <p className="font-bold uppercase tracking-widest text-lg">{t('eng.no_blocks')}</p>
             </div>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ActionButton title={t('eng.priority_queue')} subtitle={t('eng.manage_defects')} icon={ShieldAlert} onClick={() => setPage('priority')} />
-        <ActionButton title={t('eng.block_calendar')} subtitle={t('eng.view_timeline')} icon={CalendarRange} onClick={() => setPage('calendar')} primary />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0 min-h-[140px] md:h-40">
+        <ActionButton title={t('eng.priority_queue')} subtitle={t('eng.manage_defects')} icon={ShieldAlert} onClick={() => setPage('priority')} className="h-full" />
+        <ActionButton title={t('eng.block_calendar')} subtitle={t('eng.view_timeline')} icon={CalendarRange} onClick={() => setPage('calendar')} primary className="h-full" />
       </div>
     </div>
   )
@@ -180,7 +180,7 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
   const pendingBlocks = blocks.filter(b => b.status === 'pending')
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="flex flex-col h-full gap-6 font-sans pb-4">
       <HeroBanner 
         title={t('ctrl.dashboard')} 
         subtitle={`${t('dash.division')}: ${userContext.division} | ${t('ctrl.subtitle')}`} 
@@ -188,7 +188,7 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
         nominalText={t('dash.status_online')}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 shrink-0">
         <StatBox label={t('controller.asset_availability')} value="94.2%" highlight icon={Activity} />
         <StatBox label={t('controller.pending_requests')} value={pendingRequests} icon={Clock} color="amber" />
         <StatBox label={t('controller.active_blocks')} value={activeBlocks} icon={CheckCircle} color="emerald" />
@@ -196,21 +196,21 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
         <StatBox label={t('controller.network_status')} value="Nominal" icon={Activity} color="indigo" />
       </div>
 
-      <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl transition-colors">
-        <div className="flex justify-between items-center mb-6 border-b border-slate-200/50 dark:border-white/10 pb-2">
-          <h3 className="font-bold text-slate-800 dark:text-white uppercase flex items-center gap-2"><GitPullRequestArrow size={20} className="text-indigo-600 dark:text-amber-500" /> {t('ctrl.live_requests')}</h3>
+      <div className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl transition-colors flex flex-col flex-1 min-h-[300px]">
+        <div className="flex justify-between items-center mb-6 border-b border-slate-200/50 dark:border-white/10 pb-3 shrink-0">
+          <h3 className="font-bold text-slate-800 dark:text-white uppercase flex items-center gap-2 text-lg"><GitPullRequestArrow size={24} className="text-indigo-600 dark:text-amber-500" /> {t('ctrl.live_requests')}</h3>
         </div>
         
         {pendingBlocks.length > 0 ? (
-          <div className="overflow-x-auto no-scrollbar">
+          <div className="overflow-auto no-scrollbar flex-1 -mx-2 px-2">
             <table className="w-full text-sm text-left">
               <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-black dark:text-amber-500 text-xs uppercase tracking-wide">
                 <tr>
-                  <th className="p-3 rounded-tl-xl">{t('dash.corridor')}</th>
-                  <th className="p-3">{t('eng.start_time')}</th>
-                  <th className="p-3">{t('ctrl.duration')}</th>
-                  <th className="p-3">{t('ctrl.req_depts')}</th>
-                  <th className="p-3 text-center rounded-tr-xl">{t('ctrl.action')}</th>
+                  <th className="p-4 rounded-tl-xl">{t('dash.corridor')}</th>
+                  <th className="p-4">{t('eng.start_time')}</th>
+                  <th className="p-4">{t('ctrl.duration')}</th>
+                  <th className="p-4">{t('ctrl.req_depts')}</th>
+                  <th className="p-4 text-center rounded-tr-xl">{t('ctrl.action')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
@@ -229,15 +229,15 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
             </table>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center text-slate-400 py-12 bg-white/20 dark:bg-black/20 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
-            <CheckCircle size={48} className="mb-4 opacity-30 text-green-600" />
-            <p className="font-bold uppercase tracking-widest text-green-700 dark:text-green-500">{t('ctrl.all_resolved')}</p>
+          <div className="flex flex-1 flex-col items-center justify-center text-slate-400 py-12 bg-white/20 dark:bg-black/20 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 min-h-[200px]">
+            <CheckCircle size={56} className="mb-4 opacity-30 text-green-600" />
+            <p className="font-bold uppercase tracking-widest text-lg text-green-700 dark:text-green-500">{t('ctrl.all_resolved')}</p>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ActionButton title={t('ctrl.master_calendar')} subtitle={t('ctrl.view_all_timelines')} icon={CalendarRange} onClick={() => setPage('calendar')} primary />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0 min-h-[140px] md:h-40">
+        <ActionButton title={t('ctrl.master_calendar')} subtitle={t('ctrl.view_all_timelines')} icon={CalendarRange} onClick={() => setPage('calendar')} primary className="h-full" />
       </div>
     </div>
   )
@@ -258,7 +258,7 @@ function DRMDashboard({ userContext, tasks, blocks, corridors, setPage }) {
   })
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="flex flex-col h-full gap-6 font-sans pb-4">
       <HeroBanner 
         title={t('drm.summary')} 
         subtitle={`${t('dash.division')}: ${userContext.division} | ${t('drm.command_center')}`} 
@@ -266,41 +266,41 @@ function DRMDashboard({ userContext, tasks, blocks, corridors, setPage }) {
         nominalText={t('dash.status_online')}
       />
       
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 shrink-0">
         <StatBox label={t('drm.total_critical')} value={totalCritical} alert icon={AlertTriangle} />
         <StatBox label={t('drm.total_pending_blocks')} value={totalPending} icon={Clock} color="amber" />
         <StatBox label={t('drm.system_health')} value="92%" highlight icon={Activity} />
         <StatBox label={t('drm.active_corridors')} value="14" icon={TrainFront} color="blue" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-[300px]">
         {deptData.map((d, i) => (
-          <div key={i} className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl flex flex-col items-center transition-colors">
-            <h3 className="font-bold text-black dark:text-amber-500 uppercase mb-4 w-full text-center border-b border-slate-200/50 dark:border-white/10 pb-2">{d.dept} {t('eng.departments')}</h3>
-            <div className="relative mb-4">
-              <DonutRing percentage={d.healthyPct} size={140} strokeWidth={16} />
+          <div key={i} className="bg-white/60 dark:bg-[#0B1120]/60 backdrop-blur-xl border border-white/40 dark:border-white/10 p-6 shadow-xl rounded-3xl flex flex-col items-center justify-center transition-colors">
+            <h3 className="font-bold text-black dark:text-amber-500 uppercase mb-6 w-full text-center border-b border-slate-200/50 dark:border-white/10 pb-3 tracking-widest">{d.dept} {t('eng.departments')}</h3>
+            <div className="relative mb-6">
+              <DonutRing percentage={d.healthyPct} size={180} strokeWidth={20} />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-black text-slate-800 dark:text-white">{d.total}</span>
+                <span className="text-4xl font-black text-slate-800 dark:text-white">{d.total}</span>
               </div>
             </div>
-            <div className="w-full grid grid-cols-2 gap-2 text-center text-sm">
-              <div className="bg-white/50 dark:bg-black/20 p-2 rounded-xl border border-white/40 dark:border-white/10">
-                <div className="text-xs uppercase font-bold text-slate-500 dark:text-slate-400">{t('drm.total')}</div>
-                <div className="text-base font-black text-slate-700 dark:text-white">{d.total}</div>
+            <div className="w-full grid grid-cols-2 gap-4 text-center text-sm">
+              <div className="bg-white/50 dark:bg-black/20 p-3 rounded-2xl border border-white/40 dark:border-white/10 shadow-sm">
+                <div className="text-xs uppercase font-bold text-slate-500 dark:text-slate-400 mb-1">{t('drm.total')}</div>
+                <div className="text-xl font-black text-slate-700 dark:text-white">{d.total}</div>
               </div>
-              <div className={`p-2 rounded-xl border ${d.crit > 0 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400' : 'bg-white/50 dark:bg-black/20 border-white/40 dark:border-white/10 text-slate-700 dark:text-white'}`}>
-                <div className="text-xs uppercase font-bold">{t('drm.critical')}</div>
-                <div className="text-base font-black">{d.crit}</div>
+              <div className={`p-3 rounded-2xl border shadow-sm ${d.crit > 0 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400' : 'bg-white/50 dark:bg-black/20 border-white/40 dark:border-white/10 text-slate-700 dark:text-white'}`}>
+                <div className="text-xs uppercase font-bold mb-1">{t('drm.critical')}</div>
+                <div className="text-xl font-black">{d.crit}</div>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <ActionButton title={t('drm.reports')} subtitle={t('drm.div_kpis')} icon={BarChart3} onClick={() => setPage('reports')} primary />
-        <ActionButton title={t('ctrl.master_calendar')} subtitle={t('ctrl.view_all_timelines')} icon={CalendarRange} onClick={() => setPage('calendar')} />
-        <ActionButton title={t('drm.whatif')} subtitle={t('drm.forecast')} icon={Clock} onClick={() => setPage('simulator')} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0 min-h-[140px] md:h-40">
+        <ActionButton title={t('drm.reports')} subtitle={t('drm.div_kpis')} icon={BarChart3} onClick={() => setPage('reports')} primary className="h-full" />
+        <ActionButton title={t('ctrl.master_calendar')} subtitle={t('ctrl.view_all_timelines')} icon={CalendarRange} onClick={() => setPage('calendar')} className="h-full" />
+        <ActionButton title={t('drm.whatif')} subtitle={t('drm.forecast')} icon={Clock} onClick={() => setPage('simulator')} className="h-full" />
       </div>
     </div>
   )

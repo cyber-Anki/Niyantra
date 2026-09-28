@@ -66,10 +66,18 @@
   }
 }
 
+/* ===== FULL-SCREEN FIT: ensure everything fills the viewport ===== */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* thin, quiet scrollbars that fit the cream/navy palette */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -128,4 +136,53 @@ a {
 
 button:active {
   transform: scale(0.98);
+}
+
+/* ===== MOBILE RESPONSIVE OVERRIDES (phone sizes) ===== */
+@media (max-width: 640px) {
+  html {
+    font-size: 12px;
+  }
+
+  /* Tighter paddings on mobile */
+  .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+  }
+
+  /* Make stat boxes and cards stack nicely */
+  .grid {
+    gap: 0.5rem !important;
+  }
+
+  /* Reduce rounded corners on very small screens */
+  .rounded-3xl {
+    border-radius: 1rem;
+  }
+
+  .rounded-2xl {
+    border-radius: 0.75rem;
+  }
+
+  /* Make tables horizontally scrollable */
+  table {
+    font-size: 0.8rem;
+  }
+
+  /* Tighter padding in cards on mobile */
+  .p-6 {
+    padding: 0.75rem;
+  }
+
+  .p-5 {
+    padding: 0.625rem;
+  }
+}
+
+/* Extra small devices (below 380px) */
+@media (max-width: 380px) {
+  html {
+    font-size: 11px;
+  }
 }

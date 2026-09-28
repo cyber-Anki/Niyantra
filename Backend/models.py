@@ -3,6 +3,79 @@ from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, JSON, 
 from sqlalchemy.orm import relationship
 from database import Base
 
+class TrackSectionDB(Base):
+    __tablename__ = "track_sections"
+
+    id = Column(Integer, primary_key=True, index=True)
+    corridor = Column(String(100), index=True)
+    gmt_load = Column(Float, default=0.0)
+    speed_kmh = Column(Float, default=100.0)
+    tgi_score = Column(Float, nullable=False)
+    sleeper_density = Column(Float, nullable=False)
+    ballast_cushion_mm = Column(Float, nullable=False)
+    section_code = Column(String(50), nullable=True)
+
+class TrackDefectDB(Base):
+    __tablename__ = "track_defects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    section_id = Column(Integer, ForeignKey("track_sections.id"), nullable=False)
+    usfd_log_id = Column(String(100), nullable=True)
+    defect_type = Column(String(50), nullable=False)  # SQUAT/FRACTURE/WELD_FAILURE
+    severity = Column(String(50), nullable=False)     # IMR/OBS/REM
+    chainage = Column(Float, nullable=False)
+    stress_range_mpa = Column(Float, nullable=False)
+    last_inspected_at = Column(DateTime, default=datetime.utcnow)
+    initial_crack_depth_mm = Column(Float, nullable=False)
+    critical_crack_depth_mm = Column(Float, nullable=False)
+    status = Column(String(50), default="ACTIVE")
+class TrainScheduleDB(Base):
+    __tablename__ = "train_schedules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    train_number = Column(String(20), index=True, nullable=False)
+    train_name = Column(String(100), nullable=False)
+    train_category = Column(String(30), nullable=False)   # PREMIER_PASSENGER, MAIL_EXPRESS, FREIGHT
+    priority_weight = Column(Float, nullable=False)        # e.g., 10.0 for Vande Bharat, 2.0 for Freight
+    corridor = Column(String(100), nullable=False)        # NDLS-GZB
+    origin_station = Column(String(10), nullable=False)
+    destination_station = Column(String(10), nullable=False)
+    section_entry_time = Column(DateTime, nullable=False)
+    section_exit_time = Column(DateTime, nullable=False)
+    avg_speed_kmh = Column(Float, default=90.0)
+
+
+class ShadowBlockOpportunityDB(Base):
+    __tablename__ = "shadow_block_opportunities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    section_id = Column(Integer, ForeignKey("track_sections.id"), nullable=False)
+    primary_block_id = Column(String, ForeignKey("scheduled_blocks.block_id"), nullable=False)
+    secondary_block_id = Column(String, ForeignKey("scheduled_blocks.block_id"), nullable=False)
+    saved_headway_mins = Column(Integer, nullable=False)
+    feasibility_status = Column(String(30), default="FEASIBLE")  # FEASIBLE, CONFLICT, REJECTED
+
+class MaintenanceExecutionDB(Base):
+    __tablename__ = "maintenance_executions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    block_id = Column(String, ForeignKey("scheduled_blocks.block_id"), unique=True, nullable=False)
+    
+    # Execution Telemetry
+    actual_start_time = Column(DateTime, nullable=True)
+    actual_end_time = Column(DateTime, nullable=True)
+    block_burst_mins = Column(Integer, default=0)              # Negative if finished early, positive if delayed
+    
+    # Resource & Cost Tracking
+    materials_used = Column(String(255), nullable=True)        # e.g., "2 AT Welds, 50 Sleepers"
+    execution_cost_inr = Column(Float, default=0.0)
+    
+    # Post-Maintenance Audit
+    post_repair_tgi = Column(Float, nullable=True)             # New Track Geometry Index post-tamping
+    quality_inspector_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    status = Column(String(30), default="COMPLETED")           # COMPLETED, INCOMPLETE, FAILED_AUDIT
+
+    block = relationship("ScheduledBlockDB", backref="execution_record")
 
 class ScheduledBlockDB(Base):
     __tablename__ = "scheduled_blocks"
@@ -13,6 +86,12 @@ class ScheduledBlockDB(Base):
     week_start = Column(String, index=True, nullable=True)
     start_minute = Column(Integer)
     end_minute = Column(Integer)
+    window_start = Column(DateTime, nullable=True)
+    window_end = Column(DateTime, nullable=True)
+    required_duration_mins = Column(Integer, default=0)
+    urgency_score = Column(Float, default=0.0)
+    department = Column(String(50), nullable=True)
+    defect_id = Column(Integer, ForeignKey("track_defects.id"), nullable=True)
     task_ids = Column(JSON, default=list)
     departments = Column(JSON, default=list)
     is_merged = Column(Boolean, default=False)

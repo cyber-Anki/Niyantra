@@ -90,6 +90,7 @@ function Shell({ userContext, onLogout }) {
           collapsed={collapsed}
           setCollapsed={setCollapsed}
           userContext={userContext}
+          onLogout={onLogout}
         />
       </div>
 
@@ -97,9 +98,9 @@ function Shell({ userContext, onLogout }) {
         <Topbar
           setPage={setPage}
           onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
-          onLogout={onLogout}
+          userContext={userContext}
         />
-        <main className="flex-1 overflow-y-auto p-3 md:p-4 transition-colors">
+        <main className="flex-1 overflow-y-auto p-2 sm:p-3 md:p-4 transition-colors">
           {bootLoading && <p className="text-sm font-bold text-slate-500 animate-pulse">Loading command center…</p>}
           {error && <p className="mb-3 text-sm font-bold text-red-600 dark:text-red-400">{error}</p>}
           {!bootLoading && (

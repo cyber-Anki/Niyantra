@@ -4,7 +4,6 @@ import {
   Moon,
   Sun,
   Bell,
-  LogOut,
   AlertTriangle,
   ClipboardCheck,
   GitPullRequestArrow,
@@ -12,6 +11,8 @@ import {
   CheckCircle2,
   CheckCheck,
   ChevronRight,
+  User,
+  ChevronDown,
 } from 'lucide-react'
 import { useNiyantraData } from '../../store/DataContext.jsx'
 import { useTranslation } from '../../store/TranslationContext.jsx'
@@ -180,8 +181,67 @@ function NotificationPanel({ onClose, onNavigate, onMarkAllRead, isMarkedRead })
   )
 }
 
-export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
+function ProfileDropdown({ userContext, onClose }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        onClose()
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [onClose])
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 6, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 6, scale: 0.98 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+      className="absolute right-0 top-[calc(100%+12px)] z-50 w-72 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0F172A] shadow-[0_20px_50px_rgba(15,23,42,0.14)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden"
+    >
+      <div className="absolute -top-1.5 right-3.5 h-3 w-3 rotate-45 border-t border-l border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0F172A] z-10 pointer-events-none" />
+      
+      <div className="relative z-20 p-4 border-b border-slate-100 dark:border-slate-800/80 bg-gradient-to-br from-indigo-50 to-slate-50 dark:from-indigo-950/30 dark:to-slate-900/60">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-md">
+            {userContext?.name?.[0]?.toUpperCase() || 'U'}
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{userContext?.name || 'User'}</p>
+            <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 truncate">{userContext?.role || 'Officer'}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-3 space-y-1">
+        <div className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/40">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 mb-1">Division</p>
+          <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{userContext?.division || '—'}</p>
+        </div>
+        {userContext?.corridor && (
+          <div className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/40">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 mb-1">Corridor</p>
+            <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{userContext.corridor}</p>
+          </div>
+        )}
+        {userContext?.section && (
+          <div className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/40">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 mb-1">Section</p>
+            <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{userContext.section}</p>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
+export default function Topbar({ setPage, onToggleMobileMenu, userContext }) {
   const [notifOpen, setNotifOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
   const [isMarkedRead, setIsMarkedRead] = useState(false)
   const [isDark, setIsDark] = useState(false)
   const { rankedTasks, blocks, unscheduledTaskIds } = useNiyantraData()
@@ -203,15 +263,15 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
       unscheduledTaskIds.length
 
   return (
-    <header className="flex h-12 shrink-0 items-center justify-between bg-slate-900 border-b border-slate-800 px-4 md:px-6 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] sticky top-0 z-30">
-      <div className="flex items-center gap-3">
+    <header className="flex h-12 shrink-0 items-center justify-between bg-slate-900 border-b border-slate-800 px-3 md:px-5 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] sticky top-0 z-30">
+      <div className="flex items-center gap-2">
         <button className="md:hidden p-2 -ml-2 rounded-xl text-white/80 hover:bg-white/10 transition" onClick={onToggleMobileMenu}>
-          <Menu size={24} />
+          <Menu size={22} />
         </button>
-        <h1 className="font-serif text-xl font-black text-white tracking-widest hidden sm:block drop-shadow-sm">{t('topbar.title')}</h1>
+        <h1 className="font-serif text-lg md:text-xl font-black text-white tracking-widest hidden sm:block drop-shadow-sm">{t('topbar.title')}</h1>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-1.5 md:gap-2.5">
         <button
           onClick={() => setIsDark(!isDark)}
           title="Toggle Theme"
@@ -222,7 +282,7 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
         <button
           onClick={toggleLanguage}
           title="Translate"
-          className="focus-ring rounded-xl px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 shadow-sm transition-all duration-200 font-bold text-sm"
+          className="focus-ring rounded-xl px-2.5 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 shadow-sm transition-all duration-200 font-bold text-sm"
         >
           A/अ
         </button>
@@ -258,14 +318,31 @@ export default function Topbar({ setPage, onToggleMobileMenu, onLogout }) {
         
         <div className="h-5 w-px bg-white/20 hidden sm:block"></div>
         
-        <button
-          onClick={onLogout}
-          title="Logout"
-          className="focus-ring flex items-center gap-2 rounded-xl px-3 py-1.5 bg-white/10 hover:bg-red-500/30 border border-white/15 text-white/90 hover:text-red-300 shadow-sm transition-all duration-200 font-semibold"
-        >
-          <LogOut size={16} />
-          <span className="hidden sm:inline-block text-sm font-bold">Logout</span>
-        </button>
+        {/* Profile Button */}
+        <div className="relative">
+          <button
+            onClick={() => setProfileOpen(!profileOpen)}
+            className={`focus-ring flex items-center gap-2 rounded-xl px-2 py-1.5 transition-all duration-200 ${
+              profileOpen
+                ? 'bg-indigo-500/25 border border-indigo-400/40 shadow-sm'
+                : 'bg-white/10 hover:bg-white/20 border border-white/15 shadow-sm'
+            }`}
+          >
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-xs shadow-sm">
+              {userContext?.name?.[0]?.toUpperCase() || 'U'}
+            </div>
+            <span className="hidden sm:block text-sm font-bold text-white/90 max-w-[100px] truncate">{userContext?.name || 'User'}</span>
+            <ChevronDown size={14} className={`text-white/60 hidden sm:block transition-transform duration-200 ${profileOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <AnimatePresence>
+            {profileOpen && (
+              <ProfileDropdown
+                userContext={userContext}
+                onClose={() => setProfileOpen(false)}
+              />
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </header>
   )

@@ -1,11 +1,12 @@
 import {
   LayoutGrid, ListChecks, CalendarRange, BarChart3,
   ChevronLeft, ChevronRight, GitPullRequestArrow, FlaskConical,
+  LogOut,
 } from 'lucide-react'
 import logoMark from '../../assets/logo-mark.png'
 import { useTranslation } from '../../store/TranslationContext.jsx'
 
-export default function Sidebar({ page, setPage, collapsed, setCollapsed, userContext }) {
+export default function Sidebar({ page, setPage, collapsed, setCollapsed, userContext, onLogout }) {
   const { t } = useTranslation()
 
   const NAV_ITEMS = [
@@ -19,29 +20,31 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
 
   return (
     <aside
-      className={`relative shrink-0 bg-slate-900 border-r border-slate-800 text-slate-300 transition-[width] duration-200 h-full ${
-        collapsed ? 'w-20' : 'w-72'
+      className={`relative shrink-0 bg-slate-900 border-r border-slate-800 text-slate-300 transition-[width] duration-200 h-full flex flex-col ${
+        collapsed ? 'w-24' : 'w-80'
       }`}
     >
       <button
         onClick={() => setCollapsed((c) => !c)}
-        className="focus-ring absolute -right-3 top-7 z-10 hidden h-6 w-6 items-center justify-center rounded-full bg-gold text-slate-900 shadow-card hover:bg-gold-dark md:flex"
+        className="focus-ring absolute -right-3 top-9 z-10 hidden h-7 w-7 items-center justify-center rounded-full bg-gold text-slate-900 shadow-card hover:bg-gold-dark md:flex"
         aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
-        {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+        {collapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
       </button>
 
-      <div className="flex h-12 items-center gap-3 border-b border-slate-800 px-4">
-        <img src={logoMark} alt="Niyantran" className="h-7 w-7 object-contain shrink-0" />
+      {/* Logo */}
+      <div className="flex h-16 items-center gap-3 border-b border-slate-800 px-5 shrink-0">
+        <img src={logoMark} alt="Niyantran" className="h-9 w-9 object-contain shrink-0" />
         {!collapsed && (
           <div className="overflow-hidden whitespace-nowrap">
-            <h1 className="font-serif text-base font-bold tracking-wide text-white">Niyantran</h1>
-            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Indian Railways</p>
+            <h1 className="font-serif text-lg font-bold tracking-wide text-white">Niyantran</h1>
+            <p className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Indian Railways</p>
           </div>
         )}
       </div>
 
-      <nav className="space-y-0.5 p-2">
+      {/* Navigation - grows to fill available space */}
+      <nav className="space-y-1 p-3 flex-1 overflow-y-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
           const active = page === item.id
@@ -49,18 +52,29 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, userCo
             <button
               key={item.id}
               onClick={() => setPage(item.id)}
-              className={`focus-ring flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
+              className={`focus-ring flex w-full items-center gap-3 rounded-xl px-4 py-3 text-[0.95rem] font-semibold transition ${
                 active
                   ? 'bg-gold text-slate-900 shadow-md font-bold'
                   : 'text-slate-200 hover:bg-slate-800 hover:text-white'
               }`}
             >
-              <Icon size={18} className="shrink-0" />
+              <Icon size={20} className="shrink-0" />
               {!collapsed && <span className="truncate">{item.label}</span>}
             </button>
           )
         })}
       </nav>
+
+      {/* Logout Button - pinned at bottom */}
+      <div className="shrink-0 border-t border-slate-800 p-3">
+        <button
+          onClick={onLogout}
+          className="focus-ring flex w-full items-center gap-3 rounded-xl px-4 py-3 text-[0.95rem] font-semibold text-red-400 hover:bg-red-500/20 hover:text-red-300 transition"
+        >
+          <LogOut size={20} className="shrink-0" />
+          {!collapsed && <span className="truncate">Logout</span>}
+        </button>
+      </div>
     </aside>
   )
 }
