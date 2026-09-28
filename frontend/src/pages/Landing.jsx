@@ -64,6 +64,9 @@ export default function Landing({ onNavigateLogin }) {
 
   return (
     <div className="bg-slate-50 flex flex-col font-sans">
+      {/* Gov Tricolor Strip */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-[#FF9933] via-white to-[#138808]"></div>
+      
       {/* Top utility bar */}
       <div className="bg-slate-100 border-b border-slate-200 px-4 md:px-8 py-1.5 flex flex-wrap items-center justify-between text-xs font-semibold text-slate-600">
         <div className="flex items-center gap-4">
@@ -229,38 +232,38 @@ export default function Landing({ onNavigateLogin }) {
       )}
 
       {/* Services Section */}
-      <section id="services" className="py-24 px-8 bg-slate-900 text-white relative overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <section id="services" className="py-24 px-8 bg-white border-b border-slate-200 relative overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-50 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-50 rounded-full blur-[100px] pointer-events-none"></div>
         
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-black text-white uppercase tracking-widest inline-block relative">
+            <h3 className="text-4xl font-black text-slate-900 uppercase tracking-widest inline-block relative">
               {t('landing.serv_title')}
-              <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-1/2 h-1.5 bg-indigo-500 rounded-full"></div>
+              <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-1/2 h-1.5 bg-amber-400 rounded-full"></div>
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md flex flex-col items-start hover:-translate-y-2 hover:bg-white/10 transition-all duration-300 shadow-2xl group">
-              <div className="p-4 bg-indigo-500/20 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-indigo-500 transition-all duration-300">
-                <ShieldAlert size={40} className="text-indigo-400 group-hover:text-white transition-colors" />
+            <div className="p-10 bg-slate-50 border border-slate-200 rounded-3xl flex flex-col items-start hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300 group">
+              <div className="p-4 bg-indigo-100 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-indigo-600 transition-all duration-300">
+                <ShieldAlert size={40} className="text-indigo-600 group-hover:text-white transition-colors" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-3 uppercase tracking-wide">{t('landing.serv_ai')}</h4>
-              <p className="text-slate-400 font-medium leading-relaxed">{t('landing.serv_ai_desc')}</p>
+              <h4 className="text-2xl font-bold text-slate-900 mb-3 uppercase tracking-wide">{t('landing.serv_ai')}</h4>
+              <p className="text-slate-600 font-medium leading-relaxed">{t('landing.serv_ai_desc')}</p>
             </div>
-            <div className="p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md flex flex-col items-start hover:-translate-y-2 hover:bg-white/10 transition-all duration-300 shadow-2xl group">
-              <div className="p-4 bg-amber-500/20 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 transition-all duration-300">
-                <SplitSquareHorizontal size={40} className="text-amber-400 group-hover:text-slate-900 transition-colors" />
+            <div className="p-10 bg-slate-50 border border-slate-200 rounded-3xl flex flex-col items-start hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300 group">
+              <div className="p-4 bg-amber-100 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 transition-all duration-300">
+                <SplitSquareHorizontal size={40} className="text-amber-600 group-hover:text-slate-900 transition-colors" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-3 uppercase tracking-wide">{t('landing.serv_conflict')}</h4>
-              <p className="text-slate-400 font-medium leading-relaxed">{t('landing.serv_conflict_desc')}</p>
+              <h4 className="text-2xl font-bold text-slate-900 mb-3 uppercase tracking-wide">{t('landing.serv_conflict')}</h4>
+              <p className="text-slate-600 font-medium leading-relaxed">{t('landing.serv_conflict_desc')}</p>
             </div>
-            <div className="p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md flex flex-col items-start hover:-translate-y-2 hover:bg-white/10 transition-all duration-300 shadow-2xl group">
-              <div className="p-4 bg-emerald-500/20 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-emerald-500 transition-all duration-300">
-                <LineChart size={40} className="text-emerald-400 group-hover:text-white transition-colors" />
+            <div className="p-10 bg-slate-50 border border-slate-200 rounded-3xl flex flex-col items-start hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300 group">
+              <div className="p-4 bg-emerald-100 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-emerald-600 transition-all duration-300">
+                <LineChart size={40} className="text-emerald-600 group-hover:text-white transition-colors" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-3 uppercase tracking-wide">{t('landing.serv_sim')}</h4>
-              <p className="text-slate-400 font-medium leading-relaxed">{t('landing.serv_sim_desc')}</p>
+              <h4 className="text-2xl font-bold text-slate-900 mb-3 uppercase tracking-wide">{t('landing.serv_sim')}</h4>
+              <p className="text-slate-600 font-medium leading-relaxed">{t('landing.serv_sim_desc')}</p>
             </div>
           </div>
         </div>
