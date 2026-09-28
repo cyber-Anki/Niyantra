@@ -13,28 +13,16 @@ function formatTimeOfDay(minute) {
 }
 
 function StatBox({ label, value, unit, highlight = false, alert = false, icon: Icon, color = 'blue' }) {
-  // Determine color classes
-  const colorMap = {
-    blue:    { card: 'bg-blue-50 border border-blue-200',    label: 'text-blue-600',    value: 'text-blue-800',    icon: 'text-blue-400' },
-    emerald: { card: 'bg-emerald-50 border border-emerald-200', label: 'text-emerald-600', value: 'text-emerald-800', icon: 'text-emerald-400' },
-    amber:   { card: 'bg-amber-50 border border-amber-200',  label: 'text-amber-600',   value: 'text-amber-800',   icon: 'text-amber-400' },
-    red:     { card: 'bg-red-50 border border-red-200',      label: 'text-red-600',     value: 'text-red-800',     icon: 'text-red-400' },
-    indigo:  { card: 'bg-indigo-50 border border-indigo-200', label: 'text-indigo-600',  value: 'text-indigo-800',  icon: 'text-indigo-400' },
-  }
-
-  let scheme = colorMap[color] || colorMap.blue
-  if (alert) scheme = colorMap.red
-  if (highlight) scheme = colorMap.indigo
-
+  // Uniform card style — all cards look equal
   return (
-    <div className={`relative overflow-hidden rounded-2xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${scheme.card}`}>
+    <div className="relative overflow-hidden rounded-2xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 border-l-4 border-l-indigo-500 dark:border-l-amber-500">
       <div className="relative z-10">
-        <div className={`text-[11px] uppercase font-bold tracking-wide mb-2 leading-snug break-words ${scheme.label}`}>{label}</div>
-        <div className={`text-3xl font-black ${scheme.value}`}>{value} {unit && <span className="text-xs font-bold opacity-80">{unit}</span>}</div>
+        <div className="text-[11px] uppercase font-bold tracking-wide mb-2 leading-snug break-words text-indigo-600 dark:text-amber-500">{label}</div>
+        <div className="text-3xl font-black text-slate-800 dark:text-white">{value} {unit && <span className="text-xs font-bold opacity-80">{unit}</span>}</div>
       </div>
       {Icon && (
-        <div className={`absolute -right-2 -bottom-2 opacity-25 transform rotate-[-15deg] transition-transform duration-500 ${scheme.icon}`}>
-          <Icon size={90} />
+        <div className="absolute -right-3 -bottom-3 opacity-15 transform rotate-[-15deg] transition-transform duration-500 text-slate-400 dark:text-slate-600">
+          <Icon size={64} />
         </div>
       )}
     </div>
@@ -73,7 +61,7 @@ function HeroBanner({ title, subtitle, icon: Icon, nominalText }) {
 
 function ActionButton({ title, subtitle, icon: Icon, onClick, primary = false, className = '' }) {
   return (
-    <button onClick={onClick} className={`focus-ring group relative overflow-hidden rounded-3xl p-6 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${!primary ? 'bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-glow-emerald border-none' : 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-glow-blue border-none'} ${className}`}>
+    <button onClick={onClick} className={`focus-ring group relative overflow-hidden rounded-3xl p-6 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl bg-gradient-to-br from-indigo-600 to-indigo-800 dark:from-slate-800 dark:to-slate-900 text-white shadow-lg border border-indigo-500/20 dark:border-amber-500/20 ${className}`}>
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <h3 className="font-bold text-xl sm:text-2xl font-serif leading-tight mb-2">{title}</h3>
