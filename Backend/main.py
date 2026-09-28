@@ -23,8 +23,12 @@ from database import Base, engine, get_db
 from models import ScheduledBlockDB, OfficerDecisionDB, UserDB
 from system3_analytics import execute_post_maintenance_audit
 from auth import auth_router, get_current_user
+from drm_optimizer import evaluate_drm_block_decision
 
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except SQLAlchemyError as e:
+    print(f"Warning: Database connection failed during startup: {e}")
 
 app = FastAPI(title="Niyantra Command Center API")
 
@@ -300,3 +304,19 @@ def approve_drm_block(block_id: str, db: Session = Depends(get_db), current_user
 @app.get("/health")
 def health():
     return {"status": "ok", "model_loaded": _model is not None}
+
+
+@app.get("/api/drm/evaluate/{block_id}")
+def evaluate_block(block_id: str, db: Session = Depends(get_db)):
+    result = evaluate_drm_block_decision(block_id, db)
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
+    return result
+
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
+

@@ -11,3 +11,5 @@ passlib[bcrypt]
 pyjwt
 email-validator
 requests
+python-dotenv
+psycopg2-binary
