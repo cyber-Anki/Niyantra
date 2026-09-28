@@ -101,7 +101,7 @@ function TaskRow({ task, block, flagged, onToggleFlag, onApprove, onSendToSchedu
               <button
                 onClick={() => onApprove(task, block)}
                 disabled={!block}
-                className="focus-ring rounded-lg bg-indigo-600 dark:bg-amber-500 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-indigo-700 dark:hover:bg-amber-600 disabled:opacity-50"
+                className="focus-ring rounded-lg bg-[#1e3a5f] dark:bg-amber-500 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#152d4a] dark:hover:bg-amber-600 disabled:opacity-50"
               >
                 Approve Slot
               </button>
@@ -287,7 +287,7 @@ export default function PriorityQueue() {
 
       <div className="overflow-x-auto no-scrollbar mx-6 rounded-2xl border border-slate-200 bg-white shadow-sm mb-6">
         <table className="w-full text-left whitespace-nowrap">
-          <thead className="bg-indigo-600 dark:bg-amber-600 text-white">
+          <thead className="bg-[#1e3a5f] dark:bg-amber-600 text-white">
             <tr>
               <th className="py-3 pl-4 pr-2 w-8"></th>
               <th className="py-3 px-2"><SortHeader label="Asset / Section" sortKey="section" sortBy={sortBy} sortDir={sortDir} onSort={handleSort} className="!text-white hover:!text-white/80" /></th>

@@ -98,7 +98,7 @@ function ManualOverrideModal({ block, taskById, onClose, decideBlock, t }) {
           {/* ── Sub-panel: Reassign Time Slot ── */}
           {selectedAction === 'reassign_time' && (
             <div className="mt-3 p-4 rounded-2xl border border-blue-200 bg-blue-50/50 space-y-3">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-blue-600">New Time Window</p>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-black">New Time Window</p>
               <div className="flex gap-3">
                 <div className="flex-1">
                   <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Start</label>
@@ -440,7 +440,7 @@ export default function ConflictResolution({ setPage }) {
                 <div key={b.block_id} className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm transition-transform hover:-translate-y-1 flex flex-col">
                   <div className="flex items-center justify-between bg-slate-50 px-5 py-3 border-b border-slate-200">
                     <span className="font-mono text-xs font-bold text-slate-700">{b.block_id}</span>
-                    <span className="bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 px-2 py-0.5 rounded text-xs font-bold text-indigo-600 dark:text-amber-500">
+                    <span className="bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 px-2 py-0.5 rounded text-xs font-bold text-black dark:text-amber-500">
                       {b.section} · {formatTimeOfDay(b.start_minute)}–{formatTimeOfDay(b.end_minute)}
                     </span>
                   </div>
@@ -556,7 +556,7 @@ export default function ConflictResolution({ setPage }) {
                     </button>
                     <button
                       onClick={() => setPage?.('priority')}
-                      className="focus-ring ml-auto text-[11px] font-bold text-indigo-600 dark:text-amber-500 uppercase tracking-wider hover:underline"
+                      className="focus-ring ml-auto text-[11px] font-bold text-black dark:text-amber-500 uppercase tracking-wider hover:underline"
                     >
                       {t('cr.view_queue')} &rarr;
                     </button>

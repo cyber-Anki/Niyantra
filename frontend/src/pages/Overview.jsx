@@ -134,7 +134,7 @@ function EngineerDashboard({ userContext, tasks, blocks, setPage }) {
           {myBlocks.length > 0 ? (
             <div className="overflow-x-auto no-scrollbar">
               <table className="w-full text-sm text-left">
-                <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-indigo-600 dark:text-amber-500 text-xs uppercase tracking-wider rounded-t-xl">
+                <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-black dark:text-amber-500 text-xs uppercase tracking-wider rounded-t-xl">
                   <tr>
                     <th className="p-3 rounded-tl-xl">{t('eng.start_time')}</th>
                     <th className="p-3">{t('eng.end_time')}</th>
@@ -204,7 +204,7 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
         {pendingBlocks.length > 0 ? (
           <div className="overflow-x-auto no-scrollbar">
             <table className="w-full text-sm text-left">
-              <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-indigo-600 dark:text-amber-500 text-xs uppercase tracking-wide">
+              <thead className="bg-slate-100/50 dark:bg-slate-800/50 text-black dark:text-amber-500 text-xs uppercase tracking-wide">
                 <tr>
                   <th className="p-3 rounded-tl-xl">{t('dash.corridor')}</th>
                   <th className="p-3">{t('eng.start_time')}</th>
@@ -216,7 +216,7 @@ function ControllerDashboard({ userContext, blocks, corridors, setPage }) {
               <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
                 {pendingBlocks.slice(0, 8).map((b, i) => (
                   <tr key={i} className="hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
-                    <td className="p-3 font-black text-indigo-600 dark:text-amber-500 text-base">{b.section}</td>
+                    <td className="p-3 font-black text-black dark:text-amber-500 text-base">{b.section}</td>
                     <td className="p-3 font-bold text-slate-700 dark:text-slate-300">{formatTimeOfDay(b.start_minute)}</td>
                     <td className="p-3 font-semibold text-slate-600 dark:text-slate-400">{b.end_minute - b.start_minute} mins</td>
                     <td className="p-3 text-slate-600 dark:text-slate-400">{b.departments?.join(', ') || 'N/A'}</td>
