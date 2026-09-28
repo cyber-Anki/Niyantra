@@ -17,24 +17,31 @@ from system1_priority_engine import score_all_tasks
 from physics_fatigue import compute_damage_signal
 import system2_optimizer as s2
 import system3_horizon_engine as s3
-from drm_optimizer import evaluate_drm_block_decision
+import os
 
 from database import Base, engine, get_db
 from models import ScheduledBlockDB, OfficerDecisionDB, UserDB
-
+from system3_analytics import execute_post_maintenance_audit
 from auth import auth_router, get_current_user
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AI Block Planning Backend")
+app = FastAPI(title="Niyantra Command Center API")
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 
+origins = [
+    "http://localhost:5173",
+    "https://niyantra.vercel.app",
+    os.getenv("FRONTEND_URL", "*")
+]
+
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],              # Must allow POST for Auth/OTP
+    allow_headers=["*"],              # Must allow 'Authorization: Bearer <token>'
 )
 
 # --- load System 1 model once at startup ---
@@ -69,6 +76,16 @@ class DecideRequest(BaseModel):
     new_end_minute: Optional[int] = None
     decided_by: str = "unauthenticated"
 
+# Assume RBAC requires a "HQ_ANALYST" or "BOARD_MEMBER" role
+@app.post("/api/audit/close-block/{block_id}")
+def close_block_and_audit(block_id: int, payload: dict, db: Session = Depends(get_db)):
+    return execute_post_maintenance_audit(
+        block_id=block_id,
+        actual_start=payload["actual_start"],
+        actual_end=payload["actual_end"],
+        cost=payload["cost"],
+        db=db
+    )
 
 @app.get("/api/data/bootstrap")
 def get_bootstrap():
@@ -222,32 +239,62 @@ def decide_block(req: DecideRequest, db: Session = Depends(get_db), current_user
 
 
 @app.get("/api/drm/evaluation/{block_id}")
-def get_drm_evaluation(block_id: str, db: Session = Depends(get_db)):
-    """Dynamic impact evaluation for the DRM Console via drm_optimizer."""
-    result = evaluate_drm_block_decision(block_id, db)
-    if "error" in result:
-        raise HTTPException(404, result["error"])
-    return result
+def get_drm_evaluation(block_id: str):
+    """
+    Mock endpoint returning simulated DRM evaluation metrics for a given block.
+    """
+    # Deterministic randomness based on block_id
+    random.seed(block_id)
+    score = random.randint(10, 500)
+    recommendation = "APPROVE" if score < 200 else "RESCHEDULE_OFF_PEAK"
+    
+    trains = []
+    num_trains = random.randint(0, 3)
+    categories = ["Vande Bharat", "Rajdhani", "Shatabdi", "Freight", "Express"]
+    
+    for _ in range(num_trains):
+        cat = random.choice(categories)
+        if cat == "Freight":
+            num = f"BOXN-{random.randint(100, 999)}"
+        else:
+            num = str(random.randint(11000, 19999))
+            
+        trains.append({
+            "train_number": num,
+            "category": cat,
+            "estimated_delay_minutes": random.randint(5, 60)
+        })
+        
+    # restore random state
+    random.seed()
+        
+    return {
+        "total_penalty_score": score,
+        "recommendation": recommendation,
+        "affected_trains": trains
+    }
 
 
 @app.post("/api/drm/approve-block/{block_id}")
 def approve_drm_block(block_id: str, db: Session = Depends(get_db), current_user: UserDB = Depends(get_current_user)):
-    """Commits DRM decision directly to the database."""
+    """
+    Commits the DRM decision directly. Updates the block status to approved.
+    """
     block = db.get(ScheduledBlockDB, block_id)
-    if not block:
-        raise HTTPException(404, "Block not found")
-        
+    if block is None:
+        raise HTTPException(404, f"block {block_id} not found")
+
     block.status = "approved"
     
-    officer_name = current_user.full_name or "DRM Officer"
+    officer_name = current_user.full_name or "DRM_API"
     db.add(OfficerDecisionDB(
         block_id=block_id, action="approve",
         decided_by=officer_name,
     ))
     db.commit()
     db.refresh(block)
-    
-    return {"status": "success", "block_id": block_id}
+
+    return {"status": "success", "block_id": block_id, "new_status": block.status}
 
 
 @app.get("/health")
