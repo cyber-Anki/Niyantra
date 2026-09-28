@@ -17,6 +17,7 @@ from system1_priority_engine import score_all_tasks
 from physics_fatigue import compute_damage_signal
 import system2_optimizer as s2
 import system3_horizon_engine as s3
+from drm_optimizer import evaluate_drm_block_decision
 
 from database import Base, engine, get_db
 from models import ScheduledBlockDB, OfficerDecisionDB, UserDB
@@ -222,27 +223,11 @@ def decide_block(req: DecideRequest, db: Session = Depends(get_db), current_user
 
 @app.get("/api/drm/evaluation/{block_id}")
 def get_drm_evaluation(block_id: str, db: Session = Depends(get_db)):
-    """Dynamic impact evaluation for the DRM Console."""
-    block = db.get(ScheduledBlockDB, block_id)
-    if not block:
-        raise HTTPException(404, "Block not found")
-    
-    # Generate deterministic evaluation metrics based on block_id length and chars
-    penalty_score = sum(ord(c) for c in block_id) % 150
-    recommendation = "APPROVE" if penalty_score < 75 else "RESCHEDULE_OFF_PEAK"
-    
-    affected_trains = [
-        {"train_number": "22436", "category": "Vande Bharat", "estimated_delay_minutes": (penalty_score % 10) + 5},
-        {"train_number": "12302", "category": "Rajdhani", "estimated_delay_minutes": (penalty_score % 15) + 12},
-        {"train_number": "BCN-409", "category": "Freight", "estimated_delay_minutes": (penalty_score % 20) + 20},
-    ]
-    
-    return {
-        "block_id": block_id,
-        "total_penalty_score": penalty_score,
-        "recommendation": recommendation,
-        "affected_trains": affected_trains
-    }
+    """Dynamic impact evaluation for the DRM Console via drm_optimizer."""
+    result = evaluate_drm_block_decision(block_id, db)
+    if "error" in result:
+        raise HTTPException(404, result["error"])
+    return result
 
 
 @app.post("/api/drm/approve-block/{block_id}")
