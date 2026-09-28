@@ -238,6 +238,65 @@ def decide_block(req: DecideRequest, db: Session = Depends(get_db), current_user
     }
 
 
+@app.get("/api/drm/evaluation/{block_id}")
+def get_drm_evaluation(block_id: str):
+    """
+    Mock endpoint returning simulated DRM evaluation metrics for a given block.
+    """
+    # Deterministic randomness based on block_id
+    random.seed(block_id)
+    score = random.randint(10, 500)
+    recommendation = "APPROVE" if score < 200 else "RESCHEDULE_OFF_PEAK"
+    
+    trains = []
+    num_trains = random.randint(0, 3)
+    categories = ["Vande Bharat", "Rajdhani", "Shatabdi", "Freight", "Express"]
+    
+    for _ in range(num_trains):
+        cat = random.choice(categories)
+        if cat == "Freight":
+            num = f"BOXN-{random.randint(100, 999)}"
+        else:
+            num = str(random.randint(11000, 19999))
+            
+        trains.append({
+            "train_number": num,
+            "category": cat,
+            "estimated_delay_minutes": random.randint(5, 60)
+        })
+        
+    # restore random state
+    random.seed()
+        
+    return {
+        "total_penalty_score": score,
+        "recommendation": recommendation,
+        "affected_trains": trains
+    }
+
+
+@app.post("/api/drm/approve-block/{block_id}")
+def approve_drm_block(block_id: str, db: Session = Depends(get_db), current_user: UserDB = Depends(get_current_user)):
+    """
+    Commits the DRM decision directly. Updates the block status to approved.
+    """
+    block = db.get(ScheduledBlockDB, block_id)
+    if block is None:
+        raise HTTPException(404, f"block {block_id} not found")
+
+    block.status = "approved"
+    
+    officer_name = current_user.full_name or "DRM_API"
+    db.add(OfficerDecisionDB(
+        block_id=block_id, action="approve",
+        decided_by=officer_name,
+    ))
+    db.commit()
+    db.refresh(block)
+
+    return {"status": "success", "block_id": block_id, "new_status": block.status}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "model_loaded": _model is not None}
