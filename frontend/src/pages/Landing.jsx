@@ -194,20 +194,7 @@ export default function Landing({ onNavigateLogin }) {
             </button>
           </div>
 
-          {/* Right features list */}
-          <div className="hidden md:flex flex-col gap-4 bg-[#1a2332]/60 backdrop-blur-sm border border-white/10 rounded-lg p-5 min-w-[280px]">
-            {[
-              { icon: <Calendar size={18} />, title: 'Optimized Maintenance Scheduling' },
-              { icon: <Zap size={18} />, title: 'Conflict-free Operations' },
-              { icon: <TrendingUp size={18} />, title: 'Higher Network Capacity' },
-              { icon: <BarChart3 size={18} />, title: 'Data-driven Decision Making' },
-            ].map((f, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className="text-amber-400 shrink-0">{f.icon}</div>
-                <span className="text-white text-sm font-medium">{f.title}</span>
-              </div>
-            ))}
-          </div>
+
         </div>
 
         {/* Diagonal caption bar */}
